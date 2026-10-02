@@ -1,168 +1,109 @@
-import React, { useState } from 'react';
-import { REVIEWS } from '../data/reviews';
-import { Star, CheckCircle, Instagram, Heart } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Sparkles, Heart, ArrowRight } from 'lucide-react';
 
 export const ReviewSection: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'all' | 'verified' | '5star'>('all');
-
-  const galleryImages = [
+  const homeReviewImages = [
     {
-      url: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=600&q=80',
-      caption: 'Wedding garland preservation frame',
-      likes: 780
+      id: 'h-rev-1',
+      url: '/reviews/review-1.jpg',
+      likes: 942
     },
     {
-      url: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80',
-      caption: '24K gold foil initial keychains set',
-      likes: 924
+      id: 'h-rev-2',
+      url: '/reviews/550887156_122140264028658912_2420151643039578278_n.jpg',
+      likes: 835
     },
     {
-      url: 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=600&q=80',
-      caption: 'Royal emerald geode wall clock',
-      likes: 645
+      id: 'h-rev-3',
+      url: '/reviews/548275486_122139653252658912_1171929115424733035_n.jpg',
+      likes: 1120
     },
     {
-      url: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80',
-      caption: 'Ocean wave 3-layer resin coasters',
-      likes: 812
+      id: 'h-rev-4',
+      url: '/reviews/550325310_122140266320658912_7231201057920921566_n.jpg',
+      likes: 674
+    },
+    {
+      id: 'h-rev-5',
+      url: '/reviews/530862365_122136102956658912_5285189544644175084_n.jpg',
+      likes: 785
+    },
+    {
+      id: 'h-rev-6',
+      url: '/reviews/529954523_122136102572658912_4395678324086200379_n.jpg',
+      likes: 930
+    },
+    {
+      id: 'h-rev-7',
+      url: '/reviews/530369802_122136102872658912_861243861180862681_n.jpg',
+      likes: 640
+    },
+    {
+      id: 'h-rev-8',
+      url: '/reviews/530825121_122136104126658912_725598718912369336_n.jpg',
+      likes: 820
     }
   ];
-
-  const filteredReviews = REVIEWS.filter((r) => {
-    if (activeTab === '5star') return r.rating === 5;
-    if (activeTab === 'verified') return r.verifiedPurchase;
-    return true;
-  });
 
   return (
     <section id="community-gallery" className="py-16 sm:py-24 bg-[#E8E2D3] border-b border-[#D3CBBA]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Gallery Lookbook Section */}
+        
+        {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center space-x-1.5 text-xs font-bold uppercase tracking-widest text-zinc-500 mb-2 font-mono">
-            <Instagram className="w-3.5 h-3.5 text-pink-600" />
-            <span>COMMUNITY LOOKBOOK</span>
+          <div className="inline-flex items-center space-x-1.5 text-xs font-bold uppercase tracking-widest text-amber-900 mb-2 font-mono">
+            <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+            <span>REAL CUSTOMER REVIEWS</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-5xl font-semibold text-zinc-900 tracking-tight">
-            Tagged with #Meltsparkle
+            Loved by 15,000+ Customers
           </h2>
           <p className="mt-3 text-sm text-zinc-600">
-            Real homes, real bridal memories across Bangladesh. Follow facebook.com/Meltsparkle & tag us to be featured.
+            Real customer chats, unboxing photos, and keepsakes shared across Bangladesh.
           </p>
         </div>
 
-        {/* 4 Image Gallery Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-20">
-          {galleryImages.map((img, idx) => (
-            <motion.div
-              key={idx}
-              whileHover={{ y: -4 }}
-              className="group relative aspect-square rounded-2xl overflow-hidden bg-[#DFD8C7] shadow-sm border border-[#D3CBBA]"
+        {/* Pinterest-style Image Masonry Grid (Images Only, Zero Text Below) */}
+        <div className="columns-2 sm:columns-2 md:columns-4 gap-3.5 sm:gap-5 space-y-3.5 sm:space-y-5 mb-12">
+          {homeReviewImages.map((img) => (
+            <Link
+              key={img.id}
+              to="/reviews"
+              className="break-inside-avoid group relative rounded-2xl sm:rounded-3xl overflow-hidden bg-black/5 shadow-xs hover:shadow-2xl transition-all duration-300 block"
             >
               <img
                 src={img.url}
-                alt={img.caption}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                alt="Customer Review Screenshot"
+                className="w-full h-auto object-cover select-none transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4 text-white">
-                <p className="text-xs font-medium line-clamp-1">{img.caption}</p>
-                <div className="flex items-center space-x-1 text-[11px] text-pink-300 mt-1">
-                  <Heart className="w-3 h-3 fill-pink-500 text-pink-500" />
-                  <span>{img.likes} likes</span>
+
+              {/* Hover Dark Vignette & Heart */}
+              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-3.5 text-white">
+                <span className="text-[11px] font-bold tracking-wider uppercase bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20">
+                  View Review
+                </span>
+                <div className="flex items-center space-x-1 text-xs font-semibold bg-black/60 backdrop-blur-md px-2 py-1 rounded-full">
+                  <Heart className="w-3.5 h-3.5 fill-red-500 text-red-500" />
+                  <span>{img.likes}</span>
                 </div>
               </div>
-            </motion.div>
+            </Link>
           ))}
         </div>
 
-        {/* Customer Reviews Section */}
-        <div className="pt-12 border-t border-[#D3CBBA]">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-10">
-            <div>
-              <div className="flex items-center space-x-2">
-                <div className="flex text-amber-500">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-amber-500" />
-                  ))}
-                </div>
-                <span className="text-xl font-bold text-zinc-900 font-serif">4.95 / 5.0</span>
-                <span className="text-sm text-zinc-600">(1,480+ Happy Customers)</span>
-              </div>
-              <h3 className="text-2xl font-bold text-zinc-900 mt-1 font-serif">
-                What Our Clients Say
-              </h3>
-            </div>
-
-            {/* Filter Tabs */}
-            <div className="flex p-1 bg-[#DFD8C7] rounded-xl border border-[#D3CBBA]">
-              <button
-                onClick={() => setActiveTab('all')}
-                className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  activeTab === 'all' ? 'bg-black text-[#E8E2D3] shadow-sm' : 'text-zinc-700 hover:text-black'
-                }`}
-              >
-                All Reviews
-              </button>
-              <button
-                onClick={() => setActiveTab('5star')}
-                className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  activeTab === '5star' ? 'bg-black text-[#E8E2D3] shadow-sm' : 'text-zinc-700 hover:text-black'
-                }`}
-              >
-                5 Stars Only
-              </button>
-              <button
-                onClick={() => setActiveTab('verified')}
-                className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                  activeTab === 'verified' ? 'bg-black text-[#E8E2D3] shadow-sm' : 'text-zinc-700 hover:text-black'
-                }`}
-              >
-                Verified Purchases
-              </button>
-            </div>
-          </div>
-
-          {/* Review Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {filteredReviews.map((rev) => (
-              <div
-                key={rev.id}
-                className="bg-[#F2EDE2] border border-[#D3CBBA] rounded-2xl p-6 flex flex-col justify-between shadow-soft hover:shadow-card hover:border-black/40 transition-all"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex text-amber-500">
-                      {[...Array(rev.rating)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-amber-500" />
-                      ))}
-                    </div>
-                    <span className="text-xs text-zinc-500 font-mono">{rev.date}</span>
-                  </div>
-
-                  <h4 className="text-sm font-bold text-zinc-900 mb-2 font-serif">{rev.title}</h4>
-                  <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">
-                    "{rev.comment}"
-                  </p>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-[#D3CBBA]/60 flex items-center justify-between">
-                  <div>
-                    <div className="text-xs font-bold text-zinc-900">{rev.author}</div>
-                    <div className="text-[11px] text-zinc-500">{rev.city}</div>
-                  </div>
-                  {rev.verifiedPurchase && (
-                    <div className="flex items-center space-x-1 text-[11px] text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-full font-medium">
-                      <CheckCircle className="w-3 h-3" />
-                      <span>Verified Order</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+        {/* Call to action button linking to /reviews */}
+        <div className="text-center">
+          <Link
+            to="/reviews"
+            className="inline-flex items-center space-x-2 px-8 py-3.5 bg-black hover:bg-zinc-800 text-[#E8E2D3] text-xs font-bold uppercase tracking-widest rounded-full transition-all duration-200 shadow-md hover:shadow-xl active:scale-95"
+          >
+            <span>Explore All 18+ Customer Reviews</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
+
       </div>
     </section>
   );

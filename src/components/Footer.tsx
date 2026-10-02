@@ -194,12 +194,12 @@ export const Footer: React.FC = () => {
                 </button>
               </li>
               <li>
-                <button
-                  onClick={() => scrollToSection('community-gallery')}
+                <Link
+                  to="/reviews"
                   className="hover:text-white transition-colors"
                 >
-                  Gallery & Lookbook
-                </button>
+                  Customer Reviews & Photos
+                </Link>
               </li>
               <li>
                 <button
@@ -254,20 +254,20 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <button
-                  onClick={() => scrollToSection('faq-section')}
-                  className="hover:text-white transition-colors text-left"
+                <Link
+                  to="/faq"
+                  className="hover:text-white transition-colors text-left block"
                 >
-                  FAQ & Custom Requests
-                </button>
+                  Frequently Asked Questions (FAQ)
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => scrollToSection('about-section')}
-                  className="hover:text-white transition-colors text-left"
+                <Link
+                  to="/about"
+                  className="hover:text-white transition-colors text-left block"
                 >
-                  About Meltsparkle
-                </button>
+                  About Meltsparkle & Contact
+                </Link>
               </li>
             </ul>
           </div>

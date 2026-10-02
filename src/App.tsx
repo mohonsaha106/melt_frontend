@@ -6,6 +6,10 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
 import { SpecialOffersPage } from './pages/SpecialOffersPage';
+import { ShopPage } from './pages/ShopPage';
+import { FAQPage } from './pages/FAQPage';
+import { AboutPage } from './pages/AboutPage';
+import { ReviewsPage } from './pages/ReviewsPage';
 import { CartDrawer } from './components/CartDrawer';
 import { FreeDesignModal } from './components/FreeDesignModal';
 import { QuickViewModal } from './components/QuickViewModal';
@@ -41,6 +45,18 @@ export const AppContent: React.FC = () => {
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/shop" element={<ShopPage />} />
+          <Route path="/catalog" element={<ShopPage />} />
+          <Route path="/products" element={<ShopPage />} />
+          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/faqs" element={<FAQPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/about-us" element={<AboutPage />} />
+          <Route path="/contact" element={<AboutPage />} />
+          <Route path="/reviews" element={<ReviewsPage />} />
+          <Route path="/review" element={<ReviewsPage />} />
+          <Route path="/gallery" element={<ReviewsPage />} />
+          <Route path="/lookbook" element={<ReviewsPage />} />
           {/* Support both the exact user route (/sepcial-offer) and common aliases */}
           <Route path="/sepcial-offer" element={<SpecialOffersPage />} />
           <Route path="/special-offer" element={<SpecialOffersPage />} />

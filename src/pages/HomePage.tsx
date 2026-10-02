@@ -1,5 +1,4 @@
 import React from 'react';
-import { HeroV4 } from '../components/Hero-v4';
 import { OffersSection } from '../components/OffersSection';
 import { PlacementSelector } from '../components/PlacementSelector';
 import { HighlightBanner } from '../components/HighlightBanner';
@@ -9,14 +8,13 @@ import { TrustBadges } from '../components/TrustBadges';
 import { HowToOrderSection } from '../components/HowToOrderSection';
 import { HowToApplySection } from '../components/HowToApplySection';
 import { ReviewSection } from '../components/ReviewSection';
-import { FAQSection } from '../components/FAQSection';
-import { AboutSection } from '../components/AboutSection';
+import { Hero } from '@/components/Hero';
 
 export const HomePage: React.FC = () => {
   return (
     <>
       {/* Editorial Hero Banner */}
-      <HeroV4 />
+      <Hero/>
 
       {/* Promotional Offers Section (2 Rows + See More button linking to /sepcial-offer) */}
       <OffersSection />
@@ -44,12 +42,6 @@ export const HomePage: React.FC = () => {
 
       {/* Community Lookbook & Reviews */}
       <ReviewSection />
-
-      {/* FAQ Accordion */}
-      <FAQSection />
-
-      {/* Brand Story & Metrics */}
-      <AboutSection />
     </>
   );
 };

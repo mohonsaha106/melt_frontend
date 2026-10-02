@@ -158,16 +158,12 @@ export const Header: React.FC = () => {
 
             {/* Desktop Navigation Links */}
             <nav className="flex items-center space-x-7 text-xs font-semibold tracking-wider uppercase text-zinc-800">
-              <button
-                onClick={() => {
-                  scrollToSection('product-catalog');
-                  setSelectedCategory('all');
-                  setSelectedPlacement(null);
-                }}
+              <Link
+                to="/shop"
                 className="hover:text-black transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
               >
                 SHOP
-              </button>
+              </Link>
 
               <Link
                 to="/sepcial-offer"
@@ -177,12 +173,12 @@ export const Header: React.FC = () => {
                 OFFERS
               </Link>
 
-              <button
-                onClick={() => scrollToSection('community-gallery')}
+              <Link
+                to="/reviews"
                 className="hover:text-black transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
               >
-                GALLERY
-              </button>
+                REVIEWS
+              </Link>
 
               <button
                 onClick={() => setIsCustomStudioOpen(true)}
@@ -206,19 +202,19 @@ export const Header: React.FC = () => {
                 KEEPSAKE GUIDE
               </button> */}
 
-              <button
-                onClick={() => scrollToSection('faq-section')}
+              <Link
+                to="/faq"
                 className="hover:text-black transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
               >
                 FAQ
-              </button>
+              </Link>
 
-              <button
-                onClick={() => scrollToSection('about-section')}
+              <Link
+                to="/about"
                 className="hover:text-black transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
               >
                 ABOUT
-              </button>
+              </Link>
             </nav>
 
             {/* Desktop Right Action Icons */}
@@ -355,17 +351,14 @@ export const Header: React.FC = () => {
                     <ChevronRight className="w-4 h-4 text-rose-700" />
                   </Link>
 
-                  <button
-                    onClick={() => {
-                      scrollToSection('product-catalog');
-                      setSelectedCategory('all');
-                      setSelectedPlacement(null);
-                    }}
+                  <Link
+                    to="/shop"
+                    onClick={() => setIsMobileMenuOpen(false)}
                     className="w-full flex items-center justify-between py-3 px-3 text-sm font-semibold tracking-wider text-zinc-900 hover:bg-[#DFD8C7] rounded-lg text-left"
                   >
                     <span>SHOP ALL KEEPSAKES</span>
                     <ChevronRight className="w-4 h-4 text-zinc-500" />
-                  </button>
+                  </Link>
 
                   <button
                     onClick={() => {
@@ -381,13 +374,14 @@ export const Header: React.FC = () => {
                     <ChevronRight className="w-4 h-4 text-amber-700" />
                   </button>
 
-                  <button
-                    onClick={() => scrollToSection('community-gallery')}
+                  <Link
+                    to="/reviews"
+                    onClick={() => setIsMobileMenuOpen(false)}
                     className="w-full flex items-center justify-between py-3 px-3 text-sm font-semibold tracking-wider text-zinc-900 hover:bg-[#DFD8C7] rounded-lg text-left"
                   >
-                    <span>GALLERY & LOOKBOOK</span>
+                    <span>CUSTOMER REVIEWS & PHOTOS</span>
                     <ChevronRight className="w-4 h-4 text-zinc-500" />
-                  </button>
+                  </Link>
 
                   <button
                     onClick={() => scrollToSection('how-to-order')}
@@ -411,8 +405,9 @@ export const Header: React.FC = () => {
                     <ChevronRight className="w-4 h-4 text-zinc-500" />
                   </button>
 
-                  <button
-                    onClick={() => scrollToSection('faq-section')}
+                  <Link
+                    to="/faq"
+                    onClick={() => setIsMobileMenuOpen(false)}
                     className="w-full flex items-center justify-between py-3 px-3 text-sm font-semibold tracking-wider text-zinc-900 hover:bg-[#DFD8C7] rounded-lg text-left"
                   >
                     <div className="flex items-center space-x-2">
@@ -420,18 +415,19 @@ export const Header: React.FC = () => {
                       <span>FAQS & HELP</span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-zinc-500" />
-                  </button>
+                  </Link>
 
-                  <button
-                    onClick={() => scrollToSection('about-section')}
+                  <Link
+                    to="/about"
+                    onClick={() => setIsMobileMenuOpen(false)}
                     className="w-full flex items-center justify-between py-3 px-3 text-sm font-semibold tracking-wider text-zinc-900 hover:bg-[#DFD8C7] rounded-lg text-left"
                   >
                     <div className="flex items-center space-x-2">
                       <Info className="w-4 h-4 text-zinc-700" />
-                      <span>ABOUT MELTSPARKLE</span>
+                      <span>ABOUT & CONTACT</span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-zinc-500" />
-                  </button>
+                  </Link>
                 </div>
               </div>
 

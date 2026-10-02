@@ -1,135 +1,274 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Play, ArrowDown, Sparkles, Shield, Droplets, Clock } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight, ArrowUpRight, ArrowRight } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { PRODUCTS } from '../data/products';
+
+interface GalleryPiece {
+  id: string;
+  sku: string;
+  collectionName: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  price: number;
+  originalPrice: number;
+  imageUrl: string;
+  editionTag: string;
+}
+
+const GALLERY_PIECES: GalleryPiece[] = [
+  {
+    id: 'prod-forever-rose-pendant',
+    sku: 'MS-107',
+    collectionName: 'THE SIGNATURE COLLECTION',
+    title: 'Eternal Rosebud Teardrop Pendant',
+    subtitle: 'Real miniature red rosebud set in 24K gold foil',
+    description: 'A genuine botanical rosebud immortalized inside museum-clarity crystal epoxy on an anti-tarnish 18K gold-plated chain.',
+    price: 550,
+    originalPrice: 700,
+    imageUrl: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1200&q=85',
+    editionTag: 'FINE JEWELRY NO. 01'
+  },
+  {
+    id: 'prod-gold-monogram-keychain',
+    sku: 'MS-102',
+    collectionName: 'GOLDEN MONOGRAM SERIES',
+    title: '24K Gold Leaf Initial Locket',
+    subtitle: 'Pressed baby’s breath florals with 24K gold flakes',
+    description: 'Personalized alphabet charm hand-poured with real gold leaf, natural pressed flowers, and luxury swivel clasp hardware.',
+    price: 350,
+    originalPrice: 450,
+    imageUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=85',
+    editionTag: 'PERSONALIZED HEIRLOOM'
+  },
+  {
+    id: 'prod-floral-ring-dish',
+    sku: 'MS-106',
+    collectionName: 'CEREMONIAL BRIDAL ATELIER',
+    title: 'Personalized Floral Trinket Dish',
+    subtitle: 'Scalloped jewelry tray with gold foil script',
+    description: 'Adorned with real dried rose petals, botanical ferns, and custom couple calligraphy for ring and vanity display.',
+    price: 650,
+    originalPrice: 850,
+    imageUrl: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=1200&q=85',
+    editionTag: 'BRIDAL ESSENTIAL'
+  },
+  {
+    id: 'prod-geode-emerald-wall-clock',
+    sku: 'MS-103',
+    collectionName: 'STATEMENT MINERAL DECOR',
+    title: 'Royal Emerald Geode Wall Clock',
+    subtitle: 'Natural crushed quartz veins & silent quartz movement',
+    description: 'Statement luxury resin art piece capturing deep jewel emerald pigments and metallic gold veins for modern interiors.',
+    price: 3400,
+    originalPrice: 4200,
+    imageUrl: 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=1200&q=85',
+    editionTag: 'STATEMENT PIECE'
+  },
+  {
+    id: 'prod-botanical-hair-clips',
+    sku: 'MS-112',
+    collectionName: 'BOTANICAL ACCESSORIES',
+    title: 'Pressed Daisy & Gold Hair Clips',
+    subtitle: 'Forget-me-nots & golden leaves (Set of 3)',
+    description: 'Handcrafted alligator hair barrettes cast with real organic florals and golden leaf accents in clear archival epoxy.',
+    price: 420,
+    originalPrice: 550,
+    imageUrl: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=1200&q=85',
+    editionTag: 'TRENDING ACCESSORY'
+  }
+];
 
 export const Hero: React.FC = () => {
-  const { setSelectedCategory, setSelectedPlacement } = useStore();
+  const { setQuickViewProduct, addToCart, setSelectedCategory, setSelectedPlacement } = useStore();
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const handleBrowseClick = () => {
-    const el = document.getElementById('product-catalog');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-      setSelectedCategory('all');
-      setSelectedPlacement(null);
+  const nextSlide = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % GALLERY_PIECES.length);
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    setActiveIndex((prev) => (prev - 1 + GALLERY_PIECES.length) % GALLERY_PIECES.length);
+  }, []);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [nextSlide, prevSlide]);
+
+  const currentPiece = GALLERY_PIECES[activeIndex];
+
+  const handleOpenProduct = (productId: string) => {
+    const prod = PRODUCTS.find((p) => p.id === productId);
+    if (prod) {
+      setQuickViewProduct(prod);
     }
   };
 
-  const handleHowToOrderClick = () => {
-    const el = document.getElementById('how-to-order');
+  const handleQuickAdd = (productId: string) => {
+    const prod = PRODUCTS.find((p) => p.id === productId);
+    if (prod) {
+      addToCart(prod, 'S');
+    }
+  };
+
+  const handleShopAll = () => {
+    setSelectedCategory('jewelry');
+    setSelectedPlacement(null);
+    const el = document.getElementById('product-catalog');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   return (
-    <section className="relative overflow-hidden bg-[#E8E2D3] pt-16 pb-20 sm:pt-24 sm:pb-28 border-b border-[#D3CBBA]">
-      {/* Subtle background ambient glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-amber-200/30 via-[#DDD5C3]/50 to-amber-100/20 blur-3xl -z-10 pointer-events-none rounded-full" />
+    <section className="relative overflow-hidden bg-[#E8E2D3] border-b border-[#D3CBBA] pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-7 lg:pb-14 select-none">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Center / Asymmetric Gallery Stage */}
+        <div className="relative flex items-center justify-center my-2 sm:my-4">
+          {/* Asymmetric Gallery Carousel Track */}
+          <div className="relative w-full flex items-center justify-center min-h-[270px] sm:min-h-[320px] lg:min-h-[350px]">
+            {GALLERY_PIECES.map((piece, idx) => {
+              const total = GALLERY_PIECES.length;
+              let offset = (idx - activeIndex + total) % total;
+              if (offset > total / 2) offset -= total;
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Floating Mini Pill */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-[#DFD8C7] border border-[#D3CBBA] text-zinc-800 text-xs font-medium mb-8 shadow-sm"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-amber-600 animate-spin" style={{ animationDuration: '8s' }} />
-          <span>Meltsparkle • Keeping memories alive! ✨</span>
-        </motion.div>
+              const isCenter = offset === 0;
+              const isLeft = offset === -1 || (offset === total - 1 && total === 3);
+              const isRight = offset === 1 || (offset === -(total - 1) && total === 3);
+              const isVisible = isCenter || isLeft || isRight;
 
-        {/* Hero Editorial Heading */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.15 }}
-          className="font-serif text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight text-[#111111] leading-[1.12] max-w-4xl mx-auto text-balance"
-        >
-          Keeping Memories Alive in Handcrafted Resin
-        </motion.h1>
+              if (!isVisible) return null;
 
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="mt-6 text-base sm:text-lg md:text-xl text-zinc-700 font-normal max-w-2xl mx-auto leading-relaxed"
-        >
-          Bespoke resin art, sacred wedding flower preservation, and personalized keepsake creations handcrafted with love in Bangladesh. Preserving your most cherished moments forever.
-        </motion.p>
+              return (
+                <motion.div
+                  key={piece.id}
+                  onClick={() => {
+                    if (!isCenter) setActiveIndex(idx);
+                  }}
+                  initial={false}
+                  animate={{
+                    x: isCenter ? '0%' : isLeft ? '-65%' : '65%',
+                    scale: isCenter ? 1 : 0.8,
+                    opacity: isCenter ? 1 : 0.35,
+                    rotate: isCenter ? 0 : isLeft ? -4 : 4,
+                    zIndex: isCenter ? 20 : 10,
+                    filter: isCenter ? 'blur(0px)' : 'blur(2px)'
+                  }}
+                  transition={{ type: 'spring', damping: 26, stiffness: 220 }}
+                  className={`absolute w-[280px] sm:w-[400px] lg:w-[460px] aspect-[16/11] rounded-2xl sm:rounded-3xl overflow-hidden bg-white border-2 border-[#D3CBBA] shadow-2xl transition-all cursor-pointer ${
+                    isCenter ? 'ring-1 ring-black/10' : 'hover:opacity-60'
+                  }`}
+                >
+                  <img
+                    src={piece.imageUrl}
+                    alt={piece.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none" />
 
-        {/* Dual CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.45 }}
-          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto"
-        >
+                  {/* Top Badge */}
+                  <div className="absolute top-3.5 left-3.5">
+                    <span className="px-3 py-0.5 rounded-full bg-black/80 backdrop-blur-md text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider border border-white/20">
+                      {piece.editionTag}
+                    </span>
+                  </div>
+
+                  {/* Bottom Info Overlay on Image */}
+                  <div className="absolute bottom-3.5 left-4 right-4 text-white text-left">
+                    <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-amber-300 block mb-0.5">
+                      {piece.collectionName}
+                    </span>
+                    <h3 className="font-serif text-base sm:text-xl font-bold text-white leading-tight line-clamp-1">
+                      {piece.title}
+                    </h3>
+                    <div className="mt-1.5 flex items-center justify-between pt-1.5 border-t border-white/20">
+                      <span className="font-serif font-bold text-sm sm:text-base text-white">
+                        ৳{piece.price} BDT
+                      </span>
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-amber-200">
+                        {piece.sku}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Minimal Floating Arrow Controls */}
           <button
-            onClick={handleHowToOrderClick}
-            className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-7 py-3.5 rounded-full border border-[#D3CBBA] bg-[#DFD8C7] hover:bg-[#D5CDBE] text-zinc-900 text-xs font-bold tracking-widest uppercase transition-all duration-200 active:scale-95 shadow-sm"
+            onClick={prevSlide}
+            className="absolute left-2 sm:left-6 lg:left-12 z-30 p-2.5 sm:p-3 rounded-full bg-white/90 hover:bg-white text-black shadow-xl border border-[#D3CBBA] backdrop-blur-md transition-all active:scale-95 focus:outline-none"
+            aria-label="Previous Gallery Piece"
           >
-            <Play className="w-3.5 h-3.5 text-zinc-800 fill-zinc-800" />
-            <span>HOW TO ORDER</span>
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
           <button
-            onClick={handleBrowseClick}
-            className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-8 py-3.5 rounded-full bg-black hover:bg-zinc-800 text-[#E8E2D3] text-xs font-bold tracking-widest uppercase transition-all duration-200 active:scale-95 shadow-md hover:shadow-lg"
+            onClick={nextSlide}
+            className="absolute right-2 sm:right-6 lg:right-12 z-30 p-2.5 sm:p-3 rounded-full bg-white/90 hover:bg-white text-black shadow-xl border border-[#D3CBBA] backdrop-blur-md transition-all active:scale-95 focus:outline-none"
+            aria-label="Next Gallery Piece"
           >
-            <span>EXPLORE KEEPSAKES</span>
-            <ArrowDown className="w-3.5 h-3.5" />
+            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
-        </motion.div>
+        </div>
 
-        {/* Quick Highlights Bar */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.6 }}
-          className="mt-16 pt-8 border-t border-[#D3CBBA] grid grid-cols-2 md:grid-cols-4 gap-4 text-left"
-        >
-          <div className="flex items-center space-x-3 p-3.5 rounded-xl bg-[#DFD8C7]/70 border border-[#D3CBBA]">
-            <div className="p-2 rounded-lg bg-[#E8E2D3] text-zinc-900 shadow-sm">
-              <Sparkles className="w-4 h-4 text-amber-600" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-zinc-900">100% Handcrafted</div>
-              <div className="text-[11px] text-zinc-600">Crystal archival epoxy</div>
-            </div>
-          </div>
+        {/* Dynamic Editorial Content Block Beneath Gallery */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentPiece.id}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.3 }}
+            className="max-w-xl mx-auto text-center mt-4 sm:mt-6"
+          >
+            <span className="text-[10px] sm:text-xs font-bold tracking-[0.22em] uppercase text-amber-900 block mb-1">
+              {currentPiece.collectionName}
+            </span>
 
-          <div className="flex items-center space-x-3 p-3.5 rounded-xl bg-[#DFD8C7]/70 border border-[#D3CBBA]">
-            <div className="p-2 rounded-lg bg-[#E8E2D3] text-zinc-900 shadow-sm">
-              <Shield className="w-4 h-4 text-emerald-700" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-zinc-900">Real Flora & Foil</div>
-              <div className="text-[11px] text-zinc-600">Pressed bridal flowers</div>
-            </div>
-          </div>
+            <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-light tracking-tight text-zinc-900 leading-tight">
+              {currentPiece.title}
+            </h2>
 
-          <div className="flex items-center space-x-3 p-3.5 rounded-xl bg-[#DFD8C7]/70 border border-[#D3CBBA]">
-            <div className="p-2 rounded-lg bg-[#E8E2D3] text-zinc-900 shadow-sm">
-              <Clock className="w-4 h-4 text-amber-700" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-zinc-900">Lifetime Keepsake</div>
-              <div className="text-[11px] text-zinc-600">UV non-yellowing</div>
-            </div>
-          </div>
+            <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-zinc-600 font-normal leading-relaxed max-w-md mx-auto line-clamp-2 sm:line-clamp-none">
+              {currentPiece.description}
+            </p>
 
-          <div className="flex items-center space-x-3 p-3.5 rounded-xl bg-[#DFD8C7]/70 border border-[#D3CBBA]">
-            <div className="p-2 rounded-lg bg-[#E8E2D3] text-zinc-900 shadow-sm">
-              <Droplets className="w-4 h-4 text-sky-700" />
+            {/* CTAs */}
+            <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3">
+              <button
+                onClick={() => handleQuickAdd(currentPiece.id)}
+                className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-2.5 sm:px-7 sm:py-3 rounded-full bg-black text-[#E8E2D3] hover:bg-zinc-800 text-xs font-bold tracking-[0.18em] uppercase transition-all active:scale-95 shadow-md group"
+              >
+                <span>EXPLORE PIECE • ৳{currentPiece.price}</span>
+                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </button>
+
+              <button
+                onClick={() => handleOpenProduct(currentPiece.id)}
+                className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border border-[#D3CBBA] hover:bg-white text-zinc-900 text-xs font-bold tracking-[0.15em] uppercase transition-all"
+              >
+                <span>VIEW DETAILS</span>
+              </button>
+
+              <button
+                onClick={handleShopAll}
+                className="text-xs font-bold uppercase tracking-wider text-zinc-900 hover:underline inline-flex items-center space-x-1 sm:ml-3"
+              >
+                <span>FULL ATELIER</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
             </div>
-            <div>
-              <div className="text-xs font-bold text-zinc-900">Custom Monograms</div>
-              <div className="text-[11px] text-zinc-600">Names, initials & dates</div>
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );

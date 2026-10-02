@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Product } from '../types';
 import { useStore } from '../context/StoreContext';
-import { Heart, ShoppingBag, Eye, Star } from 'lucide-react';
+import { Heart, ShoppingBag, Eye, Star, Share2, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface ProductCardProps {
@@ -11,10 +11,42 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, showDiscountBadge = false }) => {
   const { addToCart, isInWishlist, toggleWishlist, setQuickViewProduct } = useStore();
+  const [isCopied, setIsCopied] = useState(false);
   const isWishlisted = isInWishlist(product.id);
   const discountPercent = product.originalPrice && product.originalPrice > product.price
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const shareUrl = window.location.origin + `/shop?product=${product.id}`;
+    const shareData = {
+      title: `${product.name} | Melt Sparkle`,
+      text: `Check out ${product.name} - Handcrafted Keepsake (৳${product.price} BDT) on Melt Sparkle!`,
+      url: shareUrl,
+    };
+
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') {
+          copyToClipboard(shareUrl);
+        }
+      }
+    } else {
+      copyToClipboard(shareUrl);
+    }
+  };
+
+  const copyToClipboard = (url: string) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+    }
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2200);
+  };
 
   return (
     <motion.div
@@ -41,21 +73,46 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, showDiscountB
           </span>
         ) : null}
 
-        {/* Wishlist Button */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleWishlist(product.id);
-          }}
-          className="absolute top-2.5 right-2.5 z-10 p-1.5 rounded-full bg-[#E8E2D3]/90 hover:bg-[#E8E2D3] text-zinc-700 hover:text-red-500 shadow-sm transition-all duration-200 active:scale-90"
-          aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-        >
-          <Heart
-            className={`w-4 h-4 transition-colors ${
-              isWishlisted ? 'text-red-500 fill-red-500' : ''
-            }`}
-          />
-        </button>
+        {/* Top-Right Action Controls (Share & Wishlist) */}
+        <div className="absolute top-2.5 right-2.5 z-10 flex items-center space-x-1.5">
+          {/* Share Button */}
+          <button
+            onClick={handleShare}
+            className="p-1.5 rounded-full bg-[#E8E2D3]/90 hover:bg-[#E8E2D3] text-zinc-700 hover:text-black shadow-sm transition-all duration-200 active:scale-90 relative group/share"
+            aria-label={`Share ${product.name}`}
+            title={isCopied ? "Link Copied!" : "Share Product"}
+          >
+            {isCopied ? (
+              <Check className="w-3.5 h-3.5 text-emerald-700 stroke-[2.5]" />
+            ) : (
+              <Share2 className="w-3.5 h-3.5 transition-transform group-hover/share:scale-110" />
+            )}
+
+            {/* Copied Feedback Tooltip */}
+            {isCopied && (
+              <span className="absolute -bottom-6.5 right-0 whitespace-nowrap px-2 py-0.5 rounded-md bg-black text-[#E8E2D3] text-[9px] font-bold shadow-lg">
+                Link Copied!
+              </span>
+            )}
+          </button>
+
+          {/* Wishlist Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleWishlist(product.id);
+            }}
+            className="p-1.5 rounded-full bg-[#E8E2D3]/90 hover:bg-[#E8E2D3] text-zinc-700 hover:text-red-500 shadow-sm transition-all duration-200 active:scale-90"
+            aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+            title={isWishlisted ? 'In Wishlist' : 'Add to Wishlist'}
+          >
+            <Heart
+              className={`w-3.5 h-3.5 transition-colors ${
+                isWishlisted ? 'text-red-500 fill-red-500' : ''
+              }`}
+            />
+          </button>
+        </div>
 
         {/* Product Artwork / Photography Image */}
         <div className="w-full h-full flex items-center justify-center overflow-hidden rounded-lg">

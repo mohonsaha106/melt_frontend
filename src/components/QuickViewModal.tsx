@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
-import { X, Heart, ShoppingBag, Star, Clock, Truck, ShieldCheck, Sparkles, Check } from 'lucide-react';
+import { X, Heart, ShoppingBag, Star, Clock, Truck, ShieldCheck, Sparkles, Check, Share2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const QuickViewModal: React.FC = () => {
@@ -14,12 +14,43 @@ export const QuickViewModal: React.FC = () => {
 
   const [selectedSize, setSelectedSize] = useState<'S' | 'M' | 'L' | 'Pack'>('S');
   const [isAdded, setIsAdded] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   if (!quickViewProduct) return null;
 
   const isWishlisted = isInWishlist(quickViewProduct.id);
   const activeSizeOption = quickViewProduct.sizes.find(s => s.size === selectedSize) || quickViewProduct.sizes[0];
   const currentPrice = activeSizeOption ? activeSizeOption.price : quickViewProduct.price;
+
+  const handleShare = async () => {
+    const shareUrl = window.location.origin + `/shop?product=${quickViewProduct.id}`;
+    const shareData = {
+      title: `${quickViewProduct.name} | Melt Sparkle`,
+      text: `Check out ${quickViewProduct.name} - Handcrafted Keepsake (৳${currentPrice} BDT) on Melt Sparkle!`,
+      url: shareUrl,
+    };
+
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') {
+          copyToClipboard(shareUrl);
+        }
+      }
+    } else {
+      copyToClipboard(shareUrl);
+    }
+  };
+
+  const copyToClipboard = (url: string) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+    }
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2200);
+  };
 
   const handleAdd = () => {
     addToCart(quickViewProduct, selectedSize);
@@ -105,15 +136,31 @@ export const QuickViewModal: React.FC = () => {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => toggleWishlist(quickViewProduct.id)}
-                  className="p-2.5 rounded-full bg-[#DFD8C7] hover:bg-[#D4CCB8] text-zinc-700 hover:text-red-500 border border-black/10 transition-colors"
-                  aria-label="Wishlist"
-                >
-                  <Heart
-                    className={`w-5 h-5 ${isWishlisted ? 'text-red-500 fill-red-500' : ''}`}
-                  />
-                </button>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={handleShare}
+                    className="p-2.5 rounded-full bg-[#DFD8C7] hover:bg-[#D4CCB8] text-zinc-700 hover:text-black border border-black/10 transition-colors relative"
+                    aria-label="Share product"
+                    title={isCopied ? "Link Copied!" : "Share Product"}
+                  >
+                    {isCopied ? (
+                      <Check className="w-5 h-5 text-emerald-700 stroke-[2.5]" />
+                    ) : (
+                      <Share2 className="w-5 h-5" />
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => toggleWishlist(quickViewProduct.id)}
+                    className="p-2.5 rounded-full bg-[#DFD8C7] hover:bg-[#D4CCB8] text-zinc-700 hover:text-red-500 border border-black/10 transition-colors"
+                    aria-label="Wishlist"
+                    title={isWishlisted ? "In Wishlist" : "Add to Wishlist"}
+                  >
+                    <Heart
+                      className={`w-5 h-5 ${isWishlisted ? 'text-red-500 fill-red-500' : ''}`}
+                    />
+                  </button>
+                </div>
               </div>
 
               {/* Price */}
