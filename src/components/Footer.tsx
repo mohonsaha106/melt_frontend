@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { 
   Instagram, 
@@ -7,10 +8,14 @@ import {
   Mail, 
   MapPin, 
   ArrowUp,
-  MessageCircle
+  MessageCircle,
+  Tag
 } from 'lucide-react';
 
 export const Footer: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const {
     setSelectedCategory,
     setSelectedPlacement,
@@ -24,9 +29,17 @@ export const Footer: React.FC = () => {
   };
 
   const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 120);
+    } else {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
@@ -195,6 +208,15 @@ export const Footer: React.FC = () => {
                 >
                   How To Order (COD BD)
                 </button>
+              </li>
+              <li>
+                <Link
+                  to="/sepcial-offer"
+                  className="hover:text-white text-rose-400 font-medium transition-colors flex items-center gap-1.5"
+                >
+                  <Tag className="w-3 h-3" />
+                  <span>Special Offers & Deals</span>
+                </Link>
               </li>
               <li>
                 <button

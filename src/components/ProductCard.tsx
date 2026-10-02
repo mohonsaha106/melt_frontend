@@ -6,11 +6,15 @@ import { motion } from 'framer-motion';
 
 interface ProductCardProps {
   product: Product;
+  showDiscountBadge?: boolean;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product, showDiscountBadge = false }) => {
   const { addToCart, isInWishlist, toggleWishlist, setQuickViewProduct } = useStore();
   const isWishlisted = isInWishlist(product.id);
+  const discountPercent = product.originalPrice && product.originalPrice > product.price
+    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+    : 0;
 
   return (
     <motion.div
@@ -27,11 +31,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         className="relative aspect-square w-full rounded-xl bg-[#DFD8C7] flex items-center justify-center p-2 overflow-hidden cursor-pointer shadow-inner"
       >
         {/* Tag / Badge */}
-        {product.tag && (
+        {showDiscountBadge && discountPercent > 0 ? (
+          <span className="absolute top-2.5 left-2.5 z-10 px-2 py-0.5 text-[10px] font-extrabold tracking-wider uppercase rounded-md bg-rose-600 text-white shadow-sm">
+            {discountPercent}% OFF
+          </span>
+        ) : product.tag ? (
           <span className="absolute top-2.5 left-2.5 z-10 px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase rounded-md bg-black text-[#E8E2D3] shadow-sm">
             {product.tag}
           </span>
-        )}
+        ) : null}
 
         {/* Wishlist Button */}
         <button

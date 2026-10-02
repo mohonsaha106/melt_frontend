@@ -1,24 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { StoreProvider } from './context/StoreContext';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Header } from './components/Header';
-// Hero Variations (Switch as desired: Hero, HeroV1, HeroV2, HeroV3, HeroV4)
-// import { Hero } from './components/Hero';
-// import { HeroV1 } from './components/Hero-v1';
-// import { HeroV2 } from './components/Hero-v2';
-// import { HeroV3 } from './components/Hero-v3';
-import { HeroV4 } from './components/Hero-v4';
-import { PlacementSelector } from './components/PlacementSelector';
-import { HighlightBanner } from './components/HighlightBanner';
-import { ProductGrid } from './components/ProductGrid';
-import { CustomUniverseSection } from './components/CustomUniverseSection';
-import { TrustBadges } from './components/TrustBadges';
-import { HowToOrderSection } from './components/HowToOrderSection';
-import { HowToApplySection } from './components/HowToApplySection';
-import { ReviewSection } from './components/ReviewSection';
-import { FAQSection } from './components/FAQSection';
-import { AboutSection } from './components/AboutSection';
 import { Footer } from './components/Footer';
+import { HomePage } from './pages/HomePage';
+import { SpecialOffersPage } from './pages/SpecialOffersPage';
 import { CartDrawer } from './components/CartDrawer';
 import { FreeDesignModal } from './components/FreeDesignModal';
 import { QuickViewModal } from './components/QuickViewModal';
@@ -29,63 +16,38 @@ import { TrackOrderModal } from './components/TrackOrderModal';
 import { HowToApplyModal } from './components/HowToApplyModal';
 import { SearchModal } from './components/SearchModal';
 import { FloatingBottomCartBar } from './components/FloatingBottomCartBar';
-// import { HeroV1 } from './components/Hero-v1';
-// import { HeroV2 } from './components/Hero-v2';
-// import { HeroV3 } from './components/Hero-v3';
-// import { HeroV5 } from './components/Hero-v5';
-// import { HeroV6 } from './components/Hero-v6';
+
+// Helper to scroll to top automatically on route changes
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [pathname]);
+  return null;
+};
 
 export const AppContent: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#E8E2D3] flex flex-col selection:bg-black selection:text-[#E8E2D3] text-[#111111]">
+      <ScrollToTop />
+
       {/* Top Ticker Bar */}
       <AnnouncementBar />
 
       {/* Sticky Floating Header */}
       <Header />
 
-      {/* Main Content Sections */}
+      {/* Main Content Pages with Routing */}
       <main className="flex-grow">
-        {/* Editorial Hero Banner */}
-        {/* <Hero /> */}
-
-        {/* <HeroV1 />ok */}
-        <HeroV4 />
-        {/* <HeroV5 />
-        <HeroV6 />
-        <HeroV2 />
-        <HeroV3 /> */}
-
-
-        {/* Circular Placement / Category Carousel */}
-        <PlacementSelector />
-
-        {/* High-contrast Highlight Strip */}
-        <HighlightBanner />
-
-        {/* Main Product Catalog & Filter Pills */}
-        <ProductGrid />
-
-        {/* Two Ways To Order Keepsakes Section */}
-        <CustomUniverseSection />
-
-        {/* Quality & Trust Badges */}
-        <TrustBadges />
-
-        {/* How To Order Nationwide via COD */}
-        <HowToOrderSection />
-
-        {/* 5-Step Artisanal Resin Crafting Process */}
-        <HowToApplySection />
-
-        {/* Community Lookbook & Reviews */}
-        <ReviewSection />
-
-        {/* FAQ Accordion */}
-        <FAQSection />
-
-        {/* Brand Story & Metrics */}
-        <AboutSection />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          {/* Support both the exact user route (/sepcial-offer) and common aliases */}
+          <Route path="/sepcial-offer" element={<SpecialOffersPage />} />
+          <Route path="/special-offer" element={<SpecialOffersPage />} />
+          <Route path="/special-offers" element={<SpecialOffersPage />} />
+          <Route path="/offers" element={<SpecialOffersPage />} />
+          <Route path="*" element={<HomePage />} />
+        </Routes>
       </main>
 
       {/* Footer */}
@@ -108,8 +70,10 @@ export const AppContent: React.FC = () => {
 
 export default function App() {
   return (
-    <StoreProvider>
-      <AppContent />
-    </StoreProvider>
+    <BrowserRouter>
+      <StoreProvider>
+        <AppContent />
+      </StoreProvider>
+    </BrowserRouter>
   );
 }

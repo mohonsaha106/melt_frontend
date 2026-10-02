@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { 
   ShoppingBag, 
   Heart, 
   Search, 
-  Package, 
   Menu, 
   X, 
   Sparkles, 
@@ -13,11 +13,15 @@ import {
   HelpCircle,
   BookOpen,
   Info,
-  ChevronRight
+  ChevronRight,
+  Tag
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Header: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const {
     totalCartItemCount,
     openCart,
@@ -27,18 +31,39 @@ export const Header: React.FC = () => {
     setSelectedCategory,
     setSelectedPlacement,
     setIsHowToApplyOpen,
-    setIsTrackOrderOpen,
     setIsCustomStudioOpen
   } = useStore();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
     setIsMobileMenuOpen(false);
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 120);
+    } else {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (location.pathname !== '/') {
+      navigate('/');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setSelectedCategory('all');
+    setSelectedPlacement(null);
   };
 
   return (
@@ -66,20 +91,15 @@ export const Header: React.FC = () => {
             {/* Mobile Middle: Perfectly Centered Brand Logo (Vector SVG) */}
             <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-auto">
               <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                  setSelectedCategory('all');
-                  setSelectedPlacement(null);
-                }}
+                href="/"
+                onClick={handleLogoClick}
                 className="group flex items-center py-1 transition-transform duration-200 active:scale-95"
                 aria-label="Melt Sparkle"
               >
                 <img
                   src="/melt-logo.svg"
                   alt="Melt Sparkle"
-                  className="h-7 sm:h-8 w-auto max-w-[160px] object-contain select-none"
+                  className="h-11 sm:h-12 w-auto max-w-[220px] sm:max-w-[250px] object-contain select-none"
                 />
               </a>
             </div>
@@ -99,12 +119,16 @@ export const Header: React.FC = () => {
               {/* Mobile Shopping Cart Trigger */}
               <button
                 onClick={openCart}
-                className="flex items-center space-x-1 px-2.5 py-1.5 bg-black text-white hover:bg-zinc-800 rounded-full transition-all duration-200 active:scale-95 shadow-sm focus:outline-none"
+                className="p-2 text-zinc-700 hover:text-black hover:bg-[#DFD8C7] rounded-full transition-colors relative focus:outline-none active:scale-95"
                 title="Shopping Cart"
                 aria-label="Shopping Cart"
               >
-                <ShoppingBag className="w-4 h-4" />
-                <span className="text-xs font-semibold">{totalCartItemCount}</span>
+                <ShoppingBag className="w-5 h-5" />
+                {totalCartItemCount > 0 && (
+                  <span className="absolute top-0.5 right-0.5 min-w-[16px] h-4 px-1 bg-black text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+                    {totalCartItemCount}
+                  </span>
+                )}
               </button>
             </div>
           </div>
@@ -119,26 +143,21 @@ export const Header: React.FC = () => {
             {/* Desktop Brand Logo (Realistic Vector SVG) */}
             <div className="flex items-center">
               <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                  setSelectedCategory('all');
-                  setSelectedPlacement(null);
-                }}
+                href="/"
+                onClick={handleLogoClick}
                 className="group flex items-center py-1 transition-all duration-200 hover:scale-[1.03]"
                 aria-label="Melt Sparkle"
               >
                 <img
                   src="/melt-logo.svg"
                   alt="Melt Sparkle"
-                  className="h-9 xl:h-10 w-auto max-w-[210px] object-contain select-none drop-shadow-xs"
+                  className="h-11 xl:h-12 w-auto max-w-[240px] xl:max-w-[270px] object-contain select-none drop-shadow-xs"
                 />
               </a>
             </div>
 
             {/* Desktop Navigation Links */}
-            <nav className="flex items-center space-x-8 text-xs font-semibold tracking-wider uppercase text-zinc-800">
+            <nav className="flex items-center space-x-7 text-xs font-semibold tracking-wider uppercase text-zinc-800">
               <button
                 onClick={() => {
                   scrollToSection('product-catalog');
@@ -149,6 +168,14 @@ export const Header: React.FC = () => {
               >
                 SHOP
               </button>
+
+              <Link
+                to="/sepcial-offer"
+                className="hover:text-rose-800 text-rose-700 font-bold transition-colors py-1 relative flex items-center gap-1 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-rose-700 after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
+              >
+                <Tag className="w-3 h-3 text-rose-600" />
+                OFFERS
+              </Link>
 
               <button
                 onClick={() => scrollToSection('community-gallery')}
@@ -161,7 +188,7 @@ export const Header: React.FC = () => {
                 onClick={() => setIsCustomStudioOpen(true)}
                 className="hover:text-black transition-colors py-1 text-amber-800 font-bold relative flex items-center gap-1"
               >
-                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                {/* <Sparkles className="w-3.5 h-3.5 text-amber-600" /> */}
                 CUSTOM STUDIO
               </button>
 
@@ -172,12 +199,12 @@ export const Header: React.FC = () => {
                 HOW TO ORDER
               </button>
 
-              <button
+              {/* <button
                 onClick={() => setIsHowToApplyOpen(true)}
                 className="hover:text-black transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
               >
                 KEEPSAKE GUIDE
-              </button>
+              </button> */}
 
               <button
                 onClick={() => scrollToSection('faq-section')}
@@ -195,7 +222,7 @@ export const Header: React.FC = () => {
             </nav>
 
             {/* Desktop Right Action Icons */}
-            <div className="flex items-center space-x-2 sm:space-x-4">
+            <div className="flex items-center space-x-1 sm:space-x-1.5">
               {/* Desktop Search Icon Trigger */}
               <button
                 onClick={() => setIsSearchModalOpen(true)}
@@ -228,20 +255,10 @@ export const Header: React.FC = () => {
                 <Instagram className="w-4 h-4" />
               </a>
 
-              {/* Order Tracking */}
-              <button
-                onClick={() => setIsTrackOrderOpen(true)}
-                className="p-2 text-zinc-700 hover:text-black hover:bg-[#DFD8C7] rounded-full transition-colors focus:outline-none"
-                title="Track My Order"
-                aria-label="Track Order"
-              >
-                <Package className="w-4 h-4" />
-              </button>
-
               {/* Wishlist Icon */}
               <button
                 onClick={() => setIsWishlistOpen(true)}
-                className="p-2 text-zinc-700 hover:text-black hover:bg-zinc-100 rounded-full transition-colors relative focus:outline-none"
+                className="p-2 text-zinc-700 hover:text-black hover:bg-[#DFD8C7] rounded-full transition-colors relative focus:outline-none"
                 title="Wishlist"
                 aria-label="Wishlist"
               >
@@ -256,12 +273,16 @@ export const Header: React.FC = () => {
               {/* Shopping Cart Drawer Trigger */}
               <button
                 onClick={openCart}
-                className="flex items-center space-x-1.5 p-2 bg-black text-white hover:bg-zinc-800 rounded-full sm:px-3 sm:py-1.5 transition-all duration-200 active:scale-95 shadow-sm focus:outline-none"
+                className="p-2 text-zinc-700 hover:text-black hover:bg-[#DFD8C7] rounded-full transition-colors relative focus:outline-none active:scale-95"
                 title="Shopping Cart"
                 aria-label="Shopping Cart"
               >
                 <ShoppingBag className="w-4 h-4" />
-                <span className="text-xs font-semibold px-0.5">{totalCartItemCount}</span>
+                {totalCartItemCount > 0 && (
+                  <span className="absolute top-0.5 right-0.5 min-w-[16px] h-4 px-1 bg-black text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+                    {totalCartItemCount}
+                  </span>
+                )}
               </button>
             </div>
           </div>
@@ -290,14 +311,14 @@ export const Header: React.FC = () => {
               className="fixed inset-y-0 left-0 w-[85%] max-w-sm bg-[#E8E2D3] z-50 shadow-2xl flex flex-col justify-between overflow-y-auto lg:hidden border-r border-[#D3CBBA]"
             >
               <div className="p-6">
-                <div className="flex items-center justify-between pb-6 border-b border-[#D3CBBA]">
+                <div className="flex items-center justify-between pb-1 border-b border-[#D3CBBA]">
                   <div>
                     <img
                       src="/melt-logo.svg"
                       alt="Melt Sparkle"
-                      className="h-9 w-auto max-w-[160px] object-contain select-none mb-1"
+                      className="h-10 sm:h-11 w-auto max-w-[190px] object-contain select-none mb-1"
                     />
-                    <p className="text-[11px] text-zinc-600 italic">Keeping memories alive!</p>
+                    {/* <p className="text-[11px] text-zinc-600 italic">Keeping memories alive!</p> */}
                   </div>
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -321,6 +342,18 @@ export const Header: React.FC = () => {
                     </div>
                     <ChevronRight className="w-4 h-4 text-zinc-500" />
                   </button>
+
+                  <Link
+                    to="/sepcial-offer"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="w-full flex items-center justify-between py-3 px-3 text-sm font-bold tracking-wider text-rose-900 bg-rose-500/10 hover:bg-rose-500/20 rounded-lg text-left"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <Tag className="w-4 h-4 text-rose-600" />
+                      <span>SPECIAL OFFERS & DEALS</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-rose-700" />
+                  </Link>
 
                   <button
                     onClick={() => {
@@ -374,20 +407,6 @@ export const Header: React.FC = () => {
                     <div className="flex items-center space-x-2">
                       <BookOpen className="w-4 h-4 text-zinc-700" />
                       <span>PRESERVATION & CARE GUIDE</span>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-zinc-500" />
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setIsTrackOrderOpen(true);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="w-full flex items-center justify-between py-3 px-3 text-sm font-semibold tracking-wider text-zinc-900 hover:bg-[#DFD8C7] rounded-lg text-left"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <Package className="w-4 h-4 text-zinc-700" />
-                      <span>TRACK MY PARCEL</span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-zinc-500" />
                   </button>

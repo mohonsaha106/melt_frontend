@@ -1,10 +1,30 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { PRODUCTS } from '../data/products';
-import { CATEGORIES } from '../data/categories';
 import { useStore } from '../context/StoreContext';
 import { ProductCard } from './ProductCard';
-import { SlidersHorizontal, Search, Sparkles } from 'lucide-react';
+import { SearchFilterBar, CategoryFilterItem } from './SearchFilterBar';
+import { FilterDrawerModal } from './FilterDrawerModal';
 import { AnimatePresence, motion } from 'framer-motion';
+
+// Rich categories and theme tags matching designs
+const CATALOG_CATEGORIES: CategoryFilterItem[] = [
+  { id: 'all', label: 'All' },
+  { id: 'preservation', label: 'Preservation' },
+  { id: 'keychains', label: 'Keychains' },
+  { id: 'bookmarks', label: 'Bookmarks' },
+  { id: 'clocks', label: 'Geode Clocks' },
+  { id: 'coasters', label: 'Coasters' },
+  { id: 'jewelry', label: 'Jewelry' },
+  { id: 'custom', label: 'Custom Studio' },
+  { id: 'aesthetic', label: 'Aesthetic' },
+  { id: 'minimal', label: 'Minimal' },
+  { id: 'floral', label: 'Floral' },
+  { id: 'wedding', label: 'Wedding' },
+  { id: 'baby', label: 'Baby Keepsakes' },
+  { id: 'nightlamps', label: 'Nightlamps' },
+  { id: 'gold-foil', label: '24K Gold Foil' },
+  { id: 'arabic', label: 'Arabic Art' },
+];
 
 export const ProductGrid: React.FC = () => {
   const {
@@ -19,20 +39,49 @@ export const ProductGrid: React.FC = () => {
     setIsCustomStudioOpen
   } = useStore();
 
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 8000]);
+  const [minRating, setMinRating] = useState<number>(0);
+
   // Filter & Sort Logic
   const filteredProducts = useMemo(() => {
     return PRODUCTS.filter((product) => {
-      // Category filter
-      if (selectedCategory !== 'all') {
-        if (selectedCategory === 'custom') {
-          // Handled by custom studio card or category
-        } else if (product.category !== selectedCategory) {
+      // Category / Tag filter
+      const cat = selectedCategory as string;
+      if (cat !== 'all') {
+        if (cat === 'custom') {
+          // Handled by custom studio
+        } else if (cat === 'aesthetic' || cat === 'minimal') {
+          // Tag / style matching
+        } else if (cat === 'floral') {
+          if (!product.placements.includes('Flower Preservation') && !product.placements.includes('Floral Bookmarks')) return false;
+        } else if (cat === 'wedding') {
+          if (!product.placements.includes('Wedding Keepsakes')) return false;
+        } else if (cat === 'baby') {
+          if (!product.placements.includes('Baby Keepsakes')) return false;
+        } else if (cat === 'nightlamps') {
+          if (!product.placements.includes('Letter Nightlamps')) return false;
+        } else if (cat === 'gold-foil') {
+          if (!product.description.toLowerCase().includes('gold')) return false;
+        } else if (cat === 'arabic') {
+          if (!product.sku.includes('111') && !product.name.toLowerCase().includes('arabic') && !product.name.toLowerCase().includes('calligraphy')) return false;
+        } else if (product.category !== cat) {
           return false;
         }
       }
 
       // Placement filter
       if (selectedPlacement && !product.placements.includes(selectedPlacement)) {
+        return false;
+      }
+
+      // Price Range filter
+      if (product.price < priceRange[0] || product.price > priceRange[1]) {
+        return false;
+      }
+
+      // Min Rating filter
+      if (minRating > 0 && product.rating < minRating) {
         return false;
       }
 
@@ -55,83 +104,55 @@ export const ProductGrid: React.FC = () => {
       if (sortBy === 'rating') return b.rating - a.rating;
       return 0; // featured default
     });
-  }, [selectedCategory, selectedPlacement, searchQuery, sortBy]);
+  }, [selectedCategory, selectedPlacement, searchQuery, sortBy, priceRange, minRating]);
+
+  const handleResetFilters = () => {
+    setPriceRange([0, 8000]);
+    setSelectedPlacement(null);
+    setMinRating(0);
+    setSelectedCategory('all');
+    setSearchQuery('');
+  };
+
+  const handleSelectCategory = (catId: string) => {
+    if (catId === 'custom') {
+      setIsCustomStudioOpen(true);
+    } else {
+      setSelectedCategory(catId as any);
+    }
+  };
 
   return (
     <section id="product-catalog" className="py-12 sm:py-16 bg-[#E8E2D3] min-h-[600px] border-b border-[#D3CBBA]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-8">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 font-serif">
-            Artisan Keepsakes & Resin Creations
-          </h2>
-          <p className="mt-2 text-sm text-zinc-600">
-            Handcrafted with real botanicals, 24K gold flakes, and UV non-yellowing crystal epoxy.
-          </p>
-        </div>
-
-        {/* Category Filter Pills (Scrollable on mobile) */}
-        <div className="flex items-center justify-start sm:justify-center overflow-x-auto pb-4 gap-2 no-scrollbar">
-          {CATEGORIES.map((cat) => {
-            const isActive = selectedCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => {
-                  if (cat.id === 'custom') {
-                    setIsCustomStudioOpen(true);
-                  } else {
-                    setSelectedCategory(cat.id);
-                  }
-                }}
-                className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
-                  isActive
-                    ? 'bg-black text-[#E8E2D3] shadow-sm'
-                    : 'bg-[#DFD8C7] hover:bg-[#D5CDBE] text-zinc-800 border border-[#D3CBBA]/60'
-                }`}
-              >
-                {cat.id === 'custom' && <Sparkles className="w-3 h-3 inline-block mr-1 text-amber-500" />}
-                {cat.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Controls Toolbar: Results Count & Sort Dropdown */}
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-[#D3CBBA]">
-          <div className="flex items-center space-x-2 text-xs text-zinc-600">
-            <span className="font-semibold text-zinc-900">{filteredProducts.length}</span>
-            <span>keepsakes found</span>
-            {selectedPlacement && (
-              <span className="bg-[#DFD8C7] text-zinc-900 px-2 py-0.5 rounded-md font-medium border border-[#D3CBBA]">
-                in {selectedPlacement}
-              </span>
-            )}
-          </div>
-
-          <div className="flex items-center space-x-3 w-full sm:w-auto justify-end">
-            <div className="flex items-center space-x-1.5 text-xs text-zinc-700">
-              <SlidersHorizontal className="w-3.5 h-3.5" />
-              <span>Sort by:</span>
-            </div>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="text-xs bg-[#DFD8C7] border border-[#D3CBBA] rounded-lg px-3 py-1.5 font-medium text-zinc-900 focus:outline-none focus:ring-1 focus:ring-black cursor-pointer"
-            >
-              <option value="featured">Featured & Best Selling</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="rating">Customer Rating</option>
-            </select>
-          </div>
-        </div>
+        
+        {/* Reusable Search & Filter Bar Component */}
+        <SearchFilterBar
+          title="Shop All Designs"
+          itemCount={filteredProducts.length}
+          itemCountLabel="designs available"
+          searchValue={searchQuery}
+          onSearchChange={setSearchQuery}
+          searchPlaceholder="Search by name or design code..."
+          categories={CATALOG_CATEGORIES}
+          selectedCategory={selectedCategory}
+          onSelectCategory={handleSelectCategory}
+          initialVisibleCount={8}
+          sortValue={sortBy}
+          onSortChange={(val) => setSortBy(val as any)}
+          sortOptions={[
+            { id: 'featured', label: 'Default' },
+            { id: 'price-low', label: 'Price: Low to High' },
+            { id: 'price-high', label: 'Price: High to Low' },
+            { id: 'rating', label: 'Highest Rated' },
+          ]}
+        />
 
         {/* Product Cards Grid */}
         {filteredProducts.length > 0 ? (
           <motion.div
             layout
-            className="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"
+            className="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"
           >
             <AnimatePresence>
               {filteredProducts.map((product) => (
@@ -140,28 +161,34 @@ export const ProductGrid: React.FC = () => {
             </AnimatePresence>
           </motion.div>
         ) : (
-          /* Empty Search Results State */
-          <div className="py-20 text-center max-w-md mx-auto">
-            <div className="w-16 h-16 rounded-full bg-[#DFD8C7] flex items-center justify-center mx-auto text-zinc-500 mb-4 border border-[#D3CBBA]">
-              <Search className="w-8 h-8" />
-            </div>
-            <h3 className="text-base font-bold text-zinc-900">No matching keepsakes found</h3>
-            <p className="text-xs text-zinc-600 mt-1">
-              Try searching with different keywords or clearing your active filters.
+          <div className="py-20 text-center bg-[#F2EDE2] rounded-3xl mt-8 border border-[#D3CBBA] p-8">
+            <h3 className="text-lg font-bold text-zinc-900">No designs found</h3>
+            <p className="text-xs text-zinc-600 mt-1 max-w-sm mx-auto">
+              We couldn't find any keepsakes matching your search or filters.
             </p>
             <button
-              onClick={() => {
-                setSearchQuery('');
-                setSelectedCategory('all');
-                setSelectedPlacement(null);
-              }}
-              className="mt-5 px-5 py-2 rounded-full bg-black text-[#E8E2D3] text-xs font-semibold hover:bg-zinc-800 transition-colors"
+              onClick={handleResetFilters}
+              className="mt-4 px-6 py-2.5 bg-black text-[#E8E2D3] text-xs font-bold uppercase tracking-wider rounded-full hover:bg-zinc-800 transition-colors shadow-sm"
             >
-              Clear All Filters
+              Reset Filters
             </button>
           </div>
         )}
       </div>
+
+      {/* Advanced Filter Drawer Modal */}
+      <FilterDrawerModal
+        isOpen={isFilterDrawerOpen}
+        onClose={() => setIsFilterDrawerOpen(false)}
+        selectedPriceRange={priceRange}
+        onPriceRangeChange={setPriceRange}
+        selectedPlacement={selectedPlacement}
+        onSelectPlacement={setSelectedPlacement}
+        minRating={minRating}
+        onMinRatingChange={setMinRating}
+        onResetFilters={handleResetFilters}
+        totalResultsCount={filteredProducts.length}
+      />
     </section>
   );
 };
