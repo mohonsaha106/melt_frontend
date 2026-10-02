@@ -6,7 +6,6 @@ import {
   Phone, 
   Mail, 
   MapPin, 
-  Sparkles, 
   ArrowUp,
   MessageCircle
 } from 'lucide-react';
@@ -70,11 +69,15 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 sm:gap-12">
           {/* Brand Info */}
           <div className="space-y-4 md:col-span-2">
-            <div className="flex items-center space-x-2">
-              <span className="font-serif text-xl sm:text-2xl font-bold tracking-[0.2em] uppercase text-white">
-                MELT SPARKLE
-              </span>
-              <Sparkles className="w-4 h-4 text-amber-500" />
+            <div>
+              <img
+                src="/melt-logo-white.svg"
+                alt="Melt Sparkle"
+                className="h-10 sm:h-11 w-auto max-w-[210px] object-contain select-none mb-1.5"
+              />
+              <p className="text-[11px] tracking-wider uppercase text-amber-400 font-mono">
+                Keeping memories alive!
+              </p>
             </div>
 
             <p className="text-xs sm:text-sm text-zinc-400 max-w-sm leading-relaxed">

@@ -42,6 +42,8 @@ interface StoreContextType {
   setIsHowToApplyOpen: (open: boolean) => void;
   isTrackOrderOpen: boolean;
   setIsTrackOrderOpen: (open: boolean) => void;
+  isSearchModalOpen: boolean;
+  setIsSearchModalOpen: (open: boolean) => void;
   lastOrder: OrderDetails | null;
   setLastOrder: (order: OrderDetails | null) => void;
 
@@ -100,6 +102,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isHowToApplyOpen, setIsHowToApplyOpen] = useState(false);
   const [isTrackOrderOpen, setIsTrackOrderOpen] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [lastOrder, setLastOrder] = useState<OrderDetails | null>(null);
 
   // Search & Filters
@@ -339,6 +342,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setIsHowToApplyOpen,
         isTrackOrderOpen,
         setIsTrackOrderOpen,
+        isSearchModalOpen,
+        setIsSearchModalOpen,
         lastOrder,
         setLastOrder,
         selectedCategory,

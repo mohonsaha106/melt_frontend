@@ -79,7 +79,7 @@ export const PRODUCTS: Product[] = [
     tag: 'HOT',
     rating: 4.9,
     reviewCount: 230,
-    imageUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80',
     description: 'Breathtaking 3-layer resin beach art capturing frothy seafoam waves, natural coastal sand, and azure blue waters. Heat-resistant with soft protective cork base.',
     placements: ['Ocean Coasters', 'Trinket Trays'],
     durability: 'Heat & Spill Resistant',

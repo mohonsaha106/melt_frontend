@@ -36,6 +36,21 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #6E6550;
   }
+
+  /* Search modal scrollbar */
+  .search-modal-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .search-modal-scrollbar::-webkit-scrollbar-track {
+    background: #F4F4F5;
+  }
+  .search-modal-scrollbar::-webkit-scrollbar-thumb {
+    background: #D4D4D8;
+    border-radius: 9999px;
+  }
+  .search-modal-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #A1A1AA;
+  }
 }
 
 @layer utilities {

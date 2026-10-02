@@ -2,7 +2,12 @@ import React from 'react';
 import { StoreProvider } from './context/StoreContext';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Header } from './components/Header';
-import { Hero } from './components/Hero';
+// Hero Variations (Switch as desired: Hero, HeroV1, HeroV2, HeroV3, HeroV4)
+// import { Hero } from './components/Hero';
+// import { HeroV1 } from './components/Hero-v1';
+// import { HeroV2 } from './components/Hero-v2';
+// import { HeroV3 } from './components/Hero-v3';
+import { HeroV4 } from './components/Hero-v4';
 import { PlacementSelector } from './components/PlacementSelector';
 import { HighlightBanner } from './components/HighlightBanner';
 import { ProductGrid } from './components/ProductGrid';
@@ -22,7 +27,13 @@ import { CustomTattooStudio } from './components/CustomTattooStudio';
 import { CheckoutModal } from './components/CheckoutModal';
 import { TrackOrderModal } from './components/TrackOrderModal';
 import { HowToApplyModal } from './components/HowToApplyModal';
+import { SearchModal } from './components/SearchModal';
 import { FloatingBottomCartBar } from './components/FloatingBottomCartBar';
+// import { HeroV1 } from './components/Hero-v1';
+// import { HeroV2 } from './components/Hero-v2';
+// import { HeroV3 } from './components/Hero-v3';
+// import { HeroV5 } from './components/Hero-v5';
+// import { HeroV6 } from './components/Hero-v6';
 
 export const AppContent: React.FC = () => {
   return (
@@ -36,7 +47,15 @@ export const AppContent: React.FC = () => {
       {/* Main Content Sections */}
       <main className="flex-grow">
         {/* Editorial Hero Banner */}
-        <Hero />
+        {/* <Hero /> */}
+
+        {/* <HeroV1 />ok */}
+        <HeroV4 />
+        {/* <HeroV5 />
+        <HeroV6 />
+        <HeroV2 />
+        <HeroV3 /> */}
+
 
         {/* Circular Placement / Category Carousel */}
         <PlacementSelector />
@@ -81,6 +100,7 @@ export const AppContent: React.FC = () => {
       <CheckoutModal />
       <TrackOrderModal />
       <HowToApplyModal />
+      <SearchModal />
       <FloatingBottomCartBar />
     </div>
   );
