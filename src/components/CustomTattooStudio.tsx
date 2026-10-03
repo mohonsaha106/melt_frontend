@@ -66,7 +66,7 @@ export const CustomTattooStudio: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-hidden">
       {/* Backdrop */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -101,7 +101,7 @@ export const CustomTattooStudio: React.FC = () => {
         </div>
 
         {/* Studio Body */}
-        <div className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-h-[75vh] overflow-y-auto">
+        <div className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-h-[75vh] overflow-y-auto no-scrollbar">
           {/* Left: Live Resin Keepsake Preview Box */}
           <div className="flex flex-col items-center">
             <div className="relative w-full aspect-square rounded-3xl bg-[#0A0A0A] flex flex-col items-center justify-center p-8 overflow-hidden shadow-2xl border border-zinc-800">

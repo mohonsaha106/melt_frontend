@@ -10,6 +10,7 @@ import { ShopPage } from './pages/ShopPage';
 import { FAQPage } from './pages/FAQPage';
 import { AboutPage } from './pages/AboutPage';
 import { ReviewsPage } from './pages/ReviewsPage';
+import { HowToOrderPage } from './pages/HowToOrderPage';
 import { CartDrawer } from './components/CartDrawer';
 import { FreeDesignModal } from './components/FreeDesignModal';
 import { QuickViewModal } from './components/QuickViewModal';
@@ -20,6 +21,7 @@ import { TrackOrderModal } from './components/TrackOrderModal';
 import { HowToApplyModal } from './components/HowToApplyModal';
 import { SearchModal } from './components/SearchModal';
 import { FloatingBottomCartBar } from './components/FloatingBottomCartBar';
+import { FloatingMessengerButton } from './components/FloatingMessengerButton';
 
 // Helper to scroll to top automatically on route changes
 const ScrollToTop: React.FC = () => {
@@ -57,6 +59,9 @@ export const AppContent: React.FC = () => {
           <Route path="/review" element={<ReviewsPage />} />
           <Route path="/gallery" element={<ReviewsPage />} />
           <Route path="/lookbook" element={<ReviewsPage />} />
+          <Route path="/how-to-order" element={<HowToOrderPage />} />
+          <Route path="/howtoorder" element={<HowToOrderPage />} />
+          <Route path="/order-process" element={<HowToOrderPage />} />
           {/* Support both the exact user route (/sepcial-offer) and common aliases */}
           <Route path="/sepcial-offer" element={<SpecialOffersPage />} />
           <Route path="/special-offer" element={<SpecialOffersPage />} />
@@ -80,6 +85,7 @@ export const AppContent: React.FC = () => {
       <HowToApplyModal />
       <SearchModal />
       <FloatingBottomCartBar />
+      <FloatingMessengerButton />
     </div>
   );
 };

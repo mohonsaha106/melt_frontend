@@ -107,7 +107,7 @@ export const CheckoutModal: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-hidden">
       {/* Backdrop */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -226,7 +226,7 @@ export const CheckoutModal: React.FC = () => {
           </div>
         ) : (
           /* Checkout Form */
-          <form onSubmit={handleSubmitOrder} className="p-6 sm:p-8 space-y-6 max-h-[75vh] overflow-y-auto">
+          <form onSubmit={handleSubmitOrder} className="p-6 sm:p-8 space-y-6 max-h-[75vh] overflow-y-auto no-scrollbar">
             {errorMsg && (
               <div className="p-3 bg-red-100 border border-red-300 rounded-xl text-xs text-red-700 flex items-center space-x-2">
                 <AlertCircle className="w-4 h-4 flex-shrink-0" />

@@ -4,9 +4,6 @@ import { PlacementSelector } from '../components/PlacementSelector';
 import { HighlightBanner } from '../components/HighlightBanner';
 import { ProductGrid } from '../components/ProductGrid';
 import { CustomUniverseSection } from '../components/CustomUniverseSection';
-import { TrustBadges } from '../components/TrustBadges';
-import { HowToOrderSection } from '../components/HowToOrderSection';
-import { HowToApplySection } from '../components/HowToApplySection';
 import { ReviewSection } from '../components/ReviewSection';
 import { Hero } from '@/components/Hero';
 
@@ -32,13 +29,10 @@ export const HomePage: React.FC = () => {
       <CustomUniverseSection />
 
       {/* Quality & Trust Badges */}
-      <TrustBadges />
-
-      {/* How To Order Nationwide via COD */}
-      <HowToOrderSection />
+      {/* <TrustBadges /> */}
 
       {/* 5-Step Artisanal Resin Crafting Process */}
-      <HowToApplySection />
+      {/* <HowToApplySection /> */}
 
       {/* Community Lookbook & Reviews */}
       <ReviewSection />

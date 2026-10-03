@@ -9,7 +9,7 @@ export const HowToApplyModal: React.FC = () => {
   if (!isHowToApplyOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-hidden">
       {/* Backdrop */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -42,7 +42,7 @@ export const HowToApplyModal: React.FC = () => {
           </button>
         </div>
 
-        <div className="p-6 sm:p-8 space-y-6 max-h-[75vh] overflow-y-auto">
+        <div className="p-6 sm:p-8 space-y-6 max-h-[75vh] overflow-y-auto no-scrollbar">
           {/* Flower Sending Steps */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-700 font-mono flex items-center gap-1.5">

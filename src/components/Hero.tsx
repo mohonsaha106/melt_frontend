@@ -80,9 +80,22 @@ const GALLERY_PIECES: GalleryPiece[] = [
   }
 ];
 
+const AUTOPLAY_DURATION = 5; // 5 seconds per slide
+
 export const Hero: React.FC = () => {
   const { setQuickViewProduct, addToCart, setSelectedCategory, setSelectedPlacement } = useStore();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 640 : false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const nextSlide = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % GALLERY_PIECES.length);
@@ -127,12 +140,21 @@ export const Hero: React.FC = () => {
     }
   };
 
+  // Precise geometry for perfect border alignment with rounded corners
+  const strokeWidth = isMobile ? 2 : 3;
+  const strokeOffset = isMobile ? 1 : 1.5;
+  const cornerRadius = isMobile ? 15 : 22.5;
+
   return (
-    <section className="relative overflow-hidden bg-[#E8E2D3] border-b border-[#D3CBBA] pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-7 lg:pb-14 select-none">
+    <section 
+      className="relative overflow-hidden bg-[#E8E2D3] border-b border-[#D3CBBA] pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-7 lg:pb-14 select-none"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Center / Asymmetric Gallery Stage */}
         <div className="relative flex items-center justify-center my-2 sm:my-4">
-          {/* Asymmetric Gallery Carousel Track */}
+          {/* Asymmetric Gallery Carousel Track with continuous gliding */}
           <div className="relative w-full flex items-center justify-center min-h-[270px] sm:min-h-[320px] lg:min-h-[350px]">
             {GALLERY_PIECES.map((piece, idx) => {
               const total = GALLERY_PIECES.length;
@@ -140,11 +162,9 @@ export const Hero: React.FC = () => {
               if (offset > total / 2) offset -= total;
 
               const isCenter = offset === 0;
-              const isLeft = offset === -1 || (offset === total - 1 && total === 3);
-              const isRight = offset === 1 || (offset === -(total - 1) && total === 3);
-              const isVisible = isCenter || isLeft || isRight;
-
-              if (!isVisible) return null;
+              const isLeft = offset === -1;
+              const isRight = offset === 1;
+              const isFarLeft = offset < -1;
 
               return (
                 <motion.div
@@ -154,34 +174,47 @@ export const Hero: React.FC = () => {
                   }}
                   initial={false}
                   animate={{
-                    x: isCenter ? '0%' : isLeft ? '-65%' : '65%',
-                    scale: isCenter ? 1 : 0.8,
-                    opacity: isCenter ? 1 : 0.35,
-                    rotate: isCenter ? 0 : isLeft ? -4 : 4,
-                    zIndex: isCenter ? 20 : 10,
-                    filter: isCenter ? 'blur(0px)' : 'blur(2px)'
+                    x: isCenter
+                      ? '0%'
+                      : isLeft
+                      ? '-62%'
+                      : isRight
+                      ? '62%'
+                      : isFarLeft
+                      ? '-120%'
+                      : '120%',
+                    scale: isCenter ? 1 : isLeft || isRight ? 0.82 : 0.65,
+                    opacity: isCenter ? 1 : isLeft || isRight ? 0.45 : 0,
+                    rotate: isCenter ? 0 : isLeft ? -3.5 : isRight ? 3.5 : isFarLeft ? -6 : 6,
+                    zIndex: isCenter ? 25 : isLeft || isRight ? 10 : 0,
+                    filter: isCenter ? 'blur(0px)' : isLeft || isRight ? 'blur(1.5px)' : 'blur(4px)',
+                    pointerEvents: isCenter ? 'auto' : isLeft || isRight ? 'auto' : 'none'
                   }}
-                  transition={{ type: 'spring', damping: 26, stiffness: 220 }}
-                  className={`absolute w-[280px] sm:w-[400px] lg:w-[460px] aspect-[16/11] rounded-2xl sm:rounded-3xl overflow-hidden bg-white border-2 border-[#D3CBBA] shadow-2xl transition-all cursor-pointer ${
-                    isCenter ? 'ring-1 ring-black/10' : 'hover:opacity-60'
+                  transition={{
+                    duration: 0.75,
+                    ease: [0.22, 1, 0.36, 1]
+                  }}
+                  className={`absolute w-[280px] sm:w-[400px] lg:w-[460px] aspect-[16/11] rounded-2xl sm:rounded-3xl overflow-hidden bg-white shadow-2xl cursor-pointer ${
+                    isCenter ? 'ring-1 ring-black/10' : 'hover:opacity-75'
                   }`}
                 >
                   <img
                     src={piece.imageUrl}
                     alt={piece.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    className="w-full h-full object-cover select-none"
+                    loading="eager"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none" />
 
                   {/* Top Badge */}
-                  <div className="absolute top-3.5 left-3.5">
+                  <div className="absolute top-3.5 left-3.5 z-10">
                     <span className="px-3 py-0.5 rounded-full bg-black/80 backdrop-blur-md text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider border border-white/20">
                       {piece.editionTag}
                     </span>
                   </div>
 
                   {/* Bottom Info Overlay on Image */}
-                  <div className="absolute bottom-3.5 left-4 right-4 text-white text-left">
+                  <div className="absolute bottom-3.5 left-4 right-4 text-white text-left z-10">
                     <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-amber-300 block mb-0.5">
                       {piece.collectionName}
                     </span>
@@ -197,6 +230,50 @@ export const Hero: React.FC = () => {
                       </span>
                     </div>
                   </div>
+
+                  {/* ====================================================
+                      ANIMATED PERIMETER BORDER (Fills from start to finish in Black)
+                     ==================================================== */}
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-visible">
+                    {/* Base subtle track border */}
+                    <rect
+                      x={strokeOffset}
+                      y={strokeOffset}
+                      width={`calc(100% - ${strokeOffset * 2}px)`}
+                      height={`calc(100% - ${strokeOffset * 2}px)`}
+                      rx={cornerRadius}
+                      fill="none"
+                      stroke="#D3CBBA"
+                      strokeWidth={strokeWidth}
+                    />
+
+                    {/* Filling Black Border around active card */}
+                    {isCenter && (
+                      <motion.rect
+                        key={`hero-border-${activeIndex}-${isPaused ? 'paused' : 'playing'}-${isMobile ? 'm' : 'd'}`}
+                        x={strokeOffset}
+                        y={strokeOffset}
+                        width={`calc(100% - ${strokeOffset * 2}px)`}
+                        height={`calc(100% - ${strokeOffset * 2}px)`}
+                        rx={cornerRadius}
+                        fill="none"
+                        stroke="#000000"
+                        strokeWidth={strokeWidth}
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: isPaused ? undefined : 1 }}
+                        transition={{ 
+                          duration: AUTOPLAY_DURATION, 
+                          ease: 'linear'
+                        }}
+                        onAnimationComplete={() => {
+                          if (!isPaused) {
+                            nextSlide();
+                          }
+                        }}
+                      />
+                    )}
+                  </svg>
                 </motion.div>
               );
             })}
@@ -220,15 +297,31 @@ export const Hero: React.FC = () => {
           </button>
         </div>
 
+        {/* Slide Progress Pill Indicators */}
+        <div className="flex items-center justify-center space-x-2 mt-3 mb-1">
+          {GALLERY_PIECES.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActiveIndex(idx)}
+              className={`h-1.5 transition-all duration-300 rounded-full ${
+                idx === activeIndex
+                  ? 'w-7 bg-black'
+                  : 'w-2 bg-[#D3CBBA] hover:bg-zinc-600'
+              }`}
+              aria-label={`Jump to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+
         {/* Dynamic Editorial Content Block Beneath Gallery */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentPiece.id}
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.3 }}
-            className="max-w-xl mx-auto text-center mt-4 sm:mt-6"
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="max-w-xl mx-auto text-center mt-3 sm:mt-5"
           >
             <span className="text-[10px] sm:text-xs font-bold tracking-[0.22em] uppercase text-amber-900 block mb-1">
               {currentPiece.collectionName}

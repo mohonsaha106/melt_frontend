@@ -12,6 +12,11 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 168,
     imageUrl: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=800&q=80'
+    ],
     description: 'Immortalize your most sacred wedding garland and reception bouquet in crystal-clear, non-yellowing UV archival resin. Handcrafted with gold foil flakes, custom couple name engraving, and acrylic stand.',
     placements: ['Wedding Keepsakes', 'Flower Preservation', 'Wall Art'],
     durability: 'Lifetime Keepsake',
@@ -35,6 +40,11 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewCount: 420,
     imageUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80'
+    ],
     description: 'Hand-poured crystal alphabet letter keychain infused with genuine 24K gold foil flakes, pressed white baby’s breath florals, and a luxury metallic swivel lobster clasp.',
     placements: ['Monogram Keychains', 'Resin Jewelry'],
     durability: 'Handcrafted Scratch-Resistant',
@@ -58,6 +68,11 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 94,
     imageUrl: 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80'
+    ],
     description: 'Statement luxury resin timepiece made with crushed natural quartz crystals, metallic gold leaf veins, deep emerald pigments, and silent sweep quartz clock movement.',
     placements: ['Geode Clocks', 'Wall Art'],
     durability: 'Silent Sweep Quartz Clock',
@@ -80,6 +95,11 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewCount: 230,
     imageUrl: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=800&q=80'
+    ],
     description: 'Breathtaking 3-layer resin beach art capturing frothy seafoam waves, natural coastal sand, and azure blue waters. Heat-resistant with soft protective cork base.',
     placements: ['Ocean Coasters', 'Trinket Trays'],
     durability: 'Heat & Spill Resistant',
@@ -101,6 +121,11 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewCount: 312,
     imageUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80'
+    ],
     description: 'Ultra-thin, flexible yet shatterproof crystal resin bookmark encasing real pressed daisies, lavender, gold shimmer foil, and a luxurious handcrafted silk tassel.',
     placements: ['Floral Bookmarks', 'Desk Signs'],
     durability: 'Flexible & Shatterproof',
@@ -124,6 +149,11 @@ export const PRODUCTS: Product[] = [
     rating: 4.8,
     reviewCount: 88,
     imageUrl: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80'
+    ],
     description: 'Scalloped edge jewelry tray adorned with real dried rose petals, botanical ferns, and custom gold script lettering. Perfect for bridal nightstands and ring displays.',
     placements: ['Trinket Trays', 'Wedding Keepsakes', 'Resin Jewelry'],
     durability: 'Handcrafted Gloss Finish',
@@ -146,6 +176,11 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewCount: 175,
     imageUrl: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80'
+    ],
     description: 'A real miniature red rosebud preserved forever inside a high-clarity resin teardrop cabochon, suspended on an anti-tarnish 18k gold plated or silver chain.',
     placements: ['Resin Jewelry', 'Flower Preservation'],
     durability: 'Anti-Tarnish Chain Included',
@@ -167,6 +202,11 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 78,
     imageUrl: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=800&q=80'
+    ],
     description: 'Preserve your baby’s precious newborn memories forever — first curl, hospital bracelet, birth time, and pressed nursery florals inside a crystal clear memory block.',
     placements: ['Baby Keepsakes', 'Flower Preservation'],
     durability: 'Forever Archival Casting',
@@ -189,6 +229,11 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 205,
     imageUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80'
+    ],
     description: 'Personalized resin alphabet letter filled with dried hydrangea petals, gold flake swirls, and fairy pearls, mounted on a solid beech wood warm LED glow stand.',
     placements: ['Letter Nightlamps', 'Monogram Keychains', 'Desk Signs'],
     durability: 'Warm LED USB Powered',
@@ -211,6 +256,11 @@ export const PRODUCTS: Product[] = [
     rating: 4.9,
     reviewCount: 62,
     imageUrl: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80'
+    ],
     description: 'High-gloss resin vanity tray with real crushed glass borders, gold shimmer veins, and dual solid brass brushed handles. Elevates perfumes, watches, and candles.',
     placements: ['Trinket Trays', 'Wall Art'],
     durability: 'Polished Brass Handles',
@@ -232,6 +282,11 @@ export const PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 114,
     imageUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80'
+    ],
     description: '16-inch circular high-gloss black and champagne gold resin art with metallic 3D raised Arabic calligraphy of Ayatul Kursi. A timeless centerpiece for any home.',
     placements: ['Wall Art', 'Geode Clocks'],
     durability: '3D Gold Mirror Acrylic Inlay',
@@ -253,6 +308,11 @@ export const PRODUCTS: Product[] = [
     rating: 4.8,
     reviewCount: 156,
     imageUrl: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80'
+    ],
     description: 'Handmade alligator hair barrettes cast with real pressed forget-me-nots, golden flakes, and delicate dried leaves. Gentle on hair and effortlessly chic.',
     placements: ['Resin Jewelry', 'Floral Bookmarks'],
     durability: 'Gold Plated Strong Grip',

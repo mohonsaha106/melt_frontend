@@ -202,12 +202,12 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <button
-                  onClick={() => scrollToSection('how-to-order')}
+                <Link
+                  to="/how-to-order"
                   className="hover:text-white transition-colors"
                 >
                   How To Order (COD BD)
-                </button>
+                </Link>
               </li>
               <li>
                 <Link
@@ -249,9 +249,12 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="#shipping" onClick={(e) => { e.preventDefault(); scrollToSection('how-to-order'); }} className="hover:text-white transition-colors">
+                <Link
+                  to="/how-to-order"
+                  className="hover:text-white transition-colors"
+                >
                   Cash on Delivery Terms
-                </a>
+                </Link>
               </li>
               <li>
                 <Link

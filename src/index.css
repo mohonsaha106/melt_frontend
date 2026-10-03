@@ -12,6 +12,10 @@
     --brand-border: #D3CBBA;
   }
 
+  html {
+    scrollbar-gutter: stable;
+  }
+
   body {
     background-color: var(--brand-bg);
     color: var(--brand-text);
@@ -68,6 +72,14 @@
     background: rgba(10, 10, 10, 0.9);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 

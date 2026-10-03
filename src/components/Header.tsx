@@ -8,13 +8,15 @@ import {
   Menu, 
   X, 
   Sparkles, 
-  Facebook,
+  Facebook, 
   Instagram, 
-  HelpCircle,
-  BookOpen,
-  Info,
-  ChevronRight,
-  Tag
+  HelpCircle, 
+  BookOpen, 
+  Info, 
+  ChevronRight, 
+  Tag,
+  Truck,
+  MessageCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -31,30 +33,11 @@ export const Header: React.FC = () => {
     setSelectedCategory,
     setSelectedPlacement,
     setIsHowToApplyOpen,
+    isCustomStudioOpen,
     setIsCustomStudioOpen
   } = useStore();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const scrollToSection = (id: string) => {
-    setIsMobileMenuOpen(false);
-    if (location.pathname !== '/') {
-      navigate('/');
-      setTimeout(() => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      }, 120);
-    } else {
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  };
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -65,6 +48,17 @@ export const Header: React.FC = () => {
     setSelectedCategory('all');
     setSelectedPlacement(null);
   };
+
+  const isPathActive = (paths: string[]) => {
+    return paths.some((p) => location.pathname === p || (p !== '/' && location.pathname.startsWith(p)));
+  };
+
+  const isShopActive = isPathActive(['/shop', '/catalog', '/products']);
+  const isOffersActive = isPathActive(['/sepcial-offer', '/special-offer', '/special-offers', '/offers']);
+  const isReviewsActive = isPathActive(['/reviews', '/review', '/gallery', '/lookbook']);
+  const isHowToOrderActive = isPathActive(['/how-to-order', '/howtoorder', '/order-process']);
+  const isFaqActive = isPathActive(['/faq', '/faqs']);
+  const isAboutActive = isPathActive(['/about', '/about-us', '/contact']);
 
   return (
     <>
@@ -160,14 +154,22 @@ export const Header: React.FC = () => {
             <nav className="flex items-center space-x-7 text-xs font-semibold tracking-wider uppercase text-zinc-800">
               <Link
                 to="/shop"
-                className="hover:text-black transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
+                className={`py-1 relative transition-colors ${
+                  isShopActive
+                    ? 'text-black font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:scale-x-100'
+                    : 'text-zinc-700 hover:text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
+                }`}
               >
                 SHOP
               </Link>
 
               <Link
                 to="/sepcial-offer"
-                className="hover:text-rose-800 text-rose-700 font-bold transition-colors py-1 relative flex items-center gap-1 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-rose-700 after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
+                className={`py-1 relative flex items-center gap-1 transition-colors ${
+                  isOffersActive
+                    ? 'text-rose-900 font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-rose-700 after:scale-x-100'
+                    : 'text-rose-700 hover:text-rose-900 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-rose-700 after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
+                }`}
               >
                 <Tag className="w-3 h-3 text-rose-600" />
                 OFFERS
@@ -175,25 +177,37 @@ export const Header: React.FC = () => {
 
               <Link
                 to="/reviews"
-                className="hover:text-black transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
+                className={`py-1 relative transition-colors ${
+                  isReviewsActive
+                    ? 'text-black font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:scale-x-100'
+                    : 'text-zinc-700 hover:text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
+                }`}
               >
                 REVIEWS
               </Link>
 
               <button
                 onClick={() => setIsCustomStudioOpen(true)}
-                className="hover:text-black transition-colors py-1 text-amber-800 font-bold relative flex items-center gap-1"
+                className={`py-1 relative flex items-center gap-1 transition-colors ${
+                  isCustomStudioOpen
+                    ? 'text-amber-950 font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-amber-800 after:scale-x-100'
+                    : 'text-amber-800 hover:text-amber-950 font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-amber-800 after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
+                }`}
               >
                 {/* <Sparkles className="w-3.5 h-3.5 text-amber-600" /> */}
                 CUSTOM STUDIO
               </button>
 
-              <button
-                onClick={() => scrollToSection('how-to-order')}
-                className="hover:text-black transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
+              <Link
+                to="/how-to-order"
+                className={`py-1 relative transition-colors ${
+                  isHowToOrderActive
+                    ? 'text-black font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:scale-x-100'
+                    : 'text-zinc-700 hover:text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
+                }`}
               >
                 HOW TO ORDER
-              </button>
+              </Link>
 
               {/* <button
                 onClick={() => setIsHowToApplyOpen(true)}
@@ -204,14 +218,22 @@ export const Header: React.FC = () => {
 
               <Link
                 to="/faq"
-                className="hover:text-black transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
+                className={`py-1 relative transition-colors ${
+                  isFaqActive
+                    ? 'text-black font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:scale-x-100'
+                    : 'text-zinc-700 hover:text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
+                }`}
               >
                 FAQ
               </Link>
 
               <Link
                 to="/about"
-                className="hover:text-black transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
+                className={`py-1 relative transition-colors ${
+                  isAboutActive
+                    ? 'text-black font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:scale-x-100'
+                    : 'text-zinc-700 hover:text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
+                }`}
               >
                 ABOUT
               </Link>
@@ -324,109 +346,156 @@ export const Header: React.FC = () => {
                   </button>
                 </div>
 
-                <div className="mt-6 space-y-1">
+                <div className="mt-4 space-y-1">
+                  {/* Search */}
                   <button
                     onClick={() => {
                       setIsMobileMenuOpen(false);
                       setIsSearchModalOpen(true);
                     }}
-                    className="w-full flex items-center justify-between py-3 px-3 text-sm font-semibold tracking-wider text-zinc-900 bg-[#DFD8C7]/60 hover:bg-[#DFD8C7] rounded-lg text-left"
+                    className="w-full flex items-center justify-between py-2.5 px-3 text-sm font-medium text-zinc-800 bg-[#DFD8C7]/70 hover:bg-[#DFD8C7] rounded-xl text-left transition-colors"
                   >
-                    <div className="flex items-center space-x-2">
-                      <Search className="w-4 h-4 text-zinc-700" />
-                      <span>SEARCH DESIGNS</span>
+                    <div className="flex items-center space-x-3">
+                      <Search className="w-4 h-4 text-zinc-600" />
+                      <span>Search</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-zinc-500" />
+                    <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </button>
 
+                  {/* Special Offers */}
                   <Link
                     to="/sepcial-offer"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-full flex items-center justify-between py-3 px-3 text-sm font-bold tracking-wider text-rose-900 bg-rose-500/10 hover:bg-rose-500/20 rounded-lg text-left"
+                    className={`w-full flex items-center justify-between py-2.5 px-3 text-sm font-semibold rounded-xl text-left transition-colors ${
+                      isOffersActive
+                        ? 'text-rose-900 bg-rose-500/20 border-l-4 border-rose-700 pl-3.5'
+                        : 'text-rose-800 bg-rose-500/10 hover:bg-rose-500/20'
+                    }`}
                   >
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-3">
                       <Tag className="w-4 h-4 text-rose-600" />
-                      <span>SPECIAL OFFERS & DEALS</span>
+                      <span className={isOffersActive ? 'underline decoration-rose-700 decoration-2 underline-offset-4' : ''}>Special Offers</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-rose-700" />
+                    <ChevronRight className="w-4 h-4 text-rose-500" />
                   </Link>
 
+                  {/* Shop */}
                   <Link
                     to="/shop"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-full flex items-center justify-between py-3 px-3 text-sm font-semibold tracking-wider text-zinc-900 hover:bg-[#DFD8C7] rounded-lg text-left"
+                    className={`w-full flex items-center justify-between py-2.5 px-3 text-sm rounded-xl text-left transition-colors ${
+                      isShopActive
+                        ? 'font-bold text-black bg-[#D4CCB8] border-l-4 border-black pl-3.5'
+                        : 'font-medium text-zinc-800 hover:text-black hover:bg-[#DFD8C7]'
+                    }`}
                   >
-                    <span>SHOP ALL KEEPSAKES</span>
-                    <ChevronRight className="w-4 h-4 text-zinc-500" />
+                    <div className="flex items-center space-x-3">
+                      <ShoppingBag className="w-4 h-4 text-zinc-600" />
+                      <span className={isShopActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>Shop</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </Link>
 
+                  {/* Custom Studio */}
                   <button
                     onClick={() => {
                       setIsCustomStudioOpen(true);
                       setIsMobileMenuOpen(false);
                     }}
-                    className="w-full flex items-center justify-between py-3 px-3 text-sm font-bold tracking-wider text-amber-900 bg-[#DFD8C7] rounded-lg text-left"
+                    className={`w-full flex items-center justify-between py-2.5 px-3 text-sm font-semibold rounded-xl text-left transition-colors ${
+                      isCustomStudioOpen
+                        ? 'text-amber-950 bg-[#D4CCB8] border-l-4 border-amber-700 pl-3.5'
+                        : 'text-amber-900 bg-[#DFD8C7]/90 hover:bg-[#DFD8C7]'
+                    }`}
                   >
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-3">
                       <Sparkles className="w-4 h-4 text-amber-600" />
-                      <span>CUSTOM KEEPSAKE STUDIO</span>
+                      <span className={isCustomStudioOpen ? 'underline decoration-amber-700 decoration-2 underline-offset-4' : ''}>Custom Studio</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-amber-700" />
+                    <ChevronRight className="w-4 h-4 text-amber-600" />
                   </button>
 
+                  {/* Reviews */}
                   <Link
                     to="/reviews"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-full flex items-center justify-between py-3 px-3 text-sm font-semibold tracking-wider text-zinc-900 hover:bg-[#DFD8C7] rounded-lg text-left"
+                    className={`w-full flex items-center justify-between py-2.5 px-3 text-sm rounded-xl text-left transition-colors ${
+                      isReviewsActive
+                        ? 'font-bold text-black bg-[#D4CCB8] border-l-4 border-black pl-3.5'
+                        : 'font-medium text-zinc-800 hover:text-black hover:bg-[#DFD8C7]'
+                    }`}
                   >
-                    <span>CUSTOMER REVIEWS & PHOTOS</span>
-                    <ChevronRight className="w-4 h-4 text-zinc-500" />
+                    <div className="flex items-center space-x-3">
+                      <Heart className="w-4 h-4 text-zinc-600" />
+                      <span className={isReviewsActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>Reviews</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </Link>
 
-                  <button
-                    onClick={() => scrollToSection('how-to-order')}
-                    className="w-full flex items-center justify-between py-3 px-3 text-sm font-semibold tracking-wider text-zinc-900 hover:bg-[#DFD8C7] rounded-lg text-left"
+                  {/* How To Order */}
+                  <Link
+                    to="/how-to-order"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`w-full flex items-center justify-between py-2.5 px-3 text-sm rounded-xl text-left transition-colors ${
+                      isHowToOrderActive
+                        ? 'font-bold text-black bg-[#D4CCB8] border-l-4 border-black pl-3.5'
+                        : 'font-medium text-zinc-800 hover:text-black hover:bg-[#DFD8C7]'
+                    }`}
                   >
-                    <span>HOW TO ORDER (COD BD)</span>
-                    <ChevronRight className="w-4 h-4 text-zinc-500" />
-                  </button>
+                    <div className="flex items-center space-x-3">
+                      <Truck className="w-4 h-4 text-zinc-600" />
+                      <span className={isHowToOrderActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>How To Order</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-zinc-400" />
+                  </Link>
 
+                  {/* Care Guide */}
                   <button
                     onClick={() => {
                       setIsHowToApplyOpen(true);
                       setIsMobileMenuOpen(false);
                     }}
-                    className="w-full flex items-center justify-between py-3 px-3 text-sm font-semibold tracking-wider text-zinc-900 hover:bg-[#DFD8C7] rounded-lg text-left"
+                    className="w-full flex items-center justify-between py-2.5 px-3 text-sm font-medium text-zinc-800 hover:text-black hover:bg-[#DFD8C7] rounded-xl text-left transition-colors"
                   >
-                    <div className="flex items-center space-x-2">
-                      <BookOpen className="w-4 h-4 text-zinc-700" />
-                      <span>PRESERVATION & CARE GUIDE</span>
+                    <div className="flex items-center space-x-3">
+                      <BookOpen className="w-4 h-4 text-zinc-600" />
+                      <span>Care Guide</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-zinc-500" />
+                    <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </button>
 
+                  {/* FAQ */}
                   <Link
                     to="/faq"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-full flex items-center justify-between py-3 px-3 text-sm font-semibold tracking-wider text-zinc-900 hover:bg-[#DFD8C7] rounded-lg text-left"
+                    className={`w-full flex items-center justify-between py-2.5 px-3 text-sm rounded-xl text-left transition-colors ${
+                      isFaqActive
+                        ? 'font-bold text-black bg-[#D4CCB8] border-l-4 border-black pl-3.5'
+                        : 'font-medium text-zinc-800 hover:text-black hover:bg-[#DFD8C7]'
+                    }`}
                   >
-                    <div className="flex items-center space-x-2">
-                      <HelpCircle className="w-4 h-4 text-zinc-700" />
-                      <span>FAQS & HELP</span>
+                    <div className="flex items-center space-x-3">
+                      <HelpCircle className="w-4 h-4 text-zinc-600" />
+                      <span className={isFaqActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>FAQ</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-zinc-500" />
+                    <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </Link>
 
+                  {/* About */}
                   <Link
                     to="/about"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-full flex items-center justify-between py-3 px-3 text-sm font-semibold tracking-wider text-zinc-900 hover:bg-[#DFD8C7] rounded-lg text-left"
+                    className={`w-full flex items-center justify-between py-2.5 px-3 text-sm rounded-xl text-left transition-colors ${
+                      isAboutActive
+                        ? 'font-bold text-black bg-[#D4CCB8] border-l-4 border-black pl-3.5'
+                        : 'font-medium text-zinc-800 hover:text-black hover:bg-[#DFD8C7]'
+                    }`}
                   >
-                    <div className="flex items-center space-x-2">
-                      <Info className="w-4 h-4 text-zinc-700" />
-                      <span>ABOUT & CONTACT</span>
+                    <div className="flex items-center space-x-3">
+                      <Info className="w-4 h-4 text-zinc-600" />
+                      <span className={isAboutActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>About Us</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-zinc-500" />
+                    <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </Link>
                 </div>
               </div>
@@ -437,17 +506,18 @@ export const Header: React.FC = () => {
                   href="https://www.facebook.com/Meltsparkle"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-2 px-4 bg-zinc-900 text-[#E8E2D3] text-xs font-semibold rounded-lg flex items-center justify-center space-x-2 hover:bg-black transition-colors"
+                  className="w-full py-2.5 px-4 bg-zinc-900 text-[#E8E2D3] text-xs font-semibold rounded-xl flex items-center justify-center space-x-2 hover:bg-black transition-colors"
                 >
                   <Facebook className="w-3.5 h-3.5" />
-                  <span>Facebook: facebook.com/Meltsparkle</span>
+                  <span>Facebook Page</span>
                 </a>
                 <a
                   href="https://wa.me/8801712345678"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-2 px-4 bg-zinc-800 text-white text-xs font-semibold rounded-lg flex items-center justify-center space-x-2 hover:bg-zinc-900 transition-colors"
+                  className="w-full py-2.5 px-4 bg-[#25D366] text-white text-xs font-semibold rounded-xl flex items-center justify-center space-x-2 hover:bg-[#20ba5a] transition-colors"
                 >
+                  <MessageCircle className="w-3.5 h-3.5" />
                   <span>WhatsApp (+880 1712-345678)</span>
                 </a>
               </div>

@@ -42,6 +42,7 @@ export interface Product {
   rating: number;
   reviewCount: number;
   imageUrl: string;
+  images?: string[];
   svgIcon?: string;
   description: string;
   placements: Placement[];

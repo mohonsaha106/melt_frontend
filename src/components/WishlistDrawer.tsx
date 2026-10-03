@@ -35,13 +35,13 @@ export const WishlistDrawer: React.FC = () => {
         className="fixed inset-0 bg-black/60 backdrop-blur-sm"
       />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+      <div className="fixed inset-y-0 right-0 max-w-full flex">
         <motion.div
           initial={{ x: '100%' }}
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ type: 'spring', damping: 26, stiffness: 280 }}
-          className="w-screen max-w-md bg-[#E8E2D3] shadow-2xl flex flex-col justify-between text-[#111111] border-l border-black/10"
+          className="w-full sm:w-[440px] max-w-full bg-[#E8E2D3] shadow-2xl flex flex-col justify-between text-[#111111] border-l border-black/10 h-full"
         >
           {/* Header */}
           <div className="p-5 sm:p-6 border-b border-black/10 flex items-center justify-between">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { 
   Heart, 
@@ -125,6 +126,17 @@ export const ReviewsPage: React.FC = () => {
     document.title = 'Customer Reviews | Melt Sparkle';
   }, []);
 
+  // Prevent background scroll when modal is active without causing layout shift
+  useEffect(() => {
+    if (activeItem) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [activeItem]);
+
   const toggleLike = (id: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     setLikedItems(prev => ({
@@ -211,9 +223,9 @@ export const ReviewsPage: React.FC = () => {
             PURE PINTEREST-STYLE MASONRY GRID
             - Images only (Chat screenshots)
             - NO text boxes or captions below
-            - Natural aspect ratios fit seamlessly
+            - GPU & Layout containment prevents any column shaking
            ========================================= */}
-        <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-4 gap-3 sm:gap-4 md:gap-5 space-y-3 sm:space-y-4 md:space-y-5">
+        <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-4 gap-3 sm:gap-4 md:gap-5">
           {REVIEW_ITEMS.map((item) => {
             const isLiked = likedItems[item.id];
             const isSaved = savedItems[item.id];
@@ -223,7 +235,12 @@ export const ReviewsPage: React.FC = () => {
               <div
                 key={item.id}
                 onClick={() => setActiveItem(item)}
-                className="break-inside-avoid group relative rounded-2xl sm:rounded-3xl overflow-hidden bg-black/5 shadow-xs hover:shadow-2xl transition-all duration-300 cursor-pointer"
+                style={{
+                  breakInside: 'avoid',
+                  contain: 'layout paint',
+                  transform: 'translateZ(0)',
+                }}
+                className="inline-block w-full mb-3 sm:mb-4 md:mb-5 group relative rounded-2xl sm:rounded-3xl overflow-hidden bg-black/5 shadow-xs hover:shadow-xl transition-shadow duration-300 cursor-pointer select-none"
               >
                 {/* Image (Natural height flow - all review chats contained directly inside image) */}
                 <img
@@ -324,128 +341,118 @@ export const ReviewsPage: React.FC = () => {
       </div>
 
       {/* =========================================
-          FULLSCREEN PINTEREST LIGHTBOX MODAL
+          FULLSCREEN PINTEREST LIGHTBOX MODAL (PORTAL)
+          - Rendered in document.body to isolate DOM & eliminate any layout shifts
+          - Zero loading delay (cached instantly)
+          - Silky smooth entrance & exit transition
          ========================================= */}
-      <AnimatePresence>
-        {activeItem && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6">
-            {/* Backdrop */}
+      {createPortal(
+        <AnimatePresence>
+          {activeItem && (
             <motion.div
+              key="reviews-lightbox-backdrop"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
               onClick={() => setActiveItem(null)}
-              className="fixed inset-0 bg-black/92 backdrop-blur-md z-50"
-            />
-
-            {/* Modal Body */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              className="relative z-50 max-w-[90vw] md:max-w-[85vw] lg:max-w-[75vw] max-h-[94vh] flex flex-col items-center justify-center"
+              className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/90 backdrop-blur-md"
             >
-              {/* Top Floating Control Bar */}
-              <div className="w-full flex items-center justify-between pb-3 text-white px-2">
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={(e) => toggleSave(activeItem.id, e)}
-                    className={`px-4 py-2 rounded-full text-xs font-bold shadow-lg transition-all active:scale-95 flex items-center space-x-1.5 ${
-                      savedItems[activeItem.id]
-                        ? 'bg-zinc-800 text-white'
-                        : 'bg-[#E60023] hover:bg-[#ad081b] text-white'
-                    }`}
-                  >
-                    <Bookmark className="w-3.5 h-3.5 fill-current" />
-                    <span>{savedItems[activeItem.id] ? 'Saved' : 'Save'}</span>
-                  </button>
+              {/* Modal Dialog Body */}
+              <motion.div
+                key="reviews-lightbox-dialog"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative max-w-[92vw] md:max-w-[85vw] lg:max-w-[75vw] max-h-[94vh] flex flex-col items-center justify-center pointer-events-auto"
+              >
+                {/* Top Floating Control Bar - Exactly 3 buttons: Left (Shop Similar + Share), Right (Close) */}
+                <div className="w-full flex items-center justify-between pb-3 text-white px-1 sm:px-2">
+                  {/* Left Side: Shop Similar & Share */}
+                  <div className="flex items-center space-x-2">
+                    <Link
+                      to="/shop"
+                      onClick={() => setActiveItem(null)}
+                      className="inline-flex items-center space-x-1.5 px-3.5 sm:px-4 py-2 rounded-full bg-[#E8E2D3] hover:bg-white text-black text-xs font-bold tracking-wide transition-all active:scale-95 shadow-md select-none"
+                    >
+                      <span>Shop Similar</span>
+                    </Link>
 
-                  <button
-                    onClick={(e) => toggleLike(activeItem.id, e)}
-                    className="p-2 rounded-full bg-white/20 hover:bg-white/30 text-white backdrop-blur-md transition-all active:scale-90"
-                    title="Like"
-                  >
-                    <Heart
-                      className={`w-4 h-4 ${
-                        likedItems[activeItem.id] ? 'text-red-500 fill-red-500' : 'text-white'
-                      }`}
-                    />
-                  </button>
+                    <button
+                      onClick={(e) => handleShare(activeItem, e)}
+                      className="p-2 rounded-full bg-white/20 hover:bg-white/30 text-white backdrop-blur-md transition-all active:scale-90 border border-white/10"
+                      title="Share link"
+                      aria-label="Share review"
+                    >
+                      <Share2 className="w-4 h-4" />
+                    </button>
+                  </div>
 
-                  <button
-                    onClick={(e) => handleShare(activeItem, e)}
-                    className="p-2 rounded-full bg-white/20 hover:bg-white/30 text-white backdrop-blur-md transition-all active:scale-90"
-                    title="Share link"
-                  >
-                    <Share2 className="w-4 h-4" />
-                  </button>
+                  {/* Right Side: Cross / Close Button */}
+                  <div className="flex items-center">
+                    <button
+                      onClick={() => setActiveItem(null)}
+                      className="p-2 rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md transition-all active:scale-90 border border-white/10"
+                      aria-label="Close"
+                      title="Close"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
 
-                <div className="flex items-center space-x-2">
-                  <Link
-                    to="/shop"
-                    onClick={() => setActiveItem(null)}
-                    className="hidden sm:inline-flex items-center space-x-1.5 px-4 py-2 rounded-full bg-[#E8E2D3] hover:bg-white text-black text-xs font-bold tracking-wide transition-colors"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-                    <span>Shop Similar</span>
-                  </Link>
+                {/* Main Image Container */}
+                <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl bg-black/40 flex items-center justify-center min-h-[220px] max-h-[82vh]">
+                  <img
+                    src={activeItem.imageUrl}
+                    alt="Customer Review Screenshot"
+                    className="max-h-[80vh] w-auto max-w-full object-contain rounded-2xl select-none block"
+                  />
 
+                  {/* Left Navigation Arrow */}
                   <button
-                    onClick={() => setActiveItem(null)}
-                    className="p-2 rounded-full bg-white/20 hover:bg-white/40 text-white backdrop-blur-md transition-all"
-                    aria-label="Close"
+                    onClick={goToPrev}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white backdrop-blur-md transition-all active:scale-90 border border-white/20 z-10"
+                    aria-label="Previous photo"
                   >
-                    <X className="w-5 h-5" />
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+
+                  {/* Right Navigation Arrow */}
+                  <button
+                    onClick={goToNext}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white backdrop-blur-md transition-all active:scale-90 border border-white/20 z-10"
+                    aria-label="Next photo"
+                  >
+                    <ChevronRight className="w-5 h-5" />
                   </button>
                 </div>
-              </div>
-
-              {/* Main Image Container */}
-              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl bg-black max-h-[82vh] flex items-center justify-center">
-                <img
-                  src={activeItem.imageUrl}
-                  alt="Customer Review Screenshot"
-                  className="max-h-[80vh] w-auto max-w-full object-contain rounded-2xl select-none"
-                />
-
-                {/* Left Navigation Arrow */}
-                <button
-                  onClick={goToPrev}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white backdrop-blur-md transition-all active:scale-90 border border-white/20"
-                  aria-label="Previous photo"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-
-                {/* Right Navigation Arrow */}
-                <button
-                  onClick={goToNext}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white backdrop-blur-md transition-all active:scale-90 border border-white/20"
-                  aria-label="Next photo"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
+              </motion.div>
             </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
-      {/* Floating Copied Link Toast Notification */}
-      <AnimatePresence>
-        {copiedToast && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-6 right-6 z-50 bg-black text-[#E8E2D3] px-4 py-3 rounded-2xl shadow-xl flex items-center space-x-2.5 text-xs font-semibold border border-white/20"
-          >
-            <Check className="w-4 h-4 text-emerald-400" />
-            <span>Link copied to clipboard!</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Floating Copied Link Toast Notification (PORTAL) */}
+      {createPortal(
+        <AnimatePresence>
+          {copiedToast && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="fixed bottom-6 right-6 z-[10000] bg-black text-[#E8E2D3] px-4 py-3 rounded-2xl shadow-xl flex items-center space-x-2.5 text-xs font-semibold border border-white/20"
+            >
+              <Check className="w-4 h-4 text-emerald-400" />
+              <span>Link copied to clipboard!</span>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 };
