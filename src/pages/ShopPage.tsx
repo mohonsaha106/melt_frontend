@@ -1,10 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { PRODUCTS } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
 import { SearchFilterBar, CategoryFilterItem } from '../components/SearchFilterBar';
 import { FilterDrawerModal } from '../components/FilterDrawerModal';
-import { useStore } from '../context/StoreContext';
 import { Placement } from '../types';
 import { 
   Sparkles, 
@@ -21,7 +20,6 @@ const SHOP_CATEGORIES: CategoryFilterItem[] = [
   { id: 'clocks', label: 'Geode Clocks' },
   { id: 'coasters', label: 'Coasters' },
   { id: 'jewelry', label: 'Jewelry' },
-  { id: 'custom', label: 'Custom Studio' },
   { id: 'aesthetic', label: 'Aesthetic' },
   { id: 'minimal', label: 'Minimal' },
   { id: 'floral', label: 'Floral & Botanicals' },
@@ -35,16 +33,38 @@ const SHOP_CATEGORIES: CategoryFilterItem[] = [
 ];
 
 export const ShopPage: React.FC = () => {
-  const { setIsCustomStudioOpen } = useStore();
-  const [selectedCat, setSelectedCat] = useState('all');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Read URL query parameters on initialization
+  const initialCat = searchParams.get('category') || searchParams.get('cat') || 'all';
+  const initialPlacement = searchParams.get('placement') as Placement | null;
+  const initialSearch = searchParams.get('q') || searchParams.get('search') || '';
+
+  const [selectedCat, setSelectedCat] = useState<string>(initialCat);
   const [sortOption, setSortOption] = useState('default');
-  const [shopSearch, setShopSearch] = useState('');
+  const [shopSearch, setShopSearch] = useState(initialSearch);
   
   // Advanced Filter Drawer State
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 8000]);
-  const [selectedPlacement, setSelectedPlacement] = useState<Placement | null>(null);
+  const [selectedPlacement, setSelectedPlacement] = useState<Placement | null>(initialPlacement);
   const [minRating, setMinRating] = useState<number>(0);
+
+  // Sync state when URL params change
+  useEffect(() => {
+    const urlCat = searchParams.get('category') || searchParams.get('cat');
+    if (urlCat) {
+      setSelectedCat(urlCat);
+    }
+    const urlPlacement = searchParams.get('placement') as Placement | null;
+    if (urlPlacement) {
+      setSelectedPlacement(urlPlacement);
+    }
+    const urlSearch = searchParams.get('q') || searchParams.get('search');
+    if (urlSearch) {
+      setShopSearch(urlSearch);
+    }
+  }, [searchParams]);
 
   // Scroll to top on page load
   useEffect(() => {
@@ -52,14 +72,13 @@ export const ShopPage: React.FC = () => {
     document.title = 'Shop All Handcrafted Keepsakes & Resin Art | Melt Sparkle';
   }, []);
 
+
   // Filter and sort all products dynamically based on search, category, and advanced filters
   const processedProducts = useMemo(() => {
     return PRODUCTS.filter((product) => {
       // 1. Category Tag Filter
       if (selectedCat !== 'all') {
-        if (selectedCat === 'custom') {
-          // Triggers custom studio
-        } else if (selectedCat === 'under-500') {
+        if (selectedCat === 'under-500') {
           if (product.price > 500) return false;
         } else if (selectedCat === 'under-1500') {
           if (product.price > 1500) return false;
@@ -122,11 +141,17 @@ export const ShopPage: React.FC = () => {
   }, [selectedCat, selectedPlacement, priceRange, minRating, shopSearch, sortOption]);
 
   const handleSelectCategory = (catId: string) => {
-    if (catId === 'custom') {
-      setIsCustomStudioOpen(true);
-    } else {
-      setSelectedCat(catId);
-    }
+    setSelectedCat(catId);
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (catId === 'all') {
+        next.delete('category');
+        next.delete('cat');
+      } else {
+        next.set('category', catId);
+      }
+      return next;
+    });
   };
 
   const handleResetFilters = () => {
@@ -136,6 +161,7 @@ export const ShopPage: React.FC = () => {
     setSelectedCat('all');
     setShopSearch('');
     setSortOption('default');
+    setSearchParams({});
   };
 
   return (
@@ -228,16 +254,16 @@ export const ShopPage: React.FC = () => {
               Can't Find Your Exact Vision?
             </h3>
             <p className="text-xs sm:text-sm text-zinc-700 mt-2 leading-relaxed">
-              Use our live interactive Custom Keepsake Studio to personalize resin colors, 24K gold foil, wedding garland preservation, baby initials, and wood base LED lights.
+              We create bespoke keepsakes with custom resin colors, 24K gold foil, wedding garland preservation, baby initials, and wood base LED lights.
             </p>
           </div>
 
-          <button
-            onClick={() => setIsCustomStudioOpen(true)}
+          <Link
+            to="/how-to-order"
             className="px-7 py-3.5 bg-black hover:bg-zinc-800 text-[#E8E2D3] text-xs font-bold uppercase tracking-widest rounded-full transition-transform active:scale-95 shadow-md shrink-0"
           >
-            Launch Custom Studio
-          </button>
+            How To Order
+          </Link>
         </div>
 
       </div>

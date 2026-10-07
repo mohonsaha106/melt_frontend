@@ -34,8 +34,6 @@ interface StoreContextType {
   // Modals & Navigation
   quickViewProduct: Product | null;
   setQuickViewProduct: (product: Product | null) => void;
-  isCustomStudioOpen: boolean;
-  setIsCustomStudioOpen: (open: boolean) => void;
   isCheckoutOpen: boolean;
   setIsCheckoutOpen: (open: boolean) => void;
   isHowToApplyOpen: boolean;
@@ -98,7 +96,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isFreeGiftModalOpen, setIsFreeGiftModalOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
-  const [isCustomStudioOpen, setIsCustomStudioOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isHowToApplyOpen, setIsHowToApplyOpen] = useState(false);
   const [isTrackOrderOpen, setIsTrackOrderOpen] = useState(false);
@@ -334,8 +331,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setIsWishlistOpen,
         quickViewProduct,
         setQuickViewProduct,
-        isCustomStudioOpen,
-        setIsCustomStudioOpen,
         isCheckoutOpen,
         setIsCheckoutOpen,
         isHowToApplyOpen,

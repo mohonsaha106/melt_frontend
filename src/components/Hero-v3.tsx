@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Sparkles, ArrowRight, Pause, Play } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, Pause, Play } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
 interface JewelryCampaignSlide {
@@ -9,8 +9,7 @@ interface JewelryCampaignSlide {
   headline: string;
   subheadline: string;
   ctaText: string;
-  categoryFilter?: 'all' | 'preservation' | 'jewelry' | 'keychains' | 'bookmarks' | 'coasters' | 'clocks' | 'custom';
-  isCustomStudio?: boolean;
+  categoryFilter?: 'all' | 'preservation' | 'jewelry' | 'keychains' | 'bookmarks' | 'coasters' | 'clocks';
   imageUrl: string;
   editionBadge: string;
   textPosition: 'left' | 'center-left';
@@ -56,7 +55,7 @@ const JEWELRY_CAMPAIGNS: JewelryCampaignSlide[] = [
     headline: 'For Moments Worth Remembering.',
     subheadline: 'Bespoke bridal ring dishes, heirloom keepsake cubes, and custom anniversary treasures handcrafted uniquely for you.',
     ctaText: 'EXPLORE CELEBRATION',
-    isCustomStudio: true,
+    categoryFilter: 'preservation',
     imageUrl: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=1920&q=85',
     editionBadge: 'CUSTOM MADE TO ORDER',
     textPosition: 'center-left'
@@ -64,7 +63,7 @@ const JEWELRY_CAMPAIGNS: JewelryCampaignSlide[] = [
 ];
 
 export const HeroV3: React.FC = () => {
-  const { setSelectedCategory, setSelectedPlacement, setIsCustomStudioOpen } = useStore();
+  const { setSelectedCategory, setSelectedPlacement } = useStore();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
 
@@ -96,11 +95,6 @@ export const HeroV3: React.FC = () => {
   }, [nextSlide, prevSlide]);
 
   const handleCtaClick = (campaign: JewelryCampaignSlide) => {
-    if (campaign.isCustomStudio) {
-      setIsCustomStudioOpen(true);
-      return;
-    }
-
     if (campaign.categoryFilter) {
       setSelectedCategory(campaign.categoryFilter);
       setSelectedPlacement(null);
@@ -181,14 +175,6 @@ export const HeroV3: React.FC = () => {
                 >
                   <span>{slide.ctaText}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-
-                <button
-                  onClick={() => setIsCustomStudioOpen(true)}
-                  className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-full border border-white/40 hover:border-white text-white hover:bg-white/10 text-xs font-bold tracking-[0.18em] uppercase transition-all backdrop-blur-sm"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>CUSTOM STUDIO</span>
                 </button>
               </div>
             </motion.div>

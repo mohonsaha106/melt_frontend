@@ -19,8 +19,7 @@ export type TattooCategory =
   | 'keychains'
   | 'bookmarks'
   | 'coasters'
-  | 'clocks'
-  | 'custom';
+  | 'clocks';
 
 export type ResinCategory = TattooCategory;
 

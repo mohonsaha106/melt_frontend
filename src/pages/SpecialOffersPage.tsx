@@ -4,7 +4,6 @@ import { PRODUCTS } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
 import { SearchFilterBar, CategoryFilterItem } from '../components/SearchFilterBar';
 import { FilterDrawerModal } from '../components/FilterDrawerModal';
-import { useStore } from '../context/StoreContext';
 import { Placement } from '../types';
 import { 
   Tag, 
@@ -29,7 +28,6 @@ const OFFER_CATEGORIES: CategoryFilterItem[] = [
 ];
 
 export const SpecialOffersPage: React.FC = () => {
-  const { setIsCustomStudioOpen } = useStore();
   const [selectedCat, setSelectedCat] = useState('all');
   const [sortOption, setSortOption] = useState('discount-high');
   const [offerSearch, setOfferSearch] = useState('');
@@ -210,12 +208,12 @@ export const SpecialOffersPage: React.FC = () => {
             </p>
           </div>
 
-          <button
-            onClick={() => setIsCustomStudioOpen(true)}
+          <Link
+            to="/how-to-order"
             className="px-6 py-3 bg-black hover:bg-zinc-800 text-[#E8E2D3] text-xs font-bold uppercase tracking-wider rounded-full transition-transform active:scale-95 shadow-md shrink-0"
           >
-            Launch Custom Studio
-          </button>
+            How To Order
+          </Link>
         </div>
 
       </div>

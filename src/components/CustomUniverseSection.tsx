@@ -1,11 +1,9 @@
 import React from 'react';
-import { useStore } from '../context/StoreContext';
+import { Link } from 'react-router-dom';
 import { PenTool, Type, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const CustomUniverseSection: React.FC = () => {
-  const { setIsCustomStudioOpen } = useStore();
-
   return (
     <section id="custom-universe" className="py-16 sm:py-24 bg-[#E8E2D3] border-b border-[#D3CBBA] relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -55,15 +53,15 @@ export const CustomUniverseSection: React.FC = () => {
             </div>
 
             <div className="mt-8 pt-6 border-t border-[#D3CBBA] relative z-10 flex items-center justify-between">
-              <button
-                onClick={() => setIsCustomStudioOpen(true)}
+              <Link
+                to="/shop"
                 className="w-full flex items-center justify-between text-xs font-bold tracking-wider uppercase text-zinc-900 hover:text-black group/btn"
               >
-                <span>OPEN KEEPSAKE STUDIO</span>
+                <span>EXPLORE MONOGRAMS</span>
                 <div className="w-8 h-8 rounded-lg bg-[#DFD8C7] group-hover/btn:bg-black group-hover/btn:text-[#E8E2D3] flex items-center justify-center transition-colors">
                   <ArrowUpRight className="w-4 h-4" />
                 </div>
-              </button>
+              </Link>
             </div>
           </motion.div>
 
@@ -94,15 +92,15 @@ export const CustomUniverseSection: React.FC = () => {
             </div>
 
             <div className="mt-8 pt-6 border-t border-[#D3CBBA] relative z-10 flex items-center justify-between">
-              <button
-                onClick={() => setIsCustomStudioOpen(true)}
+              <Link
+                to="/how-to-order"
                 className="w-full flex items-center justify-between text-xs font-bold tracking-wider uppercase text-zinc-900 hover:text-black group/btn"
               >
-                <span>REQUEST PRESERVATION</span>
+                <span>HOW TO PRESERVE</span>
                 <div className="w-8 h-8 rounded-lg bg-[#DFD8C7] group-hover/btn:bg-black group-hover/btn:text-[#E8E2D3] flex items-center justify-center transition-colors">
                   <ArrowUpRight className="w-4 h-4" />
                 </div>
-              </button>
+              </Link>
             </div>
           </motion.div>
         </div>

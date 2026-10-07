@@ -7,7 +7,6 @@ import {
   Search, 
   Menu, 
   X, 
-  Sparkles, 
   Facebook, 
   Instagram, 
   HelpCircle, 
@@ -32,9 +31,7 @@ export const Header: React.FC = () => {
     setIsSearchModalOpen,
     setSelectedCategory,
     setSelectedPlacement,
-    setIsHowToApplyOpen,
-    isCustomStudioOpen,
-    setIsCustomStudioOpen
+    setIsHowToApplyOpen
   } = useStore();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -145,7 +142,7 @@ export const Header: React.FC = () => {
                 <img
                   src="/melt-logo.svg"
                   alt="Melt Sparkle"
-                  className="h-11 xl:h-12 w-auto max-w-[240px] xl:max-w-[270px] object-contain select-none drop-shadow-xs"
+                  className="h-11 xl:h-12 w-auto max-w-[240px] xl:max-w-[270px] object-contain select-none"
                 />
               </a>
             </div>
@@ -185,18 +182,6 @@ export const Header: React.FC = () => {
               >
                 REVIEWS
               </Link>
-
-              <button
-                onClick={() => setIsCustomStudioOpen(true)}
-                className={`py-1 relative flex items-center gap-1 transition-colors ${
-                  isCustomStudioOpen
-                    ? 'text-amber-950 font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-amber-800 after:scale-x-100'
-                    : 'text-amber-800 hover:text-amber-950 font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-amber-800 after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
-                }`}
-              >
-                {/* <Sparkles className="w-3.5 h-3.5 text-amber-600" /> */}
-                CUSTOM STUDIO
-              </button>
 
               <Link
                 to="/how-to-order"
@@ -396,24 +381,6 @@ export const Header: React.FC = () => {
                     <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </Link>
 
-                  {/* Custom Studio */}
-                  <button
-                    onClick={() => {
-                      setIsCustomStudioOpen(true);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className={`w-full flex items-center justify-between py-2.5 px-3 text-sm font-semibold rounded-xl text-left transition-colors ${
-                      isCustomStudioOpen
-                        ? 'text-amber-950 bg-[#D4CCB8] border-l-4 border-amber-700 pl-3.5'
-                        : 'text-amber-900 bg-[#DFD8C7]/90 hover:bg-[#DFD8C7]'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <Sparkles className="w-4 h-4 text-amber-600" />
-                      <span className={isCustomStudioOpen ? 'underline decoration-amber-700 decoration-2 underline-offset-4' : ''}>Custom Studio</span>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-amber-600" />
-                  </button>
 
                   {/* Reviews */}
                   <Link

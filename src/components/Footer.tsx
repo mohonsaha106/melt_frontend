@@ -20,8 +20,7 @@ export const Footer: React.FC = () => {
     setSelectedCategory,
     setSelectedPlacement,
     setIsHowToApplyOpen,
-    setIsTrackOrderOpen,
-    setIsCustomStudioOpen
+    setIsTrackOrderOpen
   } = useStore();
 
   const scrollToTop = () => {
@@ -163,14 +162,7 @@ export const Footer: React.FC = () => {
                   All Keepsakes
                 </button>
               </li>
-              <li>
-                <button
-                  onClick={() => setIsCustomStudioOpen(true)}
-                  className="hover:text-amber-400 transition-colors font-semibold text-zinc-300"
-                >
-                  Custom Keepsake Studio
-                </button>
-              </li>
+
               <li>
                 <button
                   onClick={() => {

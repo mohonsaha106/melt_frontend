@@ -222,7 +222,7 @@ export const PRODUCTS: Product[] = [
     id: 'prod-glowing-letter-nightlamp',
     sku: 'MS-109',
     name: 'Custom Resin Monogram Letter Nightlamp (USB LED)',
-    category: 'custom',
+    category: 'keychains',
     price: 1450,
     originalPrice: 1900,
     tag: 'HOT',

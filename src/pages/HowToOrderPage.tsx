@@ -15,10 +15,8 @@ import {
   Gift
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useStore } from '../context/StoreContext';
 
 export const HowToOrderPage: React.FC = () => {
-  const { setIsCustomStudioOpen } = useStore();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -30,7 +28,7 @@ export const HowToOrderPage: React.FC = () => {
       step: '01',
       icon: ShoppingBag,
       title: 'Pick or Customise Keepsake',
-      desc: 'Browse our resin keepsake catalog or customize your monogram initial, flower preservation theme & name in our Custom Studio.',
+      desc: 'Browse our resin keepsake catalog or pick your favorite monogram initial, flower preservation frame & custom design.',
       highlights: ['Ready-made catalog', 'Personalized bridal flowers', 'Custom name & initial engravings']
     },
     {
@@ -231,17 +229,17 @@ export const HowToOrderPage: React.FC = () => {
 
         </div>
 
-        {/* Action Banner: Shop or Custom Studio */}
+        {/* Action Banner: Shop Keepsakes */}
         <div className="bg-black text-[#E8E2D3] rounded-3xl p-8 sm:p-12 mb-16 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
           <div className="max-w-xl text-center md:text-left">
             <span className="text-xs font-mono font-bold uppercase tracking-widest text-amber-400">
               Ready To Create Your Piece?
             </span>
             <h3 className="text-2xl sm:text-4xl font-serif font-bold text-white mt-2">
-              Start Designing or Browse Our Keepsake Catalog
+              Browse Our Keepsake Catalog
             </h3>
             <p className="text-xs sm:text-sm text-zinc-400 mt-2 leading-relaxed">
-              Choose from ready-to-ship handcrafted bookmarks, keychains, and coasters, or customize your own bridal flower keepsake in our online studio.
+              Choose from ready-to-ship handcrafted bookmarks, keychains, and coasters, or order your own bridal flower preservation piece.
             </p>
           </div>
 
@@ -253,14 +251,6 @@ export const HowToOrderPage: React.FC = () => {
               <span>Shop All Keepsakes</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
-
-            <button
-              onClick={() => setIsCustomStudioOpen(true)}
-              className="px-6 py-3.5 bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-bold uppercase tracking-wider rounded-full transition-transform active:scale-95 border border-zinc-700 flex items-center space-x-2"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Open Custom Studio</span>
-            </button>
           </div>
         </div>
 

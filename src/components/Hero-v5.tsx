@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Sparkles, ArrowRight, Play, Pause } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, Play, Pause } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
 interface VideoCampaignSlide {
@@ -9,8 +9,7 @@ interface VideoCampaignSlide {
   headline: string;
   subheadline: string;
   ctaText: string;
-  categoryFilter?: 'all' | 'preservation' | 'jewelry' | 'keychains' | 'bookmarks' | 'coasters' | 'clocks' | 'custom';
-  isCustomStudio?: boolean;
+  categoryFilter?: 'all' | 'preservation' | 'jewelry' | 'keychains' | 'bookmarks' | 'coasters' | 'clocks';
   videoSrc: string;
   posterImage: string;
   editionBadge: string;
@@ -56,7 +55,7 @@ const VIDEO_CAMPAIGNS: VideoCampaignSlide[] = [
     headline: 'For Moments Worth Remembering',
     subheadline: 'Immortalize your wedding reception bouquet and bridal mala in UV archival resin with custom name calligraphy.',
     ctaText: 'BRIDAL PRESERVATION',
-    isCustomStudio: true,
+    categoryFilter: 'preservation',
     videoSrc: 'https://assets.mixkit.co/videos/preview/mixkit-close-up-of-a-woman-wearing-golden-earrings-41617-large.mp4',
     posterImage: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=1920&q=85',
     editionBadge: 'CUSTOM COMMISSIONS'
@@ -64,7 +63,7 @@ const VIDEO_CAMPAIGNS: VideoCampaignSlide[] = [
 ];
 
 export const HeroV5: React.FC = () => {
-  const { setSelectedCategory, setSelectedPlacement, setIsCustomStudioOpen } = useStore();
+  const { setSelectedCategory, setSelectedPlacement } = useStore();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -99,11 +98,6 @@ export const HeroV5: React.FC = () => {
   const slide = VIDEO_CAMPAIGNS[currentSlide];
 
   const handleCtaClick = (campaign: VideoCampaignSlide) => {
-    if (campaign.isCustomStudio) {
-      setIsCustomStudioOpen(true);
-      return;
-    }
-
     if (campaign.categoryFilter) {
       setSelectedCategory(campaign.categoryFilter);
       setSelectedPlacement(null);
@@ -207,14 +201,6 @@ export const HeroV5: React.FC = () => {
                 >
                   <span>{slide.ctaText}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-
-                <button
-                  onClick={() => setIsCustomStudioOpen(true)}
-                  className="inline-flex items-center space-x-2 px-6 py-4 rounded-full border border-white/40 hover:border-white text-white hover:bg-white/10 text-xs font-bold tracking-[0.18em] uppercase transition-all backdrop-blur-sm"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>CUSTOM STUDIO</span>
                 </button>
               </div>
             </motion.div>

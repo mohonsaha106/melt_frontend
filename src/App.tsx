@@ -15,7 +15,6 @@ import { CartDrawer } from './components/CartDrawer';
 import { FreeDesignModal } from './components/FreeDesignModal';
 import { QuickViewModal } from './components/QuickViewModal';
 import { WishlistDrawer } from './components/WishlistDrawer';
-import { CustomTattooStudio } from './components/CustomTattooStudio';
 import { CheckoutModal } from './components/CheckoutModal';
 import { TrackOrderModal } from './components/TrackOrderModal';
 import { HowToApplyModal } from './components/HowToApplyModal';
@@ -79,7 +78,6 @@ export const AppContent: React.FC = () => {
       <FreeDesignModal />
       <QuickViewModal />
       <WishlistDrawer />
-      <CustomTattooStudio />
       <CheckoutModal />
       <TrackOrderModal />
       <HowToApplyModal />

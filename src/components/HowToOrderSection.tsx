@@ -7,7 +7,7 @@ export const HowToOrderSection: React.FC = () => {
       step: '01',
       icon: ShoppingBag,
       title: 'Pick or Customise Keepsake',
-      desc: 'Browse our resin keepsakes catalog or personalize your monogram initial, flower theme & name in the studio.'
+      desc: 'Browse our resin keepsakes catalog or choose your favorite monogram initial, flower frame & custom design.'
     },
     {
       step: '02',
