@@ -3,6 +3,7 @@ import { X, RotateCcw, Check, Star } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PLACEMENTS } from '../data/categories';
 import { Placement } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 export interface FilterDrawerModalProps {
   isOpen: boolean;
@@ -37,6 +38,8 @@ export const FilterDrawerModal: React.FC<FilterDrawerModalProps> = ({
   onResetFilters,
   totalResultsCount,
 }) => {
+  const { language, formatPrice, tNumber, getPlacementName } = useLanguage();
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -62,11 +65,11 @@ export const FilterDrawerModal: React.FC<FilterDrawerModalProps> = ({
             <div className="p-5 sm:p-6 border-b border-[#D3CBBA] flex items-center justify-between bg-[#F2EDE2]">
               <div className="flex items-center space-x-2">
                 <h3 className="font-serif text-lg sm:text-xl font-bold text-zinc-900">
-                  Filter Products
+                  {language === 'bn' ? 'ফিল্টার করুন' : 'Filter Products'}
                 </h3>
                 {totalResultsCount !== undefined && (
                   <span className="text-xs bg-[#DFD8C7] text-zinc-700 px-2 py-0.5 rounded-full font-medium border border-[#D3CBBA]">
-                    {totalResultsCount} results
+                    {language === 'bn' ? `${tNumber(totalResultsCount)} টি ডিজাইন` : `${totalResultsCount} results`}
                   </span>
                 )}
               </div>
@@ -85,12 +88,12 @@ export const FilterDrawerModal: React.FC<FilterDrawerModalProps> = ({
               {/* 1. Price Filter */}
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-zinc-800 block mb-2">
-                  Price Range (BDT)
+                  {language === 'bn' ? 'মূল্য সীমা (টাকা)' : 'Price Range (BDT)'}
                 </label>
                 <div className="flex items-center justify-between text-xs text-zinc-600 mb-2">
-                  <span>৳{selectedPriceRange[0]}</span>
+                  <span>{formatPrice(selectedPriceRange[0])}</span>
                   <span className="font-bold text-zinc-900">
-                    Up to ৳{selectedPriceRange[1]}
+                    {language === 'bn' ? `সর্বোচ্চ ${formatPrice(selectedPriceRange[1])}` : `Up to ${formatPrice(selectedPriceRange[1])}`}
                   </span>
                 </div>
                 <input
@@ -113,7 +116,7 @@ export const FilterDrawerModal: React.FC<FilterDrawerModalProps> = ({
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-zinc-800">
-                    Placement & Keepsake Type
+                    {language === 'bn' ? 'ব্যবহারের ধরন ও ক্যাটাগরি' : 'Placement & Keepsake Type'}
                   </label>
                   {selectedPlacement && (
                     <button
@@ -121,7 +124,7 @@ export const FilterDrawerModal: React.FC<FilterDrawerModalProps> = ({
                       onClick={() => onSelectPlacement(null)}
                       className="text-[11px] text-zinc-500 hover:text-black underline"
                     >
-                      Clear
+                      {language === 'bn' ? 'মুছুন' : 'Clear'}
                     </button>
                   )}
                 </div>
@@ -141,7 +144,7 @@ export const FilterDrawerModal: React.FC<FilterDrawerModalProps> = ({
                             : 'bg-[#F2EDE2] hover:bg-[#DFD8C7] text-zinc-800 border border-[#D3CBBA]'
                         }`}
                       >
-                        {item.name}
+                        {getPlacementName(item.name)}
                       </button>
                     );
                   })}
@@ -151,7 +154,7 @@ export const FilterDrawerModal: React.FC<FilterDrawerModalProps> = ({
               {/* 3. Minimum Customer Rating */}
               <div>
                 <label className="text-xs font-bold uppercase tracking-wider text-zinc-800 block mb-2">
-                  Customer Rating
+                  {language === 'bn' ? 'গ্রাহক রেটিং' : 'Customer Rating'}
                 </label>
                 <div className="flex gap-2">
                   {[0, 4.0, 4.5, 4.8, 5.0].map((rating) => {
@@ -168,11 +171,11 @@ export const FilterDrawerModal: React.FC<FilterDrawerModalProps> = ({
                         }`}
                       >
                         {rating === 0 ? (
-                          <span>All</span>
+                          <span>{language === 'bn' ? 'সব' : 'All'}</span>
                         ) : (
                           <>
                             <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
-                            <span>{rating}+</span>
+                            <span>{tNumber(rating)}+</span>
                           </>
                         )}
                       </button>
@@ -190,7 +193,7 @@ export const FilterDrawerModal: React.FC<FilterDrawerModalProps> = ({
                 className="flex-1 py-3 px-4 bg-[#DFD8C7] hover:bg-[#D3CBBA] text-zinc-900 text-xs font-bold uppercase tracking-wider rounded-full transition-colors flex items-center justify-center space-x-1.5"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                <span>Reset</span>
+                <span>{language === 'bn' ? 'রিসেট' : 'Reset'}</span>
               </button>
               <button
                 type="button"
@@ -198,7 +201,7 @@ export const FilterDrawerModal: React.FC<FilterDrawerModalProps> = ({
                 className="flex-1 py-3 px-4 bg-black hover:bg-zinc-800 text-[#E8E2D3] text-xs font-bold uppercase tracking-wider rounded-full transition-colors flex items-center justify-center space-x-1.5 shadow-md"
               >
                 <Check className="w-4 h-4" />
-                <span>Apply</span>
+                <span>{language === 'bn' ? 'প্রয়োগ করুন' : 'Apply'}</span>
               </button>
             </div>
           </motion.div>

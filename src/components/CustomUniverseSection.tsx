@@ -2,8 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { PenTool, Type, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../context/LanguageContext';
 
 export const CustomUniverseSection: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="custom-universe" className="py-16 sm:py-24 bg-[#E8E2D3] border-b border-[#D3CBBA] relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,15 +15,15 @@ export const CustomUniverseSection: React.FC = () => {
           <div className="flex items-center justify-center space-x-3 mb-3">
             <span className="h-[1px] w-8 bg-[#D3CBBA]" />
             <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-zinc-500 font-mono">
-              TWO WAYS TO PRESERVE
+              {t.customUniverse.badge}
             </span>
             <span className="h-[1px] w-8 bg-[#D3CBBA]" />
           </div>
           <h2 className="font-serif text-3xl sm:text-5xl font-semibold text-zinc-900 tracking-tight">
-            Keeping your <span className="font-serif italic font-bold">memories alive.</span>
+            {t.customUniverse.title} <span className="font-serif italic font-bold">{t.customUniverse.titleHighlight}</span>
           </h2>
           <p className="mt-3 text-sm sm:text-base text-zinc-600 leading-relaxed">
-            Two distinct paths to your dream resin keepsake. Personalize a monogram treasure or preserve your sacred moments forever.
+            {t.customUniverse.subtitle}
           </p>
         </div>
 
@@ -42,13 +45,13 @@ export const CustomUniverseSection: React.FC = () => {
               </div>
 
               <span className="text-[11px] font-bold tracking-[0.15em] text-zinc-500 uppercase font-mono">
-                EXPERIENCE 01
+                {t.customUniverse.exp1Badge}
               </span>
               <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1 mb-3 font-serif">
-                Custom Name & Monograms
+                {t.customUniverse.exp1Title}
               </h3>
               <p className="text-sm text-zinc-600 leading-relaxed max-w-sm">
-                Your name, initial, or couple initials cast with 24K gold foil, baby’s breath florals, and glowing LED wooden base.
+                {t.customUniverse.exp1Desc}
               </p>
             </div>
 
@@ -57,7 +60,7 @@ export const CustomUniverseSection: React.FC = () => {
                 to="/shop"
                 className="w-full flex items-center justify-between text-xs font-bold tracking-wider uppercase text-zinc-900 hover:text-black group/btn"
               >
-                <span>EXPLORE MONOGRAMS</span>
+                <span>{t.customUniverse.exp1Btn}</span>
                 <div className="w-8 h-8 rounded-lg bg-[#DFD8C7] group-hover/btn:bg-black group-hover/btn:text-[#E8E2D3] flex items-center justify-center transition-colors">
                   <ArrowUpRight className="w-4 h-4" />
                 </div>
@@ -81,13 +84,13 @@ export const CustomUniverseSection: React.FC = () => {
               </div>
 
               <span className="text-[11px] font-bold tracking-[0.15em] text-zinc-500 uppercase font-mono">
-                EXPERIENCE 02
+                {t.customUniverse.exp2Badge}
               </span>
               <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1 mb-3 font-serif">
-                Flower & Garland Preservation
+                {t.customUniverse.exp2Title}
               </h3>
               <p className="text-sm text-zinc-600 leading-relaxed max-w-sm">
-                Send us your wedding garland or milestone flowers. We carefully dehydrate and encapsulate them forever in archival crystal resin.
+                {t.customUniverse.exp2Desc}
               </p>
             </div>
 
@@ -96,7 +99,7 @@ export const CustomUniverseSection: React.FC = () => {
                 to="/how-to-order"
                 className="w-full flex items-center justify-between text-xs font-bold tracking-wider uppercase text-zinc-900 hover:text-black group/btn"
               >
-                <span>HOW TO PRESERVE</span>
+                <span>{t.customUniverse.exp2Btn}</span>
                 <div className="w-8 h-8 rounded-lg bg-[#DFD8C7] group-hover/btn:bg-black group-hover/btn:text-[#E8E2D3] flex items-center justify-center transition-colors">
                   <ArrowUpRight className="w-4 h-4" />
                 </div>

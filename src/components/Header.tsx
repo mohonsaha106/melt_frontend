@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
+import { useLanguage } from '../context/LanguageContext';
+import { LanguageToggle } from './LanguageToggle';
 import { 
   ShoppingBag, 
   Heart, 
@@ -33,6 +35,8 @@ export const Header: React.FC = () => {
     setSelectedPlacement,
     setIsHowToApplyOpen
   } = useStore();
+
+  const { t, tNumber } = useLanguage();
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -101,8 +105,8 @@ export const Header: React.FC = () => {
               <button
                 onClick={() => setIsSearchModalOpen(true)}
                 className="p-2 text-zinc-700 hover:text-black hover:bg-[#DFD8C7] rounded-full transition-colors focus:outline-none active:scale-95"
-                aria-label="Search"
-                title="Search"
+                aria-label={t.common.search}
+                title={t.common.search}
               >
                 <Search className="w-5 h-5" />
               </button>
@@ -111,13 +115,13 @@ export const Header: React.FC = () => {
               <button
                 onClick={openCart}
                 className="p-2 text-zinc-700 hover:text-black hover:bg-[#DFD8C7] rounded-full transition-colors relative focus:outline-none active:scale-95"
-                title="Shopping Cart"
-                aria-label="Shopping Cart"
+                title={t.header.cartTooltip}
+                aria-label={t.header.cartTooltip}
               >
                 <ShoppingBag className="w-5 h-5" />
                 {totalCartItemCount > 0 && (
                   <span className="absolute top-0.5 right-0.5 min-w-[16px] h-4 px-1 bg-black text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
-                    {totalCartItemCount}
+                    {tNumber(totalCartItemCount)}
                   </span>
                 )}
               </button>
@@ -157,7 +161,7 @@ export const Header: React.FC = () => {
                     : 'text-zinc-700 hover:text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
                 }`}
               >
-                SHOP
+                {t.header.shop}
               </Link>
 
               <Link
@@ -169,7 +173,7 @@ export const Header: React.FC = () => {
                 }`}
               >
                 <Tag className="w-3 h-3 text-rose-600" />
-                OFFERS
+                {t.header.offers}
               </Link>
 
               <Link
@@ -180,7 +184,7 @@ export const Header: React.FC = () => {
                     : 'text-zinc-700 hover:text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
                 }`}
               >
-                REVIEWS
+                {t.header.reviews}
               </Link>
 
               <Link
@@ -191,15 +195,8 @@ export const Header: React.FC = () => {
                     : 'text-zinc-700 hover:text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
                 }`}
               >
-                HOW TO ORDER
+                {t.header.howToOrder}
               </Link>
-
-              {/* <button
-                onClick={() => setIsHowToApplyOpen(true)}
-                className="hover:text-black transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
-              >
-                KEEPSAKE GUIDE
-              </button> */}
 
               <Link
                 to="/faq"
@@ -209,7 +206,7 @@ export const Header: React.FC = () => {
                     : 'text-zinc-700 hover:text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
                 }`}
               >
-                FAQ
+                {t.header.faq}
               </Link>
 
               <Link
@@ -220,18 +217,21 @@ export const Header: React.FC = () => {
                     : 'text-zinc-700 hover:text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
                 }`}
               >
-                ABOUT
+                {t.header.about}
               </Link>
             </nav>
 
             {/* Desktop Right Action Icons */}
-            <div className="flex items-center space-x-1 sm:space-x-1.5">
+            <div className="flex items-center space-x-1 sm:space-x-2">
+              {/* Language Switcher Pill */}
+              <LanguageToggle variant="header" />
+
               {/* Desktop Search Icon Trigger */}
               <button
                 onClick={() => setIsSearchModalOpen(true)}
                 className="p-2 text-zinc-700 hover:text-black hover:bg-[#DFD8C7] rounded-full transition-colors flex items-center justify-center focus:outline-none"
-                title="Search designs (Cmd+K)"
-                aria-label="Search"
+                title={t.header.searchTooltip}
+                aria-label={t.common.search}
               >
                 <Search className="w-4 h-4" />
               </button>
@@ -331,6 +331,11 @@ export const Header: React.FC = () => {
                   </button>
                 </div>
 
+                {/* Language Switcher in Drawer */}
+                <div className="mt-4">
+                  <LanguageToggle variant="drawer" />
+                </div>
+
                 <div className="mt-4 space-y-1">
                   {/* Search */}
                   <button
@@ -342,7 +347,7 @@ export const Header: React.FC = () => {
                   >
                     <div className="flex items-center space-x-3">
                       <Search className="w-4 h-4 text-zinc-600" />
-                      <span>Search</span>
+                      <span>{t.common.search}</span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </button>
@@ -359,7 +364,9 @@ export const Header: React.FC = () => {
                   >
                     <div className="flex items-center space-x-3">
                       <Tag className="w-4 h-4 text-rose-600" />
-                      <span className={isOffersActive ? 'underline decoration-rose-700 decoration-2 underline-offset-4' : ''}>Special Offers</span>
+                      <span className={isOffersActive ? 'underline decoration-rose-700 decoration-2 underline-offset-4' : ''}>
+                        {t.header.offers}
+                      </span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-rose-500" />
                   </Link>
@@ -376,11 +383,12 @@ export const Header: React.FC = () => {
                   >
                     <div className="flex items-center space-x-3">
                       <ShoppingBag className="w-4 h-4 text-zinc-600" />
-                      <span className={isShopActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>Shop</span>
+                      <span className={isShopActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>
+                        {t.header.shop}
+                      </span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </Link>
-
 
                   {/* Reviews */}
                   <Link
@@ -394,7 +402,9 @@ export const Header: React.FC = () => {
                   >
                     <div className="flex items-center space-x-3">
                       <Heart className="w-4 h-4 text-zinc-600" />
-                      <span className={isReviewsActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>Reviews</span>
+                      <span className={isReviewsActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>
+                        {t.header.reviews}
+                      </span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </Link>
@@ -411,7 +421,9 @@ export const Header: React.FC = () => {
                   >
                     <div className="flex items-center space-x-3">
                       <Truck className="w-4 h-4 text-zinc-600" />
-                      <span className={isHowToOrderActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>How To Order</span>
+                      <span className={isHowToOrderActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>
+                        {t.header.howToOrder}
+                      </span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </Link>
@@ -426,7 +438,7 @@ export const Header: React.FC = () => {
                   >
                     <div className="flex items-center space-x-3">
                       <BookOpen className="w-4 h-4 text-zinc-600" />
-                      <span>Care Guide</span>
+                      <span>{t.header.keepsakeGuide}</span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </button>
@@ -443,7 +455,9 @@ export const Header: React.FC = () => {
                   >
                     <div className="flex items-center space-x-3">
                       <HelpCircle className="w-4 h-4 text-zinc-600" />
-                      <span className={isFaqActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>FAQ</span>
+                      <span className={isFaqActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>
+                        {t.header.faq}
+                      </span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </Link>
@@ -460,7 +474,9 @@ export const Header: React.FC = () => {
                   >
                     <div className="flex items-center space-x-3">
                       <Info className="w-4 h-4 text-zinc-600" />
-                      <span className={isAboutActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>About Us</span>
+                      <span className={isAboutActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>
+                        {t.header.about}
+                      </span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </Link>

@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, X } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { useLanguage } from '../context/LanguageContext';
+
 
 const listVariants = {
   hidden: { opacity: 0 },
@@ -43,6 +45,7 @@ const itemVariants = {
 
 export const FloatingMessengerButton: React.FC = () => {
   const { cart, isCartOpen, isCheckoutOpen } = useStore();
+  const { t, language } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -103,7 +106,7 @@ export const FloatingMessengerButton: React.FC = () => {
                 onClick={() => setIsOpen(false)}
                 className="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-lg hover:shadow-xl border-2 border-white/50 transition-shadow focus:outline-none"
                 aria-label="WhatsApp"
-                title="Chat on WhatsApp"
+                title={t.floatingMessenger.chatOnWhatsApp}
               >
                 <svg className="w-6 h-6 sm:w-6.5 sm:h-6.5 fill-white" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.964 9.964 0 0 0 1.333 4.993L2 22l5.233-1.237a9.994 9.994 0 0 0 4.779 1.217h.004c5.505 0 9.988-4.478 9.989-9.984 0-2.669-1.037-5.176-2.925-7.062A9.925 9.925 0 0 0 12.012 2zm5.782 14.545c-.24.67-.936 1.226-1.666 1.385-.501.107-1.155.195-3.342-.711-2.795-1.157-4.6-4.004-4.74-4.19-.138-.187-1.135-1.509-1.135-2.877 0-1.368.718-2.04 0.973-2.317.255-.276.56-.345.748-.345.188 0 .375.008.538.016.173.008.406-.065.635.485.239.57.812 1.978.883 2.122.07.144.118.314.02.508-.098.194-.147.315-.29.485-.143.17-.301.378-.43.508-.145.145-.295.304-.128.589.167.284.743 1.226 1.593 1.984 1.096.977 2.019 1.28 2.308 1.424.288.145.457.122.626-.073.169-.195.722-.84.915-1.127.194-.287.388-.24.646-.145.26.096 1.644.774 1.926.915.282.14.47.21.54.327.069.117.069.678-.17 1.352z"/>
@@ -121,7 +124,7 @@ export const FloatingMessengerButton: React.FC = () => {
                 onClick={() => setIsOpen(false)}
                 className="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-gradient-to-tr from-[#0084FF] via-[#9B51E0] to-[#FF5E3A] text-white flex items-center justify-center shadow-lg hover:shadow-xl border-2 border-white/50 transition-shadow focus:outline-none"
                 aria-label="Messenger"
-                title="Chat on Facebook Messenger"
+                title={t.floatingMessenger.chatOnMessenger}
               >
                 <svg className="w-6 h-6 sm:w-6.5 sm:h-6.5 fill-white" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 2C6.477 2 2 6.145 2 11.258c0 2.91 1.455 5.517 3.735 7.202.195.144.316.37.316.613l.063 1.91c.026.793.844 1.31 1.547.93l2.133-1.15a.99.99 0 0 1 .59-.092c.52.094 1.06.145 1.616.145 5.523 0 10-4.145 10-9.258C22 6.145 17.523 2 12 2zm1.096 12.443-2.613-2.787-5.1 2.787 5.61-5.957 2.678 2.787 5.035-2.787-5.61 5.957z" />
@@ -142,7 +145,7 @@ export const FloatingMessengerButton: React.FC = () => {
               : 'bg-[#0A0A0A] hover:bg-zinc-900 border-[#D3CBBA]/80 text-[#E8E2D3] hover:shadow-[0_8px_30px_rgb(0,0,0,0.4)]'
           }`}
           aria-label={isOpen ? "Close messaging options" : "Open messaging options"}
-          title={isOpen ? "Close" : "Chat with us"}
+          title={isOpen ? (language === 'bn' ? 'বন্ধ করুন' : 'Close') : (language === 'bn' ? 'আমাদের সাথে চ্যাট করুন' : 'Chat with us')}
         >
           {/* Active Online Green Dot (Only when closed) */}
           {!isOpen && (

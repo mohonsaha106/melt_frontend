@@ -19,10 +19,19 @@
   body {
     background-color: var(--brand-bg);
     color: var(--brand-text);
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'DM Sans', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+  }
+
+  body.font-bengali {
+    font-family: 'Hind Siliguri', 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  body.font-bengali .font-serif {
+    font-family: 'Hind Siliguri', 'Playfair Display', Georgia, serif;
+    font-weight: 700;
   }
 
   /* Custom clean scrollbar */

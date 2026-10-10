@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStore } from '../context/StoreContext';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   X, 
   Trash2, 
@@ -36,7 +37,10 @@ export const CartDrawer: React.FC = () => {
     setSelectedCategory
   } = useStore();
 
+  const { t, formatPrice, tNumber, getProductName, language } = useLanguage();
+
   if (!isCartOpen) return null;
+
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
@@ -61,12 +65,14 @@ export const CartDrawer: React.FC = () => {
           <div className="p-5 sm:p-6 border-b border-black/10 flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-2">
-                <h2 className="text-lg font-bold text-[#111111]">Your Keepsake Cart</h2>
+                <h2 className="text-lg font-bold text-[#111111]">{t.cart.title}</h2>
                 <span className="px-2 py-0.5 bg-[#DFD8C7] text-zinc-900 text-xs font-bold rounded-full border border-black/10">
-                  {totalCartItemCount}
+                  {tNumber(totalCartItemCount)}
                 </span>
               </div>
-              <p className="text-xs text-zinc-600 mt-0.5">Minimum order ৳250</p>
+              <p className="text-xs text-zinc-600 mt-0.5">
+                {language === 'bn' ? `সর্বনিম্ন অর্ডার ${formatPrice(250)}` : `Minimum order ${formatPrice(250)}`}
+              </p>
             </div>
             <button
               onClick={() => setIsCartOpen(false)}
@@ -86,8 +92,12 @@ export const CartDrawer: React.FC = () => {
                     <Gift className="w-4 h-4 text-amber-600" />
                     <span>
                       {remainingFreeGiftSlots > 0
-                        ? `🎉 ${remainingFreeGiftSlots} free gift unlocked — pick now!`
-                        : `🎁 Complimentary gift active (${eligibleFreeGiftCount} unlocked)`}
+                        ? (language === 'bn' 
+                            ? `🎉 ${tNumber(remainingFreeGiftSlots)}টি ফ্রি উপহার আনলক — পছন্দ করুন!`
+                            : `🎉 ${remainingFreeGiftSlots} free gift unlocked — pick now!`)
+                        : (language === 'bn'
+                            ? `🎁 ফ্রি উপহার একটিভ (${tNumber(eligibleFreeGiftCount)}টি আনলক)`
+                            : `🎁 Complimentary gift active (${eligibleFreeGiftCount} unlocked)`)}
                     </span>
                   </div>
                 </div>
@@ -100,12 +110,14 @@ export const CartDrawer: React.FC = () => {
                     className="w-full py-2 bg-black hover:bg-zinc-900 text-[#E8E2D3] text-xs font-bold rounded-xl transition-all active:scale-98 shadow-sm flex items-center justify-center space-x-1.5"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Choose Free Gift ({remainingFreeGiftSlots} left)</span>
+                    <span>
+                      {t.cart.chooseFreeGift} ({language === 'bn' ? `${tNumber(remainingFreeGiftSlots)}টি বাকি` : `${remainingFreeGiftSlots} left`})
+                    </span>
                   </button>
                 ) : (
                   <div className="text-[11px] text-emerald-700 font-medium flex items-center space-x-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>All free gifts added to parcel!</span>
+                    <span>{t.cart.allGiftsAdded}</span>
                   </div>
                 )}
               </div>
@@ -114,9 +126,13 @@ export const CartDrawer: React.FC = () => {
                 <div className="flex items-center justify-between text-xs mb-1.5 text-zinc-700 font-medium">
                   <div className="flex items-center space-x-1.5">
                     <Gift className="w-4 h-4 text-zinc-600" />
-                    <span>Add {nextTierItemsNeeded} more item{nextTierItemsNeeded > 1 ? 's' : ''} to unlock 1 FREE keepsake gift</span>
+                    <span>
+                      {language === 'bn'
+                        ? `আরও ${tNumber(nextTierItemsNeeded)}টি পণ্য যোগ করলে ১টি ফ্রি কিপসেক উপহার পাবেন`
+                        : `Add ${nextTierItemsNeeded} more item${nextTierItemsNeeded > 1 ? 's' : ''} to unlock 1 FREE keepsake gift`}
+                    </span>
                   </div>
-                  <span className="font-bold text-[11px] text-[#111111]">{Math.round(nextTierProgressPercent)}%</span>
+                  <span className="font-bold text-[11px] text-[#111111]">{tNumber(Math.round(nextTierProgressPercent))}%</span>
                 </div>
                 {/* Progress bar */}
                 <div className="w-full h-1.5 bg-[#DFD8C7] rounded-full overflow-hidden">
@@ -134,13 +150,21 @@ export const CartDrawer: React.FC = () => {
                 <Truck className="w-3.5 h-3.5 text-zinc-600" />
                 <span>
                   {isFreeShippingUnlocked ? (
-                    <strong className="text-emerald-700">FREE delivery unlocked!</strong>
+                    <strong className="text-emerald-700">{t.cart.freeShippingUnlocked}</strong>
                   ) : (
-                    <>Add <strong>৳{freeShippingRemaining}</strong> for free delivery</>
+                    <>
+                      {language === 'bn' ? (
+                        <>ফ্রি ডেলিভারির জন্য আরও <strong>{formatPrice(freeShippingRemaining)}</strong> যোগ করুন</>
+                      ) : (
+                        <>Add <strong>{formatPrice(freeShippingRemaining)}</strong> for free delivery</>
+                      )}
+                    </>
                   )}
                 </span>
               </div>
-              <span className="font-mono text-zinc-600">Nationwide</span>
+              <span className="font-mono text-zinc-600">
+                {language === 'bn' ? 'সারা দেশে' : 'Nationwide'}
+              </span>
             </div>
           </div>
 
@@ -161,7 +185,7 @@ export const CartDrawer: React.FC = () => {
                     {item.imageUrl ? (
                       <img
                         src={item.imageUrl}
-                        alt={item.name}
+                        alt={getProductName(item.id, item.name)}
                         className="w-full h-full object-cover rounded-lg"
                       />
                     ) : (
@@ -173,11 +197,11 @@ export const CartDrawer: React.FC = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center space-x-2">
                       <h4 className="text-xs sm:text-sm font-semibold text-[#111111] truncate">
-                        {item.name}
+                        {getProductName(item.id, item.name)}
                       </h4>
                       {item.isFreeGift && (
                         <span className="px-1.5 py-0.2 bg-black text-[#E8E2D3] text-[9px] font-bold rounded uppercase">
-                          FREE GIFT
+                          {language === 'bn' ? 'ফ্রি গিফট' : 'FREE GIFT'}
                         </span>
                       )}
                     </div>
@@ -185,14 +209,14 @@ export const CartDrawer: React.FC = () => {
                     <div className="flex items-center space-x-2 text-[11px] text-zinc-600 mt-0.5">
                       <span className="font-mono">{item.sku}</span>
                       <span>•</span>
-                      <span>Option: {item.size}</span>
+                      <span>{t.cart.optionLabel}: {item.size}</span>
                       {item.customFont && <span>• {item.customFont}</span>}
                     </div>
 
                     {/* Quantity Selector & Price */}
                     <div className="mt-2.5 flex items-center justify-between">
                       {item.isFreeGift ? (
-                        <span className="text-xs font-bold text-amber-700">Complimentary Gift</span>
+                        <span className="text-xs font-bold text-amber-700">{t.cart.complimentaryGift}</span>
                       ) : (
                         <div className="flex items-center border border-black/15 rounded-lg bg-[#DFD8C7]">
                           <button
@@ -202,7 +226,7 @@ export const CartDrawer: React.FC = () => {
                             <Minus className="w-3 h-3" />
                           </button>
                           <span className="px-2.5 py-0.5 text-xs font-bold text-[#111111]">
-                            {item.quantity}
+                            {tNumber(item.quantity)}
                           </span>
                           <button
                             onClick={() => updateQuantity(item.id, 1)}
@@ -215,7 +239,7 @@ export const CartDrawer: React.FC = () => {
 
                       <div className="flex items-center space-x-3">
                         <span className="text-xs sm:text-sm font-bold text-[#111111]">
-                          {item.isFreeGift ? '৳0' : `৳${item.price * item.quantity}`}
+                          {item.isFreeGift ? formatPrice(0) : formatPrice(item.price * item.quantity)}
                         </span>
                         <button
                           onClick={() => removeFromCart(item.id)}
@@ -236,9 +260,9 @@ export const CartDrawer: React.FC = () => {
                   <ShoppingBag className="w-8 h-8" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-[#111111]">Your keepsake cart is empty</h3>
+                  <h3 className="text-base font-bold text-[#111111]">{t.cart.emptyTitle}</h3>
                   <p className="text-xs text-zinc-600 mt-1 max-w-xs mx-auto">
-                    Explore our handcrafted floral preservation & resin keepsakes and start keeping memories alive!
+                    {t.cart.emptyDesc}
                   </p>
                 </div>
                 <button
@@ -250,7 +274,7 @@ export const CartDrawer: React.FC = () => {
                   }}
                   className="px-6 py-2.5 bg-black text-[#E8E2D3] text-xs font-bold uppercase tracking-wider rounded-full hover:bg-zinc-900 transition-colors shadow-sm"
                 >
-                  Start Shopping
+                  {t.cart.startShopping}
                 </button>
               </div>
             )}
@@ -264,15 +288,19 @@ export const CartDrawer: React.FC = () => {
                 <div className="p-3 bg-amber-100/80 border border-amber-300 rounded-xl flex items-center space-x-2 text-xs text-amber-900">
                   <AlertCircle className="w-4 h-4 flex-shrink-0 text-amber-700" />
                   <span>
-                    Minimum order amount is <strong>৳250</strong>. Add <strong>৳{250 - cartSubtotal}</strong> more to checkout.
+                    {language === 'bn' ? (
+                      <>সর্বনিম্ন অর্ডারের পরিমাণ <strong>{formatPrice(250)}</strong>। চেকআউটের জন্য আরও <strong>{formatPrice(250 - cartSubtotal)}</strong> যোগ করুন।</>
+                    ) : (
+                      <>Minimum order amount is <strong>৳250</strong>. Add <strong>{formatPrice(250 - cartSubtotal)}</strong> more to checkout.</>
+                    )}
                   </span>
                 </div>
               )}
 
               {/* Subtotal row */}
               <div className="flex items-center justify-between text-sm">
-                <span className="text-zinc-700">Subtotal:</span>
-                <span className="text-xl font-bold text-[#111111]">৳{cartSubtotal}</span>
+                <span className="text-zinc-700">{t.cart.subtotal}:</span>
+                <span className="text-xl font-bold text-[#111111]">{formatPrice(cartSubtotal)}</span>
               </div>
 
               {/* Checkout CTA */}
@@ -284,7 +312,7 @@ export const CartDrawer: React.FC = () => {
                 }}
                 className="w-full py-3.5 bg-black hover:bg-zinc-900 disabled:bg-[#C8C0AD] disabled:text-zinc-600 disabled:cursor-not-allowed text-[#E8E2D3] text-xs sm:text-sm font-bold uppercase tracking-wider rounded-2xl flex items-center justify-center space-x-2 transition-all active:scale-98 shadow-md hover:shadow-lg"
               >
-                <span>Proceed to Checkout · ৳{cartSubtotal}</span>
+                <span>{t.cart.proceedToCheckout} · {formatPrice(cartSubtotal)}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

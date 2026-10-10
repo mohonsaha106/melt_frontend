@@ -2,91 +2,31 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ArrowUpRight, ArrowRight } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { useLanguage } from '../context/LanguageContext';
 import { PRODUCTS } from '../data/products';
-
-interface GalleryPiece {
-  id: string;
-  sku: string;
-  collectionName: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  price: number;
-  originalPrice: number;
-  imageUrl: string;
-  editionTag: string;
-}
-
-const GALLERY_PIECES: GalleryPiece[] = [
-  {
-    id: 'prod-forever-rose-pendant',
-    sku: 'MS-107',
-    collectionName: 'THE SIGNATURE COLLECTION',
-    title: 'Eternal Rosebud Teardrop Pendant',
-    subtitle: 'Real miniature red rosebud set in 24K gold foil',
-    description: 'A genuine botanical rosebud immortalized inside museum-clarity crystal epoxy on an anti-tarnish 18K gold-plated chain.',
-    price: 550,
-    originalPrice: 700,
-    imageUrl: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1200&q=85',
-    editionTag: 'FINE JEWELRY NO. 01'
-  },
-  {
-    id: 'prod-gold-monogram-keychain',
-    sku: 'MS-102',
-    collectionName: 'GOLDEN MONOGRAM SERIES',
-    title: '24K Gold Leaf Initial Locket',
-    subtitle: 'Pressed baby’s breath florals with 24K gold flakes',
-    description: 'Personalized alphabet charm hand-poured with real gold leaf, natural pressed flowers, and luxury swivel clasp hardware.',
-    price: 350,
-    originalPrice: 450,
-    imageUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=85',
-    editionTag: 'PERSONALIZED HEIRLOOM'
-  },
-  {
-    id: 'prod-floral-ring-dish',
-    sku: 'MS-106',
-    collectionName: 'CEREMONIAL BRIDAL ATELIER',
-    title: 'Personalized Floral Trinket Dish',
-    subtitle: 'Scalloped jewelry tray with gold foil script',
-    description: 'Adorned with real dried rose petals, botanical ferns, and custom couple calligraphy for ring and vanity display.',
-    price: 650,
-    originalPrice: 850,
-    imageUrl: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=1200&q=85',
-    editionTag: 'BRIDAL ESSENTIAL'
-  },
-  {
-    id: 'prod-geode-emerald-wall-clock',
-    sku: 'MS-103',
-    collectionName: 'STATEMENT MINERAL DECOR',
-    title: 'Royal Emerald Geode Wall Clock',
-    subtitle: 'Natural crushed quartz veins & silent quartz movement',
-    description: 'Statement luxury resin art piece capturing deep jewel emerald pigments and metallic gold veins for modern interiors.',
-    price: 3400,
-    originalPrice: 4200,
-    imageUrl: 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=1200&q=85',
-    editionTag: 'STATEMENT PIECE'
-  },
-  {
-    id: 'prod-botanical-hair-clips',
-    sku: 'MS-112',
-    collectionName: 'BOTANICAL ACCESSORIES',
-    title: 'Pressed Daisy & Gold Hair Clips',
-    subtitle: 'Forget-me-nots & golden leaves (Set of 3)',
-    description: 'Handcrafted alligator hair barrettes cast with real organic florals and golden leaf accents in clear archival epoxy.',
-    price: 420,
-    originalPrice: 550,
-    imageUrl: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=1200&q=85',
-    editionTag: 'TRENDING ACCESSORY'
-  }
-];
+import { HERO_GALLERY_TRANSLATIONS } from '../translations';
 
 const AUTOPLAY_DURATION = 5; // 5 seconds per slide
 
 export const Hero: React.FC = () => {
   const { setQuickViewProduct, addToCart, setSelectedCategory, setSelectedPlacement } = useStore();
+  const { language, t, formatPrice } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 640 : false);
+
+  const GALLERY_PIECES = HERO_GALLERY_TRANSLATIONS.map((piece) => ({
+    id: piece.id,
+    sku: piece.sku,
+    collectionName: piece.collectionName[language],
+    title: piece.title[language],
+    subtitle: piece.subtitle[language],
+    description: piece.description[language],
+    price: piece.price,
+    originalPrice: piece.originalPrice,
+    imageUrl: piece.imageUrl,
+    editionTag: piece.editionTag[language],
+  }));
 
   useEffect(() => {
     const handleResize = () => {
@@ -223,7 +163,7 @@ export const Hero: React.FC = () => {
                     </h3>
                     <div className="mt-1.5 flex items-center justify-between pt-1.5 border-t border-white/20">
                       <span className="font-serif font-bold text-sm sm:text-base text-white">
-                        ৳{piece.price} BDT
+                        {formatPrice(piece.price)}
                       </span>
                       <span className="text-[10px] uppercase font-bold tracking-wider text-amber-200">
                         {piece.sku}
@@ -341,7 +281,7 @@ export const Hero: React.FC = () => {
                 onClick={() => handleQuickAdd(currentPiece.id)}
                 className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-2.5 sm:px-7 sm:py-3 rounded-full bg-black text-[#E8E2D3] hover:bg-zinc-800 text-xs font-bold tracking-[0.18em] uppercase transition-all active:scale-95 shadow-md group"
               >
-                <span>EXPLORE PIECE • ৳{currentPiece.price}</span>
+                <span>{t.hero.shopThisPiece} • {formatPrice(currentPiece.price)}</span>
                 <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </button>
 
@@ -349,14 +289,14 @@ export const Hero: React.FC = () => {
                 onClick={() => handleOpenProduct(currentPiece.id)}
                 className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full border border-[#D3CBBA] hover:bg-white text-zinc-900 text-xs font-bold tracking-[0.15em] uppercase transition-all"
               >
-                <span>VIEW DETAILS</span>
+                <span>{t.hero.quickView}</span>
               </button>
 
               <button
                 onClick={handleShopAll}
                 className="text-xs font-bold uppercase tracking-wider text-zinc-900 hover:underline inline-flex items-center space-x-1 sm:ml-3"
               >
-                <span>FULL ATELIER</span>
+                <span>{t.hero.exploreCollection}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>

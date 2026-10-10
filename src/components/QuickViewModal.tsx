@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../context/StoreContext';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   X, 
   Heart, 
@@ -25,7 +26,10 @@ export const QuickViewModal: React.FC = () => {
     toggleWishlist
   } = useStore();
 
+  const { t, formatPrice, tNumber, getProductName, getProductDesc, getPlacementName, language } = useLanguage();
+
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+
   const [isAdded, setIsAdded] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -159,7 +163,9 @@ export const QuickViewModal: React.FC = () => {
             {/* Tag Badge */}
             {quickViewProduct.tag && (
               <span className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase rounded-md bg-black text-[#E8E2D3] shadow-xs">
-                {quickViewProduct.tag}
+                {language === 'bn' 
+                  ? (quickViewProduct.tag === 'BEST' ? 'সেরা' : quickViewProduct.tag === 'HOT' ? 'হট' : quickViewProduct.tag === 'NEW' ? 'নতুন' : quickViewProduct.tag)
+                  : quickViewProduct.tag}
               </span>
             )}
 
@@ -169,7 +175,7 @@ export const QuickViewModal: React.FC = () => {
                 <motion.img
                   key={currentImageUrl}
                   src={currentImageUrl}
-                  alt={`${quickViewProduct.name} - View ${activeImageIndex + 1}`}
+                  alt={`${getProductName(quickViewProduct.id, quickViewProduct.name)} - View ${activeImageIndex + 1}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -205,7 +211,7 @@ export const QuickViewModal: React.FC = () => {
               {/* Image Counter Pill */}
               {images.length > 1 && (
                 <div className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 bg-black/70 backdrop-blur-xs text-white text-[10px] font-mono font-bold rounded-full border border-white/20 z-10">
-                  {activeImageIndex + 1} / {images.length}
+                  {tNumber(activeImageIndex + 1)} / {tNumber(images.length)}
                 </div>
               )}
             </div>
@@ -234,13 +240,13 @@ export const QuickViewModal: React.FC = () => {
             <div>
               {/* Placements / Collection tags */}
               <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
-                <span className="text-[10px] font-mono text-zinc-600 uppercase mr-1">COLLECTION:</span>
+                <span className="text-[10px] font-mono text-zinc-600 uppercase mr-1">{t.quickViewModal.collectionLabel}</span>
                 {quickViewProduct.placements.map((p, i) => (
                   <span
                     key={i}
                     className="px-2 py-0.5 bg-[#DFD8C7] text-zinc-800 text-[10px] rounded-full font-medium"
                   >
-                    {p}
+                    {getPlacementName(p)}
                   </span>
                 ))}
               </div>
@@ -249,15 +255,15 @@ export const QuickViewModal: React.FC = () => {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h2 className="text-xl sm:text-2xl font-bold text-[#111111] font-sans leading-tight">
-                    {quickViewProduct.name}
+                    {getProductName(quickViewProduct.id, quickViewProduct.name)}
                   </h2>
                   <div className="flex items-center space-x-2 mt-1 text-xs text-zinc-600">
                     <span className="font-mono text-zinc-500">{quickViewProduct.sku}</span>
                     <span>•</span>
                     <div className="flex items-center text-amber-600">
                       <Star className="w-3.5 h-3.5 fill-amber-500 mr-1" />
-                      <span className="font-bold text-[#111111]">{quickViewProduct.rating}</span>
-                      <span className="text-zinc-600 ml-1">({quickViewProduct.reviewCount})</span>
+                      <span className="font-bold text-[#111111]">{tNumber(quickViewProduct.rating)}</span>
+                      <span className="text-zinc-600 ml-1">({tNumber(quickViewProduct.reviewCount)})</span>
                     </div>
                   </div>
                 </div>
@@ -267,7 +273,7 @@ export const QuickViewModal: React.FC = () => {
                     onClick={handleShare}
                     className="p-2 rounded-full bg-[#DFD8C7] hover:bg-[#D4CCB8] text-zinc-700 hover:text-black border border-black/10 transition-colors"
                     aria-label="Share product"
-                    title={isCopied ? "Link Copied!" : "Share Product"}
+                    title={isCopied ? (language === 'bn' ? 'লিংক কপি হয়েছে!' : 'Link Copied!') : (language === 'bn' ? 'শেয়ার করুন' : 'Share Product')}
                   >
                     {isCopied ? (
                       <Check className="w-4 h-4 text-emerald-700 stroke-[2.5]" />
@@ -280,7 +286,7 @@ export const QuickViewModal: React.FC = () => {
                     onClick={() => toggleWishlist(quickViewProduct.id)}
                     className="p-2 rounded-full bg-[#DFD8C7] hover:bg-[#D4CCB8] text-zinc-700 hover:text-red-500 border border-black/10 transition-colors"
                     aria-label="Wishlist"
-                    title={isWishlisted ? "In Wishlist" : "Add to Wishlist"}
+                    title={isWishlisted ? (language === 'bn' ? 'উইশলিস্টে যুক্ত' : 'In Wishlist') : (language === 'bn' ? 'উইশলিস্টে যোগ করুন' : 'Add to Wishlist')}
                   >
                     <Heart
                       className={`w-4 h-4 ${isWishlisted ? 'text-red-500 fill-red-500' : ''}`}
@@ -291,16 +297,16 @@ export const QuickViewModal: React.FC = () => {
 
               {/* Price & Minimum order */}
               <div className="mt-3 flex items-baseline space-x-2.5">
-                <span className="text-2xl sm:text-3xl font-bold text-[#111111]">৳{currentPrice}</span>
+                <span className="text-2xl sm:text-3xl font-bold text-[#111111]">{formatPrice(currentPrice)}</span>
                 {quickViewProduct.originalPrice && (
-                  <span className="text-sm text-zinc-500 line-through">৳{quickViewProduct.originalPrice}</span>
+                  <span className="text-sm text-zinc-500 line-through">{formatPrice(quickViewProduct.originalPrice)}</span>
                 )}
-                <span className="text-xs text-zinc-600 font-medium">Minimum order ৳250</span>
+                <span className="text-xs text-zinc-600 font-medium">{t.quickViewModal.minimumOrderNotice}</span>
               </div>
 
               {/* Description */}
               <p className="mt-2.5 text-xs sm:text-sm text-zinc-700 leading-relaxed line-clamp-4">
-                {quickViewProduct.description}
+                {getProductDesc(quickViewProduct.id, quickViewProduct.description)}
               </p>
             </div>
 
@@ -318,12 +324,12 @@ export const QuickViewModal: React.FC = () => {
                 {isAdded ? (
                   <>
                     <Check className="w-4 h-4" />
-                    <span>Added to Cart!</span>
+                    <span>{t.quickViewModal.addedBtn}</span>
                   </>
                 ) : (
                   <>
                     <ShoppingBag className="w-4 h-4" />
-                    <span>ADD TO CART · ৳{currentPrice}</span>
+                    <span>{t.quickViewModal.addToCartBtn} · {formatPrice(currentPrice)}</span>
                   </>
                 )}
               </button>
@@ -332,19 +338,21 @@ export const QuickViewModal: React.FC = () => {
               <div className="grid grid-cols-4 gap-1.5 text-center">
                 <div className="py-1.5 px-1 rounded-xl bg-[#DFD8C7] border border-black/10">
                   <Clock className="w-3.5 h-3.5 text-black mx-auto mb-0.5" />
-                  <span className="text-[9px] sm:text-[10px] font-medium text-zinc-800 block truncate">{quickViewProduct.durability}</span>
+                  <span className="text-[9px] sm:text-[10px] font-medium text-zinc-800 block truncate">
+                    {language === 'bn' ? 'আজীবন' : quickViewProduct.durability}
+                  </span>
                 </div>
                 <div className="py-1.5 px-1 rounded-xl bg-[#DFD8C7] border border-black/10">
                   <Truck className="w-3.5 h-3.5 text-black mx-auto mb-0.5" />
-                  <span className="text-[9px] sm:text-[10px] font-medium text-zinc-800 block">2–4 Days</span>
+                  <span className="text-[9px] sm:text-[10px] font-medium text-zinc-800 block">{t.quickViewModal.deliveryTime}</span>
                 </div>
                 <div className="py-1.5 px-1 rounded-xl bg-[#DFD8C7] border border-black/10">
                   <ShieldCheck className="w-3.5 h-3.5 text-black mx-auto mb-0.5" />
-                  <span className="text-[9px] sm:text-[10px] font-medium text-zinc-800 block">UV Epoxy</span>
+                  <span className="text-[9px] sm:text-[10px] font-medium text-zinc-800 block">{t.quickViewModal.uvEpoxy}</span>
                 </div>
                 <div className="py-1.5 px-1 rounded-xl bg-[#DFD8C7] border border-black/10">
                   <Sparkles className="w-3.5 h-3.5 text-black mx-auto mb-0.5" />
-                  <span className="text-[9px] sm:text-[10px] font-medium text-zinc-800 block">Handmade</span>
+                  <span className="text-[9px] sm:text-[10px] font-medium text-zinc-800 block">{t.quickViewModal.handmade}</span>
                 </div>
               </div>
             </div>

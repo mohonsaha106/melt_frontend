@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Heart, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export const ReviewSection: React.FC = () => {
+  const { t, tNumber } = useLanguage();
   const homeReviewImages = [
     {
       id: 'h-rev-1',
@@ -54,17 +56,17 @@ export const ReviewSection: React.FC = () => {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-flex items-center space-x-1.5 text-xs font-bold uppercase tracking-widest text-amber-900 mb-2 font-mono">
             <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-            <span>REAL CUSTOMER REVIEWS</span>
+            <span>{t.reviewsSection.badge}</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-5xl font-semibold text-zinc-900 tracking-tight">
-            Loved by 15,000+ Customers
+            {t.reviewsSection.title}
           </h2>
           <p className="mt-3 text-sm text-zinc-600">
-            Real customer chats, unboxing photos, and keepsakes shared across Bangladesh.
+            {t.reviewsSection.subtitle}
           </p>
         </div>
 
-        {/* Pinterest-style Image Masonry Grid (Images Only, Zero Text Below) */}
+        {/* Pinterest-style Image Masonry Grid */}
         <div className="columns-2 sm:columns-2 md:columns-4 gap-3.5 sm:gap-5 space-y-3.5 sm:space-y-5 mb-12">
           {homeReviewImages.map((img) => (
             <Link
@@ -82,11 +84,11 @@ export const ReviewSection: React.FC = () => {
               {/* Hover Dark Vignette & Heart */}
               <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-3.5 text-white">
                 <span className="text-[11px] font-bold tracking-wider uppercase bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20">
-                  View Review
+                  {t.reviewsSection.viewReview}
                 </span>
                 <div className="flex items-center space-x-1 text-xs font-semibold bg-black/60 backdrop-blur-md px-2 py-1 rounded-full">
                   <Heart className="w-3.5 h-3.5 fill-red-500 text-red-500" />
-                  <span>{img.likes}</span>
+                  <span>{tNumber(img.likes)}</span>
                 </div>
               </div>
             </Link>
@@ -99,7 +101,7 @@ export const ReviewSection: React.FC = () => {
             to="/reviews"
             className="inline-flex items-center space-x-2 px-8 py-3.5 bg-black hover:bg-zinc-800 text-[#E8E2D3] text-xs font-bold uppercase tracking-widest rounded-full transition-all duration-200 shadow-md hover:shadow-xl active:scale-95"
           >
-            <span>Explore All 18+ Customer Reviews</span>
+            <span>{t.reviewsSection.exploreAllReviews}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

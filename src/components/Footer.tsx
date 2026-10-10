@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
+import { useLanguage } from '../context/LanguageContext';
+import { LanguageToggle } from './LanguageToggle';
 import { 
   Instagram, 
   Facebook, 
@@ -22,6 +24,8 @@ export const Footer: React.FC = () => {
     setIsHowToApplyOpen,
     setIsTrackOrderOpen
   } = useStore();
+
+  const { t } = useLanguage();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -48,10 +52,10 @@ export const Footer: React.FC = () => {
       <div className="py-20 sm:py-28 text-center border-b border-zinc-900 px-4 sm:px-6 relative">
         <div className="max-w-3xl mx-auto space-y-6">
           <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-white">
-            Preserve Your Memories Today
+            {t.footer.preCtaTitle}
           </h2>
           <p className="text-zinc-400 text-sm sm:text-base max-w-md mx-auto">
-            Keeping memories alive! Join 15,000+ happy customers preserving wedding garlands, monograms & keepsakes.
+            {t.footer.preCtaDesc}
           </p>
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <button
@@ -62,7 +66,7 @@ export const Footer: React.FC = () => {
               }}
               className="px-8 py-3.5 bg-[#E8E2D3] text-black hover:bg-[#F2EDE2] text-xs font-bold uppercase tracking-widest rounded-full transition-all duration-200 shadow-md hover:shadow-xl active:scale-95"
             >
-              Shop Keepsakes
+              {t.footer.shopKeepsakes}
             </button>
             <a
               href="https://www.facebook.com/Meltsparkle"
@@ -70,7 +74,7 @@ export const Footer: React.FC = () => {
               rel="noopener noreferrer"
               className="px-8 py-3.5 bg-zinc-900 text-[#E8E2D3] hover:bg-zinc-800 text-xs font-bold uppercase tracking-widest rounded-full transition-all duration-200 border border-zinc-800"
             >
-              Facebook Page
+              {t.footer.facebookPage}
             </a>
           </div>
         </div>
@@ -88,22 +92,22 @@ export const Footer: React.FC = () => {
                 className="h-10 sm:h-11 w-auto max-w-[210px] object-contain select-none mb-1.5"
               />
               <p className="text-[11px] tracking-wider uppercase text-amber-400 font-mono">
-                Keeping memories alive!
+                {t.footer.tagline}
               </p>
             </div>
 
             <p className="text-xs sm:text-sm text-zinc-400 max-w-sm leading-relaxed">
-              Bangladesh’s premier handcrafted resin art & memory preservation atelier. Keeping memories alive through bridal flower preservation, custom monogram keychains, geode clocks & luxury keepsakes.
+              {t.footer.brandDesc}
             </p>
 
             <div className="space-y-2 pt-2 text-xs text-zinc-300 font-mono">
               <div className="flex items-center space-x-2.5">
                 <Phone className="w-3.5 h-3.5 text-zinc-500" />
-                <span>+880 1712-345678</span>
+                <span>{t.footer.phone}</span>
               </div>
               <div className="flex items-center space-x-2.5">
                 <MapPin className="w-3.5 h-3.5 text-zinc-500" />
-                <span>Dhaka, Bangladesh (Nationwide Courier)</span>
+                <span>{t.footer.address}</span>
               </div>
               <div className="flex items-center space-x-2.5">
                 <Mail className="w-3.5 h-3.5 text-zinc-500" />
@@ -147,7 +151,7 @@ export const Footer: React.FC = () => {
           {/* Column 2: Navigation */}
           <div className="space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-zinc-300 font-mono">
-              SHOP KEEPSAKES
+              {t.footer.categories}
             </h4>
             <ul className="space-y-2.5 text-xs text-zinc-400">
               <li>
@@ -159,7 +163,7 @@ export const Footer: React.FC = () => {
                   }}
                   className="hover:text-white transition-colors"
                 >
-                  All Keepsakes
+                  {t.footer.allKeepsakes}
                 </button>
               </li>
 
@@ -171,7 +175,7 @@ export const Footer: React.FC = () => {
                   }}
                   className="hover:text-white transition-colors"
                 >
-                  Wedding Flower Preservation
+                  {t.footer.weddingPreservation}
                 </button>
               </li>
               <li>
@@ -182,7 +186,7 @@ export const Footer: React.FC = () => {
                   }}
                   className="hover:text-white transition-colors"
                 >
-                  Monogram Keychains
+                  {t.footer.monogramKeychains}
                 </button>
               </li>
               <li>
@@ -190,7 +194,7 @@ export const Footer: React.FC = () => {
                   to="/reviews"
                   className="hover:text-white transition-colors"
                 >
-                  Customer Reviews & Photos
+                  {t.footer.reviewsPhotos}
                 </Link>
               </li>
               <li>
@@ -198,7 +202,7 @@ export const Footer: React.FC = () => {
                   to="/how-to-order"
                   className="hover:text-white transition-colors"
                 >
-                  How To Order (COD BD)
+                  {t.footer.howToOrder}
                 </Link>
               </li>
               <li>
@@ -207,7 +211,7 @@ export const Footer: React.FC = () => {
                   className="hover:text-white text-rose-400 font-medium transition-colors flex items-center gap-1.5"
                 >
                   <Tag className="w-3 h-3" />
-                  <span>Special Offers & Deals</span>
+                  <span>{t.footer.specialOffers}</span>
                 </Link>
               </li>
               <li>
@@ -215,7 +219,7 @@ export const Footer: React.FC = () => {
                   onClick={() => setIsTrackOrderOpen(true)}
                   className="hover:text-white transition-colors"
                 >
-                  Track Order
+                  {t.footer.trackOrder}
                 </button>
               </li>
             </ul>
@@ -224,7 +228,7 @@ export const Footer: React.FC = () => {
           {/* Column 3: Policies & Help */}
           <div className="space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-zinc-300 font-mono">
-              INFORMATION
+              {t.footer.information}
             </h4>
             <ul className="space-y-2.5 text-xs text-zinc-400">
               <li>
@@ -232,12 +236,12 @@ export const Footer: React.FC = () => {
                   onClick={() => setIsHowToApplyOpen(true)}
                   className="hover:text-white transition-colors text-left"
                 >
-                  Preservation & Care Guide
+                  {t.footer.careGuide}
                 </button>
               </li>
               <li>
                 <a href="#facebook" onClick={(e) => { e.preventDefault(); window.open('https://www.facebook.com/Meltsparkle', '_blank'); }} className="hover:text-white transition-colors">
-                  Facebook Page (fb.com/Meltsparkle)
+                  {t.footer.facebookPage}
                 </a>
               </li>
               <li>
@@ -245,7 +249,7 @@ export const Footer: React.FC = () => {
                   to="/how-to-order"
                   className="hover:text-white transition-colors"
                 >
-                  Cash on Delivery Terms
+                  {t.footer.codTerms}
                 </Link>
               </li>
               <li>
@@ -253,7 +257,7 @@ export const Footer: React.FC = () => {
                   to="/faq"
                   className="hover:text-white transition-colors text-left block"
                 >
-                  Frequently Asked Questions (FAQ)
+                  {t.footer.faq}
                 </Link>
               </li>
               <li>
@@ -261,17 +265,19 @@ export const Footer: React.FC = () => {
                   to="/about"
                   className="hover:text-white transition-colors text-left block"
                 >
-                  About Meltsparkle & Contact
+                  {t.footer.aboutUs}
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom copyright & payment methods */}
+        {/* Bottom copyright, language toggle & payment methods */}
         <div className="mt-16 pt-8 border-t border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
-          <div>
-            © 2026 Meltsparkle Bangladesh. All rights reserved. • Keeping memories alive!
+          <div className="flex flex-col sm:flex-row items-center gap-3">
+            <span>{t.footer.copyright}</span>
+            <div className="hidden sm:block text-zinc-700">•</div>
+            <LanguageToggle variant="footer" />
           </div>
 
           {/* Supported Payments */}
@@ -287,7 +293,7 @@ export const Footer: React.FC = () => {
             onClick={scrollToTop}
             className="flex items-center space-x-1 text-zinc-400 hover:text-white transition-colors text-xs"
           >
-            <span>Back to top</span>
+            <span>{t.footer.backToTop}</span>
             <ArrowUp className="w-3.5 h-3.5" />
           </button>
         </div>
