@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Search, ChevronDown, Check, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLanguage } from '../context/LanguageContext';
 
 export interface CategoryFilterItem {
   id: string;
@@ -48,13 +47,13 @@ export interface SearchFilterBarProps {
 export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
   title,
   itemCount,
-  itemCountLabel,
+  itemCountLabel = 'designs available',
   subtitle,
 
   searchValue = '',
   onSearchChange,
   onSearchSubmit,
-  searchPlaceholder,
+  searchPlaceholder = 'Search by name or design code...',
   showSearch = true,
 
   categories = [],
@@ -64,29 +63,20 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
 
   sortValue = 'default',
   onSortChange,
-  sortOptions,
+  sortOptions = [
+    { id: 'default', label: 'Default' },
+    { id: 'price-low', label: 'Price: Low to High' },
+    { id: 'price-high', label: 'Price: High to Low' },
+    { id: 'rating', label: 'Highest Rated' },
+    { id: 'discount-high', label: 'Highest Discount' },
+  ],
   showSort = true,
 
   className = '',
 }) => {
-  const { t, language, tNumber } = useLanguage();
-
-  const defaultSortOptions: SortOptionItem[] = [
-    { id: 'default', label: t.productCatalog.sortDefault },
-    { id: 'price-low', label: t.productCatalog.sortPriceLow },
-    { id: 'price-high', label: t.productCatalog.sortPriceHigh },
-    { id: 'rating', label: t.productCatalog.sortRating },
-    { id: 'discount-high', label: t.productCatalog.sortDiscount },
-  ];
-
-  const resolvedSortOptions = sortOptions || defaultSortOptions;
-  const resolvedSearchPlaceholder = searchPlaceholder || t.productCatalog.searchPlaceholder;
-  const resolvedItemCountLabel = itemCountLabel || t.productCatalog.designsAvailable;
-
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
   const sortDropdownRef = useRef<HTMLDivElement>(null);
-
 
   // Close sort dropdown when clicking outside
   useEffect(() => {
@@ -123,9 +113,9 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
 
   // Current selected sort label
   const currentSortLabel = useMemo(() => {
-    const found = resolvedSortOptions.find((opt) => opt.id === sortValue);
-    return found ? found.label : (resolvedSortOptions[0]?.label || 'Default');
-  }, [resolvedSortOptions, sortValue]);
+    const found = sortOptions.find((opt) => opt.id === sortValue);
+    return found ? found.label : 'Default';
+  }, [sortOptions, sortValue]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && onSearchSubmit) {
@@ -145,7 +135,7 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
           )}
           {itemCount !== undefined ? (
             <p className="text-xs sm:text-sm text-zinc-500 font-normal">
-              {tNumber(itemCount)} {resolvedItemCountLabel}
+              {itemCount} {itemCountLabel}
             </p>
           ) : (
             subtitle && (
@@ -168,7 +158,7 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
               value={searchValue}
               onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={resolvedSearchPlaceholder}
+              placeholder={searchPlaceholder}
               className="w-full bg-[#DFD8C7] hover:bg-[#DCD4C2] focus:bg-[#DFD8C7] border border-[#D3CBBA] rounded-full py-2.5 sm:py-3 pl-10 pr-10 text-xs sm:text-sm text-zinc-900 placeholder:text-zinc-500/80 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-all shadow-2xs"
             />
             {searchValue && onSearchChange && (
@@ -214,9 +204,9 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
                   className="absolute right-0 mt-1.5 w-48 sm:w-52 bg-[#E8E2D3] border border-[#D3CBBA] rounded-2xl shadow-xl py-1.5 z-30 overflow-hidden"
                 >
                   <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-zinc-600 border-b border-[#D3CBBA]/60 mb-1">
-                    {t.productCatalog.sortBy}
+                    Sort Products
                   </div>
-                  {resolvedSortOptions.map((opt) => {
+                  {sortOptions.map((opt) => {
                     const isSelected = sortValue === opt.id;
                     return (
                       <button
@@ -269,7 +259,7 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
                       isSelected ? 'text-zinc-300' : 'text-zinc-600'
                     }`}
                   >
-                    ({tNumber(cat.count)})
+                    ({cat.count})
                   </span>
                 )}
               </button>
@@ -283,7 +273,7 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
               onClick={() => setIsExpanded(!isExpanded)}
               className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-medium bg-[#DFD8C7] hover:bg-[#D5CDBE] border border-[#D3CBBA] text-zinc-800 hover:text-black transition-all duration-200 focus:outline-none active:scale-95 shadow-2xs cursor-pointer whitespace-nowrap"
             >
-              {isExpanded ? (language === 'bn' ? 'কম দেখান' : 'Show Less') : (language === 'bn' ? '+ আরও' : '+ More')}
+              {isExpanded ? 'Show Less' : '+ More'}
             </button>
           )}
         </div>

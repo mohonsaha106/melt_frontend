@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
-import { useLanguage } from '../context/LanguageContext';
 import { X, Search, Package, CheckCircle2, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const TrackOrderModal: React.FC = () => {
   const { isTrackOrderOpen, setIsTrackOrderOpen, lastOrder } = useStore();
-  const { t, language } = useLanguage();
   const [orderIdQuery, setOrderIdQuery] = useState('');
   const [trackedOrder, setTrackedOrder] = useState<any | null>(lastOrder || null);
 
@@ -28,17 +26,17 @@ export const TrackOrderModal: React.FC = () => {
         trackingNumber: 'STF-BD-8931204',
         createdAt: '26 Sep 2026',
         estimatedDelivery: 'Tomorrow, 2:00 PM',
+        steps: [
+          { title: 'Order Placed', time: '26 Sep, 10:30 AM', done: true },
+          { title: '৳50 Advance Confirmed', time: '26 Sep, 11:15 AM', done: true },
+          { title: 'Quality Check & Resin Gift Boxing', time: '26 Sep, 03:00 PM', done: true },
+          { title: 'Handed to Courier (Steadfast)', time: '27 Sep, 09:00 AM', done: true },
+          { title: 'Out for Delivery', time: 'Estimated 28 Sep', done: false },
+          { title: 'Delivered', time: 'Pending', done: false }
+        ]
       });
     }, 600);
   };
-
-  const steps = [
-    { label: t.trackOrder.step1, done: true, time: language === 'bn' ? '২৬ সেপ্টে, ১০:৩০ পূর্বাহ্ন' : '26 Sep, 10:30 AM' },
-    { label: t.trackOrder.step2, done: true, time: language === 'bn' ? '২৬ সেপ্টে, ১১:১৫ পূর্বাহ্ন' : '26 Sep, 11:15 AM' },
-    { label: t.trackOrder.step3, done: true, time: language === 'bn' ? '২৬ সেপ্টে, ০৩:০০ অপরাহ্ন' : '26 Sep, 03:00 PM' },
-    { label: t.trackOrder.step4, done: true, time: language === 'bn' ? '২৭ সেপ্টে, ০৯:০০ পূর্বাহ্ন' : '27 Sep, 09:00 AM' },
-    { label: t.trackOrder.step5, done: false, time: language === 'bn' ? '২৮ সেপ্টে সম্ভাব্য' : 'Expected 28 Sep' },
-  ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
@@ -61,7 +59,7 @@ export const TrackOrderModal: React.FC = () => {
         <div className="flex items-center justify-between p-5 sm:p-6 border-b border-black/10 bg-[#DFD8C7]">
           <div className="flex items-center space-x-2">
             <Package className="w-5 h-5 text-black" />
-            <h3 className="text-lg font-bold text-[#111111]">{t.trackOrder.title}</h3>
+            <h3 className="text-lg font-bold text-[#111111]">Track Your Keepsake Parcel</h3>
           </div>
           <button
             onClick={() => setIsTrackOrderOpen(false)}
@@ -76,7 +74,7 @@ export const TrackOrderModal: React.FC = () => {
           <form onSubmit={handleSearch} className="flex gap-2">
             <input
               type="text"
-              placeholder={t.trackOrder.placeholder}
+              placeholder="Enter Order ID (e.g. MS-102948) or Phone"
               value={orderIdQuery}
               onChange={(e) => setOrderIdQuery(e.target.value)}
               className="flex-1 px-4 py-2.5 bg-[#F2EDE2] border border-black/15 rounded-xl text-xs font-mono text-[#111111] focus:outline-none focus:ring-1 focus:ring-black placeholder:text-zinc-500"
@@ -86,7 +84,7 @@ export const TrackOrderModal: React.FC = () => {
               className="px-5 py-2.5 bg-black hover:bg-zinc-900 text-[#E8E2D3] text-xs font-bold uppercase tracking-wider rounded-xl transition-colors flex items-center space-x-1.5"
             >
               <Search className="w-3.5 h-3.5" />
-              <span>{t.trackOrder.trackBtn}</span>
+              <span>Track</span>
             </button>
           </form>
 
@@ -97,23 +95,29 @@ export const TrackOrderModal: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-xs font-bold text-[#111111]">{trackedOrder.orderId}</span>
                   <span className="px-2.5 py-0.5 bg-amber-200/80 text-amber-900 text-[10px] font-bold rounded-full uppercase border border-amber-300">
-                    {t.trackOrder.inTransit}
+                    In Transit
                   </span>
                 </div>
                 <div className="text-xs text-zinc-700">
-                  {t.trackOrder.courierLabel}: <strong>Steadfast Express BD</strong> (Track ID: STF-BD-8931204)
+                  Courier: <strong>Steadfast Express BD</strong> (Track ID: STF-BD-8931204)
                 </div>
                 <div className="text-xs text-zinc-700">
-                  {t.trackOrder.estimatedDeliveryLabel}: <strong className="text-[#111111]">{language === 'bn' ? '১–২ কার্যদিবস' : '1–2 business days'}</strong>
+                  Estimated Delivery: <strong className="text-[#111111]">1–2 business days</strong>
                 </div>
               </div>
 
               {/* Step Timeline */}
               <div className="space-y-4 pl-2">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-600">{t.trackOrder.timelineTitle}</h4>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-600">Parcel Timeline</h4>
                 
                 <div className="space-y-4 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-[2px] before:bg-black/15">
-                  {steps.map((step, idx) => (
+                  {[
+                    { label: 'Order Placed & Artisan Scheduled', done: true, time: '26 Sep, 10:30 AM' },
+                    { label: '৳50 Advance Token Verified', done: true, time: '26 Sep, 11:15 AM' },
+                    { label: 'Resin Quality Inspection & Gift Box Packaging', done: true, time: '26 Sep, 03:00 PM' },
+                    { label: 'Dispatched with Courier', done: true, time: '27 Sep, 09:00 AM' },
+                    { label: 'Out for Delivery to Doorstep', done: false, time: 'Expected 28 Sep' },
+                  ].map((step, idx) => (
                     <div key={idx} className="flex items-start space-x-3 relative z-10">
                       <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
                         step.done ? 'bg-black text-[#E8E2D3]' : 'bg-[#DFD8C7] text-zinc-500 border border-black/10'
@@ -137,4 +141,3 @@ export const TrackOrderModal: React.FC = () => {
     </div>
   );
 };
-

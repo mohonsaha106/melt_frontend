@@ -1,39 +1,28 @@
 import React from 'react';
 import { Droplets, Clock, Sparkles, Truck, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useLanguage } from '../context/LanguageContext';
 
 export const TrustBadges: React.FC = () => {
-  const { language } = useLanguage();
-
   const features = [
     {
       icon: Sparkles,
-      title: language === 'bn' ? '১০০% হস্তনির্মিত ও ক্রিস্টাল ক্লিয়ার' : '100% Handcrafted & Crystal Clear',
-      description: language === 'bn'
-        ? 'ইউভি-প্রতিরোধী নন-ইয়েলোয়িং ক্রিস্টাল রেজিন এবং নিখুঁত মিরর গ্লাস ফিনিশ।'
-        : 'Artisan grade, UV-resistant non-yellowing epoxy resin poured with mirror glass finish.'
+      title: '100% Handcrafted & Crystal Clear',
+      description: 'Artisan grade, UV-resistant non-yellowing epoxy resin poured with mirror glass finish.'
     },
     {
       icon: Droplets,
-      title: language === 'bn' ? 'চিরস্থায়ী ফুল সংরক্ষণ' : 'Eternal Flower Preservation',
-      description: language === 'bn'
-        ? 'বিয়ের মালা, বিশেষ গোলাপ বা প্রিয় স্মৃতিকে আজীবনের জন্য সুরক্ষিত রাখুন।'
-        : 'Preserve sacred bridal garlands, anniversary roses, and milestone botanicals for a lifetime.'
+      title: 'Eternal Flower Preservation',
+      description: 'Preserve sacred bridal garlands, anniversary roses, and milestone botanicals for a lifetime.'
     },
     {
       icon: Clock,
-      title: language === 'bn' ? 'কাস্টম মনোগ্রাম ও স্মারক' : 'Custom Monograms & Keepsakes',
-      description: language === 'bn'
-        ? 'আপনার পছন্দসই নাম, আদ্যক্ষর, তারিখ ও রঙের থিমে তৈরি ব্যক্তিগত উপহার।'
-        : 'Personalized names, initials, dates, and color themes tailored to your memories.'
+      title: 'Custom Monograms & Keepsakes',
+      description: 'Personalized names, initials, dates, and color themes tailored to your memories.'
     },
     {
       icon: Truck,
-      title: language === 'bn' ? 'সারাদেশে ক্যাশ অন ডেলিভারি' : 'Nationwide COD in Bangladesh',
-      description: language === 'bn'
-        ? 'সুরক্ষিত লাক্সারি গিফট বক্সিং সহ ৬৪ জেলাতেই দ্রুত ক্যাশ অন ডেলিভারি।'
-        : 'Shockproof luxury gift boxing with fast Cash on Delivery across all 64 districts.'
+      title: 'Nationwide COD in Bangladesh',
+      description: 'Shockproof luxury gift boxing with fast Cash on Delivery across all 64 districts.'
     }
   ];
 
@@ -67,12 +56,10 @@ export const TrustBadges: React.FC = () => {
         {/* Custom Order CTA Banner */}
         <div className="mt-16 text-center max-w-2xl mx-auto">
           <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 font-serif">
-            {language === 'bn' ? 'নিজের পছন্দের কোনো বিশেষ ডিজাইন চান?' : 'Have a Bespoke Keepsake in Mind?'}
+            Have a Bespoke Keepsake in Mind?
           </h3>
           <p className="mt-2 text-sm text-zinc-600">
-            {language === 'bn'
-              ? 'আপনার ছবি, বিয়ের ফুল বা কাস্টম আইডিয়া আমাদের ফেসবুক বা হোয়াটসঅ্যাপে পাঠান — আমরা যত্নসহকারে তৈরি করে দেব।'
-              : "Send us your photos, bridal flowers, or custom design idea on Facebook or WhatsApp — we'll craft it for you."}
+            Send us your photos, bridal flowers, or custom design idea on Facebook or WhatsApp — we'll craft it for you.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <a
@@ -81,7 +68,7 @@ export const TrustBadges: React.FC = () => {
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 px-8 py-3.5 rounded-full bg-black hover:bg-zinc-800 text-[#E8E2D3] text-xs font-bold tracking-wider uppercase transition-all duration-200 shadow-md hover:shadow-lg active:scale-95"
             >
-              <span>{language === 'bn' ? 'ফেসবুকে বার্তা দিন' : 'Message on Facebook'}</span>
+              <span>Message on Facebook</span>
             </a>
             <a
               href="https://wa.me/8801712345678"
@@ -90,7 +77,7 @@ export const TrustBadges: React.FC = () => {
               className="inline-flex items-center space-x-2 px-8 py-3.5 rounded-full bg-[#DFD8C7] hover:bg-[#D5CDBE] text-zinc-900 border border-[#D3CBBA] text-xs font-bold tracking-wider uppercase transition-all duration-200 shadow-sm active:scale-95"
             >
               <MessageCircle className="w-4 h-4 text-emerald-600" />
-              <span>{language === 'bn' ? 'হোয়াটসঅ্যাপ করুন' : 'WhatsApp Us'}</span>
+              <span>WhatsApp Us</span>
             </a>
           </div>
         </div>

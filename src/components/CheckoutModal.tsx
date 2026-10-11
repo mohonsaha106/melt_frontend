@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
-import { useLanguage } from '../context/LanguageContext';
 import { OrderDetails } from '../types';
 import { X, CheckCircle, ShieldCheck, ArrowRight, MessageCircle, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -24,8 +23,6 @@ export const CheckoutModal: React.FC = () => {
     clearCart,
     setLastOrder
   } = useStore();
-
-  const { t, formatPrice, tNumber, language } = useLanguage();
 
   const [deliveryArea, setDeliveryArea] = useState<'dhaka' | 'outside'>('dhaka');
   const [paymentType, setPaymentType] = useState<'cod_advance' | 'full'>('cod_advance');
@@ -53,18 +50,17 @@ export const CheckoutModal: React.FC = () => {
     setErrorMsg('');
 
     if (!fullName.trim()) {
-      setErrorMsg(t.checkout.errName);
+      setErrorMsg('Please enter your full name');
       return;
     }
     if (!phone.trim() || !/^01[3-9]\d{8}$/.test(phone.replace(/\s+/g, ''))) {
-      setErrorMsg(t.checkout.errPhone);
+      setErrorMsg('Please enter a valid 11-digit Bangladeshi mobile number (e.g. 017XXXXXXXX)');
       return;
     }
     if (!address.trim()) {
-      setErrorMsg(t.checkout.errAddress);
+      setErrorMsg('Please enter your full street address and house/road number');
       return;
     }
-
 
     setIsSubmitting(true);
 
@@ -133,9 +129,7 @@ export const CheckoutModal: React.FC = () => {
           <div className="flex items-center space-x-2">
             <ShieldCheck className="w-5 h-5 text-emerald-700" />
             <h2 className="text-base sm:text-lg font-bold text-[#111111]">
-              {completedOrder 
-                ? (language === 'bn' ? 'অর্ডার কনফার্মেশন' : 'Order Confirmation') 
-                : t.checkout.title}
+              {completedOrder ? 'Order Confirmation' : 'Complete Your Keepsake Order'}
             </h2>
           </div>
           <button
@@ -156,61 +150,57 @@ export const CheckoutModal: React.FC = () => {
 
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 font-mono">
-                {t.checkout.successBadge}
+                ORDER PLACED SUCCESSFULLY
               </span>
               <h3 className="text-2xl font-bold text-[#111111] mt-1 font-serif">
-                {t.checkout.thankYou}, {completedOrder.customerName}!
+                Thank You, {completedOrder.customerName}!
               </h3>
               <p className="text-xs text-zinc-600 mt-1">
-                {t.checkout.orderIdLabel}: <strong className="font-mono text-[#111111]">{completedOrder.orderId}</strong>
+                Order ID: <strong className="font-mono text-[#111111]">{completedOrder.orderId}</strong>
               </p>
             </div>
 
             {/* Order Summary Box */}
             <div className="bg-[#F2EDE2] border border-black/10 rounded-2xl p-5 text-left text-xs space-y-2.5">
               <div className="flex justify-between text-zinc-700">
-                <span>{t.checkout.deliveryAddressLabel}:</span>
+                <span>Delivery Address:</span>
                 <span className="font-medium text-[#111111] text-right max-w-[240px] truncate">
                   {completedOrder.address}, {completedOrder.district}
                 </span>
               </div>
               <div className="flex justify-between text-zinc-700">
-                <span>{t.checkout.mobileLabel}:</span>
+                <span>Mobile Number:</span>
                 <span className="font-mono text-[#111111]">{completedOrder.phone}</span>
               </div>
               <div className="flex justify-between text-zinc-700">
-                <span>{t.checkout.itemsCountLabel} ({tNumber(completedOrder.items.length)}):</span>
-                <span className="font-bold text-[#111111]">{formatPrice(completedOrder.subtotal)}</span>
+                <span>Items ({completedOrder.items.length}):</span>
+                <span className="font-bold text-[#111111]">৳{completedOrder.subtotal}</span>
               </div>
               <div className="flex justify-between text-zinc-700">
-                <span>{t.checkout.deliveryChargeLabel}:</span>
-                <span>{completedOrder.deliveryFee === 0 ? (language === 'bn' ? 'ফ্রি' : 'FREE') : formatPrice(completedOrder.deliveryFee)}</span>
+                <span>Delivery Charge:</span>
+                <span>{completedOrder.deliveryFee === 0 ? 'FREE' : `৳${completedOrder.deliveryFee}`}</span>
               </div>
               <div className="pt-2 border-t border-black/10 flex justify-between text-sm font-bold text-[#111111]">
-                <span>{t.checkout.totalAmountLabel}:</span>
-                <span>{formatPrice(completedOrder.total)}</span>
+                <span>Total Amount:</span>
+                <span>৳{completedOrder.total}</span>
               </div>
               <div className="flex justify-between text-amber-700 font-semibold">
-                <span>{t.checkout.advanceLabel}:</span>
-                <span>{formatPrice(completedOrder.advanceAmount)}</span>
+                <span>Advance to Confirm (bKash/Nagad):</span>
+                <span>৳{completedOrder.advanceAmount}</span>
               </div>
               {completedOrder.dueAmount > 0 && (
                 <div className="flex justify-between text-zinc-600">
-                  <span>{t.checkout.dueOnDeliveryLabel}:</span>
-                  <span>{formatPrice(completedOrder.dueAmount)}</span>
+                  <span>Due on Delivery (COD):</span>
+                  <span>৳{completedOrder.dueAmount}</span>
                 </div>
               )}
             </div>
 
             {/* Next Steps Notice */}
             <div className="p-4 bg-[#DFD8C7] rounded-2xl border border-black/10 text-left text-xs text-[#111111] space-y-1">
-              <p className="font-bold">{t.checkout.nextStepTitle}</p>
+              <p className="font-bold">Next Step: Token Advance Confirmation</p>
               <p className="text-[11px] leading-relaxed text-zinc-700">
-                {language === 'bn' ? (
-                  <>অনুগ্রহ করে <strong>{formatPrice(completedOrder.advanceAmount)}</strong> আমাদের বিকাশ/নগদ মার্চেন্ট নম্বর: <strong>01712-345678</strong> (Send Money / Payment) পাঠিয়ে অর্ডার আইডি <strong>{completedOrder.orderId}</strong> রেফারেন্স হিসেবে দিন।</>
-                ) : (
-                  <>Please send <strong>{formatPrice(completedOrder.advanceAmount)}</strong> advance to our official bKash/Nagad Merchant number: <strong>01712-345678</strong> (Send Money / Payment) using your Order ID <strong>{completedOrder.orderId}</strong> as the reference.</>
-                )}
+                Please send ৳{completedOrder.advanceAmount} advance to our official bKash/Nagad Merchant number: <strong>01712-345678</strong> (Send Money / Payment) using your Order ID <strong>{completedOrder.orderId}</strong> as the reference.
               </p>
             </div>
 
@@ -223,14 +213,14 @@ export const CheckoutModal: React.FC = () => {
                 className="flex-1 py-3 bg-emerald-700 hover:bg-emerald-800 text-[#E8E2D3] text-xs font-bold uppercase tracking-wider rounded-xl flex items-center justify-center space-x-2 transition-colors shadow-sm"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>{t.checkout.confirmOnWhatsApp}</span>
+                <span>Confirm on WhatsApp</span>
               </a>
 
               <button
                 onClick={handleClose}
                 className="py-3 px-6 bg-black hover:bg-zinc-900 text-[#E8E2D3] text-xs font-bold uppercase tracking-wider rounded-xl transition-colors"
               >
-                {t.checkout.backToStore}
+                Back To Store
               </button>
             </div>
           </div>
@@ -247,7 +237,7 @@ export const CheckoutModal: React.FC = () => {
             {/* Delivery Location Switcher */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-zinc-800 mb-2">
-                {t.checkout.deliveryLocationStep}
+                1. Delivery Location
               </label>
               <div className="grid grid-cols-2 gap-3">
                 <div
@@ -262,14 +252,12 @@ export const CheckoutModal: React.FC = () => {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold">{t.checkout.insideDhaka}</span>
+                    <span className="text-xs font-bold">Inside Dhaka</span>
                     <span className="text-xs font-bold">
-                      {isFreeShippingUnlocked ? (language === 'bn' ? 'ফ্রি' : 'FREE') : formatPrice(60)}
+                      {isFreeShippingUnlocked ? 'FREE' : '৳60'}
                     </span>
                   </div>
-                  <p className={`text-[11px] mt-1 ${deliveryArea === 'dhaka' ? 'text-zinc-300' : 'text-zinc-600'}`}>
-                    {t.checkout.insideDhakaDesc}
-                  </p>
+                  <p className={`text-[11px] mt-1 ${deliveryArea === 'dhaka' ? 'text-zinc-300' : 'text-zinc-600'}`}>1–2 Days Fast Delivery</p>
                 </div>
 
                 <div
@@ -281,14 +269,12 @@ export const CheckoutModal: React.FC = () => {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold">{t.checkout.outsideDhaka}</span>
+                    <span className="text-xs font-bold">Outside Dhaka</span>
                     <span className="text-xs font-bold">
-                      {isFreeShippingUnlocked ? (language === 'bn' ? 'ফ্রি' : 'FREE') : formatPrice(110)}
+                      {isFreeShippingUnlocked ? 'FREE' : '৳110'}
                     </span>
                   </div>
-                  <p className={`text-[11px] mt-1 ${deliveryArea === 'outside' ? 'text-zinc-300' : 'text-zinc-600'}`}>
-                    {t.checkout.outsideDhakaDesc}
-                  </p>
+                  <p className={`text-[11px] mt-1 ${deliveryArea === 'outside' ? 'text-zinc-300' : 'text-zinc-600'}`}>2–4 Days across Bangladesh</p>
                 </div>
               </div>
             </div>
@@ -296,30 +282,30 @@ export const CheckoutModal: React.FC = () => {
             {/* Customer Details */}
             <div className="space-y-4">
               <label className="block text-xs font-bold uppercase tracking-wider text-zinc-800">
-                {t.checkout.shippingInfoStep}
+                2. Shipping Information
               </label>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-medium text-zinc-700 mb-1">{t.checkout.fullNameLabel}</label>
+                  <label className="block text-[11px] font-medium text-zinc-700 mb-1">Full Name *</label>
                   <input
                     type="text"
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder={t.checkout.fullNamePlaceholder}
+                    placeholder="e.g. Anika Tabassum"
                     className="w-full px-3.5 py-2.5 bg-[#F2EDE2] border border-black/15 rounded-xl text-xs font-medium text-[#111111] focus:outline-none focus:ring-1 focus:ring-black placeholder:text-zinc-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-medium text-zinc-700 mb-1">{t.checkout.phoneLabel}</label>
+                  <label className="block text-[11px] font-medium text-zinc-700 mb-1">Phone Number (11-Digits) *</label>
                   <input
                     type="tel"
                     required
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder={t.checkout.phonePlaceholder}
+                    placeholder="017XXXXXXXX"
                     className="w-full px-3.5 py-2.5 bg-[#F2EDE2] border border-black/15 rounded-xl text-xs font-mono text-[#111111] focus:outline-none focus:ring-1 focus:ring-black placeholder:text-zinc-500"
                   />
                 </div>
@@ -327,7 +313,7 @@ export const CheckoutModal: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-medium text-zinc-700 mb-1">{t.checkout.districtLabel}</label>
+                  <label className="block text-[11px] font-medium text-zinc-700 mb-1">District *</label>
                   <select
                     value={district}
                     onChange={(e) => setDistrict(e.target.value)}
@@ -340,25 +326,25 @@ export const CheckoutModal: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-medium text-zinc-700 mb-1">{t.checkout.thanaLabel}</label>
+                  <label className="block text-[11px] font-medium text-zinc-700 mb-1">Thana / Area</label>
                   <input
                     type="text"
                     value={thana}
                     onChange={(e) => setThana(e.target.value)}
-                    placeholder={t.checkout.thanaPlaceholder}
+                    placeholder="e.g. Dhanmondi / Agrabad"
                     className="w-full px-3.5 py-2.5 bg-[#F2EDE2] border border-black/15 rounded-xl text-xs font-medium text-[#111111] focus:outline-none focus:ring-1 focus:ring-black placeholder:text-zinc-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] font-medium text-zinc-700 mb-1">{t.checkout.addressLabel}</label>
+                <label className="block text-[11px] font-medium text-zinc-700 mb-1">Complete Street Address *</label>
                 <textarea
                   rows={2}
                   required
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder={t.checkout.addressPlaceholder}
+                  placeholder="House, Road, Block/Sector, Landmark..."
                   className="w-full px-3.5 py-2.5 bg-[#F2EDE2] border border-black/15 rounded-xl text-xs font-medium text-[#111111] focus:outline-none focus:ring-1 focus:ring-black placeholder:text-zinc-500"
                 />
               </div>
@@ -367,7 +353,7 @@ export const CheckoutModal: React.FC = () => {
             {/* Payment Method Selector */}
             <div className="space-y-3">
               <label className="block text-xs font-bold uppercase tracking-wider text-zinc-800">
-                {t.checkout.paymentPreferenceStep}
+                3. Payment Preference
               </label>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -379,9 +365,9 @@ export const CheckoutModal: React.FC = () => {
                       : 'border-black/15 bg-[#F2EDE2] text-[#111111] hover:border-black/30'
                   }`}
                 >
-                  <div className="text-xs font-bold">{t.checkout.codOptionTitle}</div>
+                  <div className="text-xs font-bold">Cash on Delivery (৳50 Advance)</div>
                   <p className={`text-[11px] mt-1 ${paymentType === 'cod_advance' ? 'text-zinc-300' : 'text-zinc-600'}`}>
-                    {t.checkout.codOptionDesc}
+                    Pay ৳50 token to confirm artisan dispatch, rest on delivery.
                   </p>
                 </div>
 
@@ -393,9 +379,9 @@ export const CheckoutModal: React.FC = () => {
                       : 'border-black/15 bg-[#F2EDE2] text-[#111111] hover:border-black/30'
                   }`}
                 >
-                  <div className="text-xs font-bold">{t.checkout.fullAdvanceTitle}</div>
+                  <div className="text-xs font-bold">Full Advance (100%)</div>
                   <p className={`text-[11px] mt-1 ${paymentType === 'full' ? 'text-zinc-300' : 'text-zinc-600'}`}>
-                    {t.checkout.fullAdvanceDesc}
+                    Direct bKash / Nagad payment. No cash hassle at delivery.
                   </p>
                 </div>
               </div>
@@ -403,7 +389,7 @@ export const CheckoutModal: React.FC = () => {
               {/* Payment details */}
               <div className="p-3.5 bg-[#DFD8C7] border border-black/10 rounded-xl text-xs space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-zinc-800">{t.checkout.sendAdvanceVia}</span>
+                  <span className="font-semibold text-zinc-800">Send Advance via:</span>
                   <div className="flex space-x-2">
                     {['bkash', 'nagad', 'rocket'].map((method) => (
                       <button
@@ -422,7 +408,7 @@ export const CheckoutModal: React.FC = () => {
                   </div>
                 </div>
                 <p className="text-[11px] text-zinc-700">
-                  {t.checkout.merchantNumber} <strong>01712-345678</strong> (bKash / Nagad)
+                  Merchant/Personal: <strong>01712-345678</strong> (bKash / Nagad)
                 </p>
               </div>
             </div>
@@ -430,25 +416,25 @@ export const CheckoutModal: React.FC = () => {
             {/* Order Price Summary */}
             <div className="p-4 rounded-2xl bg-[#F2EDE2] border border-black/10 text-xs space-y-1.5">
               <div className="flex justify-between text-zinc-700">
-                <span>{t.cart.subtotal} ({tNumber(cart.length)} {t.cart.itemCount}):</span>
-                <span className="font-medium text-[#111111]">{formatPrice(cartSubtotal)}</span>
+                <span>Subtotal ({cart.length} items):</span>
+                <span className="font-medium text-[#111111]">৳{cartSubtotal}</span>
               </div>
               <div className="flex justify-between text-zinc-700">
-                <span>{t.checkout.deliveryChargeLabel}:</span>
-                <span>{deliveryFee === 0 ? (language === 'bn' ? 'ফ্রি' : 'FREE') : formatPrice(deliveryFee)}</span>
+                <span>Delivery Charge:</span>
+                <span>{deliveryFee === 0 ? 'FREE' : `৳${deliveryFee}`}</span>
               </div>
               <div className="pt-2 border-t border-black/10 flex justify-between text-sm font-bold text-[#111111]">
-                <span>{t.checkout.totalAmountLabel}:</span>
-                <span>{formatPrice(totalAmount)}</span>
+                <span>Total Payable:</span>
+                <span>৳{totalAmount}</span>
               </div>
               <div className="flex justify-between text-amber-700 font-semibold">
-                <span>{t.checkout.payableNow}</span>
-                <span>{formatPrice(advanceAmount)}</span>
+                <span>Payable Now (Advance):</span>
+                <span>৳{advanceAmount}</span>
               </div>
               {dueOnDelivery > 0 && (
                 <div className="flex justify-between text-zinc-600">
-                  <span>{t.checkout.payableAtDoorstep}</span>
-                  <span>{formatPrice(dueOnDelivery)}</span>
+                  <span>Payable at Doorstep:</span>
+                  <span>৳{dueOnDelivery}</span>
                 </div>
               )}
             </div>
@@ -460,10 +446,10 @@ export const CheckoutModal: React.FC = () => {
               className="w-full py-4 bg-black hover:bg-zinc-900 disabled:bg-[#C8C0AD] disabled:text-zinc-600 text-[#E8E2D3] text-xs sm:text-sm font-bold uppercase tracking-wider rounded-2xl flex items-center justify-center space-x-2 transition-all active:scale-98 shadow-md hover:shadow-lg"
             >
               {isSubmitting ? (
-                <span>{t.checkout.processingBtn}</span>
+                <span>Processing Order...</span>
               ) : (
                 <>
-                  <span>{t.checkout.confirmOrderBtn} ({formatPrice(advanceAmount)})</span>
+                  <span>CONFIRM ORDER (৳{advanceAmount} ADVANCE)</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}

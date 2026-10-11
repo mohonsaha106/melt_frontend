@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ShoppingBag, 
@@ -15,84 +15,63 @@ import {
   Gift
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useLanguage } from '../context/LanguageContext';
 
 export const HowToOrderPage: React.FC = () => {
-  const { t, language } = useLanguage();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-    document.title = language === 'bn' 
-      ? 'কীভাবে অর্ডার করবেন | মেল্ট স্পার্কল বাংলাদেশ' 
-      : 'How To Order | Melt Sparkle Bangladesh';
-  }, [language]);
+    document.title = 'How To Order | Melt Sparkle Bangladesh';
+  }, []);
 
-  const steps = useMemo(() => [
+  const steps = [
     {
-      step: language === 'bn' ? '০১' : '01',
+      step: '01',
       icon: ShoppingBag,
-      title: t.howToOrderPage.step1Title,
-      desc: t.howToOrderPage.step1Desc,
-      highlights: language === 'bn'
-        ? ['রেডিমেড ক্যাটালগ সংগ্রহ', 'কাস্টম ব্রাইডাল মালা সংরক্ষণ', 'নাম ও মনোগ্রাম খোদাই']
-        : ['Ready-made catalog', 'Personalized bridal flowers', 'Custom name & initial engravings']
+      title: 'Pick or Customise Keepsake',
+      desc: 'Browse our resin keepsake catalog or pick your favorite monogram initial, flower preservation frame & custom design.',
+      highlights: ['Ready-made catalog', 'Personalized bridal flowers', 'Custom name & initial engravings']
     },
     {
-      step: language === 'bn' ? '০২' : '02',
+      step: '02',
       icon: CreditCard,
-      title: t.howToOrderPage.step2Title,
-      desc: t.howToOrderPage.step2Desc,
-      highlights: language === 'bn'
-        ? ['বিকাশ ও নগদে পরিশোধযোগ্য', 'তাৎক্ষণিক পার্সেল বুকিং', 'কোনো গোপন চার্জ নেই']
-        : ['bKash & Nagad supported', 'Instant order confirmation', 'Zero hidden fees']
+      title: 'Pay ৳50 Advance Token',
+      desc: 'To confirm your handcrafted order and courier packaging, pay a small ৳50 token advance via bKash or Nagad. The remaining amount is paid on delivery.',
+      highlights: ['bKash & Nagad supported', 'Instant order confirmation', 'Zero hidden fees']
     },
     {
-      step: language === 'bn' ? '০৩' : '03',
+      step: '03',
       icon: Sparkles,
-      title: t.howToOrderPage.step3Title,
-      desc: t.howToOrderPage.step3Desc,
-      highlights: language === 'bn'
-        ? ['৭২ ঘণ্টা কিউরিং সাইকেল', 'নন-ইয়েলোয়িং ইউভি ক্রিস্টাল রেজিন', 'হ্যান্ড পলিশিং ফিনিশ']
-        : ['72-hour curing cycle', 'Non-yellowing UV crystal epoxy', 'Diamond hand-polishing']
+      title: 'Artisan Casting & 72h Cure',
+      desc: 'Our resin artists arrange preserved florals, pour crystal-clear UV epoxy, allow 72-hour slow bubble-free curing, and hand-polish each edge.',
+      highlights: ['72-hour curing cycle', 'Non-yellowing UV crystal epoxy', 'Diamond hand-polishing']
     },
     {
-      step: language === 'bn' ? '০৪' : '04',
+      step: '04',
       icon: Truck,
-      title: t.howToOrderPage.step4Title,
-      desc: t.howToOrderPage.step4Desc,
-      highlights: language === 'bn'
-        ? ['স্টিডফাস্ট / রেডএক্স কুরিয়ার', 'ঢাকায় ২-৩ দিনে ডেলিভারি', 'ঢাকার বাইরে ৩-৫ দিন']
-        : ['Steadfast / RedX courier', '2-3 days Inside Dhaka', '3-5 days Outside Dhaka']
+      title: 'Doorstep Courier & COD',
+      desc: 'Packaged in bubble-cushioned gift packaging with care guides. Delivered to your doorstep anywhere in Bangladesh. Pay the balance to the delivery courier.',
+      highlights: ['Steadfast / RedX courier', '2-3 days Inside Dhaka', '3-5 days Outside Dhaka']
     }
-  ], [language, t]);
+  ];
 
-  const faqs = useMemo(() => [
+  const faqs = [
     {
-      q: language === 'bn' ? 'আপনারা কেন ৫০ টাকা অগ্রিম নেন?' : 'Why do you take a ৳50 advance payment?',
-      a: language === 'bn'
-        ? 'যেহেতু প্রতিটি কিপসেক আসল ফুল, মনোগ্রাম বা গ্রাহকের ব্যক্তিগত স্মৃতি দিয়ে যত্নসহকারে তৈরি করা হয়, তাই অর্ডার নিশ্চিতকরণ এবং কুরিয়ার পার্সেল বুকিংয়ের জন্য মাত্র ৫০ টাকা টোকেন অগ্রিম নেওয়া হয়। বাকি সমস্ত টাকা ডেলিভারির সময় পরিশোধ করতে পারবেন।'
-        : 'Since every keepsake is customized with real botanicals, monograms, or custom bridal flowers, the ৳50 advance ensures genuine parcel booking and courier label generation. The entire remaining bill is paid at your doorstep via Cash on Delivery.'
+      q: 'Why do you take a ৳50 advance payment?',
+      a: 'Since every keepsake is customized with real botanicals, monograms, or custom bridal flowers, the ৳50 advance ensures genuine parcel booking and courier label generation. The entire remaining bill is paid at your doorstep via Cash on Delivery.'
     },
     {
-      q: language === 'bn' ? 'কাস্টম কিপসেক তৈরিতে কতদিন সময় লাগে?' : 'How long does custom handcrafted casting take?',
-      a: language === 'bn'
-        ? 'কাস্টম কিপসেক তৈরি, বাবল-ফ্রি কিউরিং ও ফাইনাল পলিশিং করতে সাধারণত ২–৪ কার্যদিবস সময় লাগে। এর পর কুরিয়ারে পাঠানো হয়। জরুরি ডেলিভারির জন্য সরাসরি আমাদের হোয়াটসঅ্যাপে জানান।'
-        : 'Custom keepsakes typically take 2-4 business days for casting, curing, and polishing before courier dispatch. For rush orders or anniversary gifts, message us directly on WhatsApp or Facebook.'
+      q: 'How long does custom handcrafted casting take?',
+      a: 'Custom keepsakes typically take 2-4 business days for casting, curing, and polishing before courier dispatch. For rush orders or anniversary gifts, message us directly on WhatsApp or Facebook.'
     },
     {
-      q: language === 'bn' ? 'বিয়ের ফুল সংরক্ষণের জন্য কীভাবে পাঠাব?' : 'How do I send my bridal/wedding flowers for preservation?',
-      a: language === 'bn'
-        ? 'বিয়ের মালা বা ফুলের তোড়া সরাসরি আমাদের ঢাকা স্টুডিওতে পৌঁছে দিতে পারেন অথবা পাঠাও/কুরিয়ারের মাধ্যমে পাঠাতে পারেন। ফুল পাঠানোর সঠিক পদ্ধতি ও ঠিকানা পেতে আমাদের হোয়াটসঅ্যাপে নক দিন।'
-        : 'You can courier your dried wedding garland, petals, or boutonnière directly to our Dhaka studio or drop them off. Contact us on WhatsApp for our studio shipping address and prep guide.'
+      q: 'How do I send my bridal/wedding flowers for preservation?',
+      a: 'You can courier your dried wedding garland, petals, or boutonnière directly to our Dhaka studio or drop them off. Contact us on WhatsApp for our studio shipping address and prep guide.'
     },
     {
-      q: language === 'bn' ? 'যদি পার্সেল ক্ষতিগ্রস্ত অবস্থায় পৌঁছায়?' : 'What if the keepsake arrives damaged?',
-      a: language === 'bn'
-        ? 'আমরা প্রতিটি পার্সেল একাধিক লেয়ার বাবল র্যাপ ও প্রিমিয়াম গিফট বক্সে প্যাক করি। কোনো কারণে ট্রানজিটে ক্ষতি হলে আনবক্সিং ভিডিও পাঠালে আমরা বিনামূল্যে নতুন কিপসেক তৈরি করে দেব বা সম্পূর্ণ টাকা ফেরত দেব।'
-        : 'All our shipments are insured with bubble-padded gift boxing. In the rare event of transit damage, take an unboxing video and we will replace or refund your piece immediately with 100% money-back guarantee.'
+      q: 'What if the keepsake arrives damaged?',
+      a: 'All our shipments are insured with bubble-padded gift boxing. In the rare event of transit damage, take an unboxing video and we will replace or refund your piece immediately with 100% money-back guarantee.'
     }
-  ], [language]);
-
+  ];
 
   return (
     <div className="min-h-screen bg-[#E8E2D3] pt-4 pb-20 selection:bg-black selection:text-[#E8E2D3]">
@@ -103,10 +82,10 @@ export const HowToOrderPage: React.FC = () => {
           <nav className="flex items-center space-x-2 text-xs text-zinc-600">
             <Link to="/" className="hover:text-black transition-colors font-medium flex items-center gap-1">
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>{t.nav.home}</span>
+              <span>Home</span>
             </Link>
             <span>/</span>
-            <span className="font-semibold text-zinc-900 uppercase tracking-wider text-[11px]">{t.howToOrderPage.title}</span>
+            <span className="font-semibold text-zinc-900 uppercase tracking-wider text-[11px]">How To Order</span>
           </nav>
 
           <Link
@@ -114,7 +93,7 @@ export const HowToOrderPage: React.FC = () => {
             className="text-xs font-semibold text-zinc-800 hover:text-black flex items-center space-x-1.5 py-1 px-3.5 rounded-full bg-[#DFD8C7] hover:bg-[#D3CBBA] border border-[#D3CBBA] transition-colors"
           >
             <Sparkles className="w-3 h-3 text-amber-700" />
-            <span>{t.howToOrderPage.browseCatalog}</span>
+            <span>Explore Catalog</span>
           </Link>
         </div>
 
@@ -122,13 +101,13 @@ export const HowToOrderPage: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center space-x-1.5 text-xs font-bold uppercase tracking-widest text-amber-900 mb-2 font-mono bg-[#DFD8C7] px-3.5 py-1 rounded-full border border-[#D3CBBA]">
             <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-            <span>{t.howToOrderPage.badge}</span>
+            <span>CASH ON DELIVERY NATIONWIDE IN BANGLADESH</span>
           </div>
           <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-semibold text-zinc-900 tracking-tight mt-3">
-            {t.howToOrderPage.title}
+            How Ordering Works
           </h1>
           <p className="mt-4 text-sm sm:text-base text-zinc-600 leading-relaxed max-w-2xl mx-auto">
-            {t.howToOrderPage.subtitle}
+            From handcrafted casting with crystal epoxy and real botanicals to your doorstep anywhere in Bangladesh. Simple 4-step ordering with easy ৳50 advance confirmation.
           </p>
         </div>
 
@@ -190,22 +169,20 @@ export const HowToOrderPage: React.FC = () => {
                 <Truck className="w-5 h-5" />
               </div>
               <h3 className="text-lg font-bold text-zinc-900 font-serif mb-2">
-                {language === 'bn' ? 'সারাদেশে দ্রুত কুরিয়ার ডেলিভারি' : 'Nationwide Courier Dispatch'}
+                Nationwide Courier Dispatch
               </h3>
               <p className="text-xs sm:text-sm text-zinc-700 leading-relaxed mb-4">
-                {language === 'bn' 
-                  ? 'আমরা স্টিডফাস্ট, পাঠাও ও রেডএক্স কুরিয়ারের মাধ্যমে বাংলাদেশের ৬৪টি জেলায় দ্রুত ও নিরাপদ ট্র্যাকিং ডেলিভারি নিশ্চিত করি।'
-                  : 'We partner with Steadfast, Pathao & RedX for fast tracked courier delivery across all 64 districts in Bangladesh.'}
+                We partner with Steadfast, Pathao & RedX for fast tracked courier delivery across all 64 districts in Bangladesh.
               </p>
             </div>
             <div className="bg-[#E8E2D3] p-4 rounded-2xl border border-[#D3CBBA] space-y-2 text-xs font-mono text-zinc-800">
               <div className="flex justify-between">
-                <span>{language === 'bn' ? 'ঢাকার ভেতরে:' : 'Inside Dhaka:'}</span>
-                <span className="font-bold">{language === 'bn' ? '২ - ৩ দিন (৳৬০)' : '2 - 3 Days (৳60)'}</span>
+                <span>Inside Dhaka:</span>
+                <span className="font-bold">2 - 3 Days (৳60)</span>
               </div>
               <div className="flex justify-between">
-                <span>{language === 'bn' ? 'ঢাকার বাইরে:' : 'Outside Dhaka:'}</span>
-                <span className="font-bold">{language === 'bn' ? '৩ - ৫ দিন (৳১২০)' : '3 - 5 Days (৳120)'}</span>
+                <span>Outside Dhaka:</span>
+                <span className="font-bold">3 - 5 Days (৳120)</span>
               </div>
             </div>
           </div>
@@ -217,21 +194,17 @@ export const HowToOrderPage: React.FC = () => {
                 <CreditCard className="w-5 h-5" />
               </div>
               <h3 className="text-lg font-bold text-zinc-900 font-serif mb-2">
-                {language === 'bn' ? 'মাত্র ৫০ টাকা অগ্রিম ও সিওডি' : 'Secure ৳50 Advance & COD'}
+                Secure ৳50 Advance & COD
               </h3>
               <p className="text-xs sm:text-sm text-zinc-700 leading-relaxed mb-4">
-                {language === 'bn'
-                  ? 'মাত্র ৫০ টাকা টোকেন অগ্রিম পরিশোধ করে আপনার হ্যান্ডক্রাফটেড কিপসেক বুকিং নিশ্চিত করুন। বাকি টাকা কুরিয়ার থেকে পার্সেল হাতে পেয়ে পরিশোধ করুন।'
-                  : 'Confirm your handmade parcel booking with a small ৳50 token advance. Pay the remaining bill when the courier delivers to your hands.'}
+                Confirm your handmade parcel booking with a small ৳50 token advance. Pay the remaining bill when the courier delivers to your hands.
               </p>
             </div>
             <div className="flex items-center gap-2 flex-wrap font-mono text-xs">
               <span className="px-2.5 py-1 rounded-lg bg-pink-100 border border-pink-200 text-pink-700 font-bold">bKash</span>
               <span className="px-2.5 py-1 rounded-lg bg-orange-100 border border-orange-200 text-orange-700 font-bold">Nagad</span>
               <span className="px-2.5 py-1 rounded-lg bg-purple-100 border border-purple-200 text-purple-700 font-bold">Rocket</span>
-              <span className="px-2.5 py-1 rounded-lg bg-emerald-100 border border-emerald-200 text-emerald-700 font-bold">
-                {language === 'bn' ? 'ক্যাশ অন ডেলিভারি' : 'Cash on Delivery'}
-              </span>
+              <span className="px-2.5 py-1 rounded-lg bg-emerald-100 border border-emerald-200 text-emerald-700 font-bold">Cash on Delivery</span>
             </div>
           </div>
 
@@ -242,17 +215,15 @@ export const HowToOrderPage: React.FC = () => {
                 <Gift className="w-5 h-5" />
               </div>
               <h3 className="text-lg font-bold text-zinc-900 font-serif mb-2">
-                {language === 'bn' ? 'ফ্রি লাক্সারি গিফট প্যাকেজিং' : 'Complimentary Gift Packaging'}
+                Complimentary Gift Packaging
               </h3>
               <p className="text-xs sm:text-sm text-zinc-700 leading-relaxed mb-4">
-                {language === 'bn'
-                  ? 'প্রতিটি কিপসেক পৌঁছাবে আমাদের সিগনেচার গিফট বক্সে, সাথে থাকবে সাটিন রিবন, সুরক্ষিত বাবল-র‌্যাপিং এবং একটি পার্সোনালাইজড নোট কার্ড।'
-                  : 'Every keepsake is packed in our signature gift box, wrapped with satin ribbon, protective bubble-lining, and a personalized note card.'}
+                Every keepsake is packed in our signature gift box, wrapped with satin ribbon, protective bubble-lining, and a personalized note card.
               </p>
             </div>
             <div className="flex items-center space-x-2 text-xs font-semibold text-zinc-800 bg-[#E8E2D3] p-3 rounded-xl border border-[#D3CBBA]">
               <ShieldCheck className="w-4 h-4 text-emerald-700 shrink-0" />
-              <span>{language === 'bn' ? '১০০% সন্তুষ্টি অথবা বিনামূল্যে পরিবর্তন' : '100% Satisfaction or Free Replacement'}</span>
+              <span>100% Satisfaction or Free Replacement</span>
             </div>
           </div>
 
@@ -262,13 +233,13 @@ export const HowToOrderPage: React.FC = () => {
         <div className="bg-black text-[#E8E2D3] rounded-3xl p-8 sm:p-12 mb-16 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
           <div className="max-w-xl text-center md:text-left">
             <span className="text-xs font-mono font-bold uppercase tracking-widest text-amber-400">
-              {language === 'bn' ? 'আপনার পছন্দের কিপসেক তৈরি করতে প্রস্তুত?' : 'Ready To Create Your Piece?'}
+              Ready To Create Your Piece?
             </span>
             <h3 className="text-2xl sm:text-4xl font-serif font-bold text-white mt-2">
-              {t.howToOrderPage.ctaTitle}
+              Browse Our Keepsake Catalog
             </h3>
             <p className="text-xs sm:text-sm text-zinc-400 mt-2 leading-relaxed">
-              {t.howToOrderPage.ctaSubtitle}
+              Choose from ready-to-ship handcrafted bookmarks, keychains, and coasters, or order your own bridal flower preservation piece.
             </p>
           </div>
 
@@ -277,7 +248,7 @@ export const HowToOrderPage: React.FC = () => {
               to="/shop"
               className="px-6 py-3.5 bg-[#E8E2D3] hover:bg-white text-black text-xs font-bold uppercase tracking-wider rounded-full transition-transform active:scale-95 shadow-md flex items-center space-x-2"
             >
-              <span>{t.howToOrderPage.browseCatalog}</span>
+              <span>Shop All Keepsakes</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -288,10 +259,10 @@ export const HowToOrderPage: React.FC = () => {
           <div className="text-center mb-10">
             <div className="inline-flex items-center space-x-1.5 text-xs font-bold uppercase tracking-widest text-amber-900 mb-1.5 font-mono">
               <HelpCircle className="w-3.5 h-3.5 text-amber-700" />
-              <span>{t.howToOrderPage.faqsSubtitle}</span>
+              <span>FREQUENTLY ASKED QUESTIONS</span>
             </div>
             <h2 className="font-serif text-2xl sm:text-4xl font-bold text-zinc-900">
-              {t.howToOrderPage.faqsTitle}
+              Common Questions About Ordering
             </h2>
           </div>
 
@@ -317,7 +288,7 @@ export const HowToOrderPage: React.FC = () => {
               to="/faq"
               className="text-xs font-bold uppercase tracking-wider text-zinc-800 hover:text-black inline-flex items-center space-x-1.5 underline decoration-[#D3CBBA] hover:decoration-black underline-offset-4"
             >
-              <span>{language === 'bn' ? 'সম্পূর্ণ প্রশ্নোত্তর দেখুন' : 'View Full FAQ Page'}</span>
+              <span>View Full FAQ Page</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -331,12 +302,10 @@ export const HowToOrderPage: React.FC = () => {
             </div>
             <div>
               <h4 className="font-serif font-bold text-lg text-zinc-900">
-                {language === 'bn' ? 'কোনো সাহায্য বা কাস্টম অর্ডারের বিষয়ে জানতে চান?' : 'Need Help or Have a Custom Order Question?'}
+                Need Help or Have a Custom Order Question?
               </h4>
               <p className="text-xs text-zinc-600">
-                {language === 'bn'
-                  ? 'আমাদের ঢাকা স্টুডিও টিম প্রতিদিন সকাল ১০টা থেকে রাত ১০টা পর্যন্ত সক্রিয়।'
-                  : 'Our Dhaka studio artisan team is available daily from 10:00 AM to 10:00 PM.'}
+                Our Dhaka studio artisan team is available daily from 10:00 AM to 10:00 PM.
               </p>
             </div>
           </div>
@@ -349,7 +318,7 @@ export const HowToOrderPage: React.FC = () => {
               className="px-5 py-2.5 bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-sm flex items-center space-x-1.5 active:scale-95 transition-transform"
             >
               <MessageCircle className="w-3.5 h-3.5" />
-              <span>{language === 'bn' ? 'হোয়াটসঅ্যাপ করুন' : 'WhatsApp Us'}</span>
+              <span>WhatsApp Us</span>
             </a>
             <a
               href="https://www.facebook.com/Meltsparkle"
@@ -358,7 +327,7 @@ export const HowToOrderPage: React.FC = () => {
               className="px-5 py-2.5 bg-black hover:bg-zinc-800 text-[#E8E2D3] text-xs font-bold uppercase tracking-wider rounded-full shadow-sm flex items-center space-x-1.5 active:scale-95 transition-transform"
             >
               <Facebook className="w-3.5 h-3.5" />
-              <span>{language === 'bn' ? 'ফেসবুক পেজ' : 'Facebook'}</span>
+              <span>Facebook</span>
             </a>
           </div>
         </div>

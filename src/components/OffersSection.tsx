@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import { PRODUCTS } from '../data/products';
 import { ProductCard } from './ProductCard';
 import { Tag, Sparkles, ArrowRight } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
 
 export const OffersSection: React.FC = () => {
-  const { t, tNumber } = useLanguage();
   // Filter products that have promotional pricing (originalPrice > price)
   const offerProducts = PRODUCTS.filter(
     (product) => product.originalPrice && product.originalPrice > product.price
@@ -19,10 +17,13 @@ export const OffersSection: React.FC = () => {
     const calculateTwoRowsCount = () => {
       const width = window.innerWidth;
       if (width >= 1024) {
+        // Desktop: 4 cols x 2 rows = 8 products
         setInitialCount(8);
       } else if (width >= 768) {
+        // Tablet: 3 cols x 2 rows = 6 products
         setInitialCount(6);
       } else {
+        // Mobile: 2 cols x 2 rows = 4 products
         setInitialCount(4);
       }
     };
@@ -47,13 +48,13 @@ export const OffersSection: React.FC = () => {
           <div>
             <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-600/20 text-rose-700 text-[11px] font-bold uppercase tracking-wider mb-2 sm:mb-3">
               <Tag className="w-3.5 h-3.5 text-rose-600" />
-              <span>{t.offers.badge}</span>
+              <span>LIMITED TIME DEALS</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-zinc-900 font-serif">
-              {t.offers.title}
+              Products on Offer
             </h2>
             <p className="mt-1.5 text-xs sm:text-sm text-zinc-600 max-w-xl">
-              {t.offers.subtitle}
+              Enjoy exclusive savings on our bestselling handcrafted resin keepsakes and memory art pieces.
             </p>
           </div>
 
@@ -62,7 +63,7 @@ export const OffersSection: React.FC = () => {
             className="hidden sm:inline-flex items-center space-x-2 text-xs font-semibold text-zinc-800 hover:text-black bg-[#DFD8C7] hover:bg-[#D3CBBA] px-3.5 py-1.5 rounded-full self-start sm:self-auto border border-[#D3CBBA] transition-colors"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-            <span>{t.offers.viewAllOffers} ({tNumber(offerProducts.length)})</span>
+            <span>View All {offerProducts.length} Offers</span>
             <ArrowRight className="w-3 h-3" />
           </Link>
         </div>
@@ -85,7 +86,7 @@ export const OffersSection: React.FC = () => {
             className="px-6 sm:px-8 py-3 sm:py-3.5 bg-black hover:bg-zinc-800 text-[#E8E2D3] rounded-full font-bold text-xs sm:text-sm tracking-wider uppercase inline-flex items-center space-x-2.5 transition-all duration-200 shadow-md hover:shadow-xl active:scale-95 group focus:outline-none"
             aria-label="See all special offer products"
           >
-            <span>{t.offers.seeMoreOffers}</span>
+            <span>See More Offers</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

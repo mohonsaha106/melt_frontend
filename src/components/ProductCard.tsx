@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Product } from '../types';
 import { useStore } from '../context/StoreContext';
-import { useLanguage } from '../context/LanguageContext';
 import { Heart, ShoppingBag, Eye, Star, Share2, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -12,30 +11,11 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, showDiscountBadge = false }) => {
   const { addToCart, isInWishlist, toggleWishlist, setQuickViewProduct } = useStore();
-  const { t, getProductName, formatPrice, tNumber, language } = useLanguage();
   const [isCopied, setIsCopied] = useState(false);
   const isWishlisted = isInWishlist(product.id);
   const discountPercent = product.originalPrice && product.originalPrice > product.price
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
-
-  const localizedName = getProductName(product);
-
-  const getLocalizedTag = (tag?: string) => {
-    if (!tag) return null;
-    if (language === 'bn') {
-      switch (tag) {
-        case 'BEST': return 'সেরা';
-        case 'HOT': return 'হট';
-        case 'NEW': return 'নতুন';
-        case 'TRENDING': return 'জনপ্রিয়';
-        case 'LIMITED': return 'সীমিত';
-        case 'FREE': return 'ফ্রি';
-        default: return tag;
-      }
-    }
-    return tag;
-  };
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -85,11 +65,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, showDiscountB
         {/* Tag / Badge */}
         {showDiscountBadge && discountPercent > 0 ? (
           <span className="absolute top-2.5 left-2.5 z-10 px-2 py-0.5 text-[10px] font-extrabold tracking-wider uppercase rounded-md bg-rose-600 text-white shadow-sm">
-            {tNumber(discountPercent)}% {t.common.off}
+            {discountPercent}% OFF
           </span>
         ) : product.tag ? (
           <span className="absolute top-2.5 left-2.5 z-10 px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase rounded-md bg-black text-[#E8E2D3] shadow-sm">
-            {getLocalizedTag(product.tag)}
+            {product.tag}
           </span>
         ) : null}
 
@@ -99,8 +79,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, showDiscountB
           <button
             onClick={handleShare}
             className="p-1.5 rounded-full bg-[#E8E2D3]/90 hover:bg-[#E8E2D3] text-zinc-700 hover:text-black shadow-sm transition-all duration-200 active:scale-90 relative group/share"
-            aria-label={`Share ${localizedName}`}
-            title={isCopied ? t.common.linkCopied : t.common.share}
+            aria-label={`Share ${product.name}`}
+            title={isCopied ? "Link Copied!" : "Share Product"}
           >
             {isCopied ? (
               <Check className="w-3.5 h-3.5 text-emerald-700 stroke-[2.5]" />
@@ -111,7 +91,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, showDiscountB
             {/* Copied Feedback Tooltip */}
             {isCopied && (
               <span className="absolute -bottom-6.5 right-0 whitespace-nowrap px-2 py-0.5 rounded-md bg-black text-[#E8E2D3] text-[9px] font-bold shadow-lg">
-                {t.common.linkCopied}
+                Link Copied!
               </span>
             )}
           </button>
@@ -138,7 +118,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, showDiscountB
         <div className="w-full h-full flex items-center justify-center overflow-hidden rounded-lg">
           <img
             src={product.imageUrl}
-            alt={localizedName}
+            alt={product.name}
             className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
             loading="lazy"
           />
@@ -154,7 +134,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, showDiscountB
             className="flex-1 py-2 px-3 bg-[#E8E2D3] hover:bg-[#F2EDE2] text-zinc-900 text-xs font-semibold rounded-lg shadow-md flex items-center justify-center space-x-1.5 transition-transform active:scale-95 border border-[#D3CBBA]"
           >
             <Eye className="w-3.5 h-3.5" />
-            <span>{t.common.quickView}</span>
+            <span>Quick View</span>
           </button>
           <button
             onClick={(e) => {
@@ -162,7 +142,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, showDiscountB
               addToCart(product, 'S');
             }}
             className="p-2 bg-black hover:bg-zinc-800 text-[#E8E2D3] rounded-lg shadow-md transition-transform active:scale-95"
-            title={t.common.addToCart}
+            title="Quick Add"
           >
             <ShoppingBag className="w-4 h-4" />
           </button>
@@ -175,8 +155,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, showDiscountB
           <span className="font-mono text-[11px]">{product.sku}</span>
           <div className="flex items-center space-x-1 text-zinc-700">
             <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-            <span className="font-medium text-[11px]">{tNumber(product.rating)}</span>
-            <span className="text-[10px] text-zinc-500">({tNumber(product.reviewCount)})</span>
+            <span className="font-medium text-[11px]">{product.rating}</span>
+            <span className="text-[10px] text-zinc-500">({product.reviewCount})</span>
           </div>
         </div>
 
@@ -184,18 +164,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, showDiscountB
           onClick={() => setQuickViewProduct(product)}
           className="text-sm sm:text-base font-semibold text-zinc-900 line-clamp-1 hover:text-black cursor-pointer transition-colors"
         >
-          {localizedName}
+          {product.name}
         </h3>
 
         {/* Price Row */}
         <div className="mt-2 pt-2 border-t border-[#D3CBBA]/60 flex items-center justify-between">
           <div className="flex items-baseline space-x-2">
             <span className="text-base sm:text-lg font-bold text-zinc-900">
-              {formatPrice(product.price)}
+              ৳{product.price}
             </span>
             {product.originalPrice && (
               <span className="text-xs text-zinc-500 line-through">
-                {formatPrice(product.originalPrice)}
+                ৳{product.originalPrice}
               </span>
             )}
           </div>
@@ -204,7 +184,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, showDiscountB
           <button
             onClick={() => addToCart(product, 'S')}
             className="sm:hidden p-2 rounded-lg bg-black text-[#E8E2D3] active:scale-95 shadow-sm"
-            aria-label={t.common.addToCart}
+            aria-label="Add to cart"
           >
             <ShoppingBag className="w-3.5 h-3.5" />
           </button>

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
-import { useLanguage } from '../context/LanguageContext';
 import { PRODUCTS } from '../data/products';
 import { Product } from '../types';
 
@@ -12,8 +11,6 @@ export const SearchModal: React.FC = () => {
     setIsSearchModalOpen,
     setQuickViewProduct
   } = useStore();
-
-  const { t, getProductName, language } = useLanguage();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -143,7 +140,7 @@ export const SearchModal: React.FC = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder={t.searchModal.placeholder}
+                  placeholder="Search designs..."
                   className="flex-1 bg-transparent px-4 text-base sm:text-lg text-zinc-900 placeholder:text-zinc-400 outline-none border-none font-normal"
                   autoComplete="off"
                   spellCheck="false"
@@ -185,7 +182,7 @@ export const SearchModal: React.FC = () => {
                               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-md bg-white border border-zinc-100 flex items-center justify-center p-1 overflow-hidden flex-shrink-0 shadow-2xs">
                                 <img
                                   src={product.imageUrl}
-                                  alt={getProductName(product.id, product.name)}
+                                  alt={product.name}
                                   className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-200"
                                   loading="lazy"
                                   onError={(e) => {
@@ -201,7 +198,7 @@ export const SearchModal: React.FC = () => {
                                   {product.sku}
                                 </div>
                                 <div className="text-sm sm:text-[15px] font-normal text-zinc-800 truncate group-hover:text-black">
-                                  {getProductName(product.id, product.name)}
+                                  {product.name}
                                 </div>
                               </div>
                             </div>
@@ -211,14 +208,10 @@ export const SearchModal: React.FC = () => {
                     ) : (
                       <div className="py-12 px-6 text-center">
                         <p className="text-sm text-zinc-600 font-medium">
-                          {language === 'bn' ? (
-                            <>“<span className="text-zinc-900 font-semibold">{searchQuery}</span>” এর জন্য কোনো ডিজাইন খুঁজে পাওয়া যায়নি</>
-                          ) : (
-                            <>{t.searchModal.noResults} “<span className="text-zinc-900 font-semibold">{searchQuery}</span>”</>
-                          )}
+                          No designs found for &ldquo;<span className="text-zinc-900 font-semibold">{searchQuery}</span>&rdquo;
                         </p>
                         <p className="text-xs text-zinc-400 mt-1">
-                          {t.searchModal.searchHint}
+                          Try searching for another keyword, SKU code, or category
                         </p>
                       </div>
                     )}

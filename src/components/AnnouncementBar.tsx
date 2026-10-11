@@ -1,26 +1,18 @@
 import React from 'react';
 import { Sparkles, ShieldCheck, Clock, Truck, Gift } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
 
 export const AnnouncementBar: React.FC = () => {
-  const { t } = useLanguage();
-
-  const icons = [
-    Sparkles,
-    ShieldCheck,
-    Gift,
-    Sparkles,
-    Gift,
-    Truck,
-    Clock,
-    Gift,
-    Sparkles,
+  const announcements = [
+    { text: 'Keeping memories alive! ✨', icon: Sparkles },
+    { text: '100% Handcrafted Resin & Flower Preservation', icon: ShieldCheck },
+    { text: 'BUY 4 GET 1 FREE (Auto-applied in cart)', icon: Gift },
+    { text: '24K Gold Leaf Monograms & Custom Keepsakes', icon: Sparkles },
+    { text: 'BUY 7 GET 2 FREE', icon: Gift },
+    { text: '৳50 Advance to Confirm Order across Bangladesh', icon: Truck },
+    { text: 'Fast 2-4 Days Delivery BD Wide', icon: Clock },
+    { text: 'BUY 10 GET 3 FREE', icon: Gift },
+    { text: 'Minimum Order ৳250', icon: Sparkles },
   ];
-
-  const announcements = t.announcement.items.map((text, idx) => ({
-    text,
-    icon: icons[idx % icons.length],
-  }));
 
   return (
     <div className="bg-[#0A0A0A] text-[#E5E5E5] text-xs font-medium tracking-wide py-2.5 overflow-hidden border-b border-zinc-800/80 select-none z-50 relative">

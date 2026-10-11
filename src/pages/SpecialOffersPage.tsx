@@ -5,32 +5,29 @@ import { ProductCard } from '../components/ProductCard';
 import { SearchFilterBar, CategoryFilterItem } from '../components/SearchFilterBar';
 import { FilterDrawerModal } from '../components/FilterDrawerModal';
 import { Placement } from '../types';
-import { useLanguage } from '../context/LanguageContext';
 import { 
   Tag, 
   Sparkles, 
   ArrowLeft
 } from 'lucide-react';
 
+const OFFER_CATEGORIES: CategoryFilterItem[] = [
+  { id: 'all', label: 'All' },
+  { id: 'preservation', label: 'Preservation' },
+  { id: 'keychains', label: 'Keychains' },
+  { id: 'bookmarks', label: 'Bookmarks' },
+  { id: 'clocks', label: 'Geode Clocks' },
+  { id: 'coasters', label: 'Coasters' },
+  { id: 'jewelry', label: 'Jewelry' },
+  { id: 'custom', label: 'Custom' },
+  { id: 'under-500', label: 'Under ৳500' },
+  { id: 'under-1500', label: 'Under ৳1500' },
+  { id: 'high-discount', label: '20%+ OFF' },
+  { id: 'bridal', label: 'Wedding' },
+  { id: 'botanical', label: 'Floral & Botanical' },
+];
+
 export const SpecialOffersPage: React.FC = () => {
-  const { t, language } = useLanguage();
-
-  const offerCategories: CategoryFilterItem[] = useMemo(() => [
-    { id: 'all', label: language === 'bn' ? 'সকল' : 'All' },
-    { id: 'preservation', label: language === 'bn' ? 'ফুল সংরক্ষণ' : 'Preservation' },
-    { id: 'keychains', label: language === 'bn' ? 'কিচেন' : 'Keychains' },
-    { id: 'bookmarks', label: language === 'bn' ? 'বুকমার্ক' : 'Bookmarks' },
-    { id: 'clocks', label: language === 'bn' ? 'জিওড ঘড়ি' : 'Geode Clocks' },
-    { id: 'coasters', label: language === 'bn' ? 'কোস্টার' : 'Coasters' },
-    { id: 'jewelry', label: language === 'bn' ? 'গহনা' : 'Jewelry' },
-    { id: 'custom', label: language === 'bn' ? 'কাস্টম' : 'Custom' },
-    { id: 'under-500', label: language === 'bn' ? '৳৫০০ এর নিচে' : 'Under ৳500' },
-    { id: 'under-1500', label: language === 'bn' ? '৳১৫০০ এর নিচে' : 'Under ৳1500' },
-    { id: 'high-discount', label: language === 'bn' ? '২০%+ ছাড়' : '20%+ OFF' },
-    { id: 'bridal', label: language === 'bn' ? 'বিয়ের স্মারক' : 'Wedding' },
-    { id: 'botanical', label: language === 'bn' ? 'ফুল ও পাতা' : 'Floral & Botanical' },
-  ], [language]);
-
   const [selectedCat, setSelectedCat] = useState('all');
   const [sortOption, setSortOption] = useState('discount-high');
   const [offerSearch, setOfferSearch] = useState('');
@@ -44,10 +41,8 @@ export const SpecialOffersPage: React.FC = () => {
   // Scroll to top on page load
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-    document.title = language === 'bn'
-      ? 'স্পেশাল অফার ও ডিসকাউন্ট কিপসেক | মেল্ট স্পার্কল'
-      : 'Special Offers & Deals | Melt Sparkle';
-  }, [language]);
+    document.title = 'Special Offers & Deals | Melt Sparkle';
+  }, []);
 
   // Filter products that have promotional pricing (originalPrice > price)
   const baseOffers = useMemo(() => {
@@ -132,37 +127,42 @@ export const SpecialOffersPage: React.FC = () => {
           <nav className="flex items-center space-x-2 text-xs text-zinc-600">
             <Link to="/" className="hover:text-black transition-colors font-medium flex items-center gap-1">
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>{language === 'bn' ? 'হোম' : 'Home'}</span>
+              <span>Home</span>
             </Link>
             <span>/</span>
-            <span className="font-semibold text-zinc-900 uppercase tracking-wider text-[11px]">
-              {t.offers.title}
-            </span>
+            <span className="font-semibold text-zinc-900 uppercase tracking-wider text-[11px]">Special Offers</span>
           </nav>
 
           <Link
             to="/"
             className="text-xs font-semibold text-zinc-800 hover:text-black flex items-center space-x-1 py-1 px-3 rounded-full bg-[#DFD8C7] hover:bg-[#D3CBBA] transition-colors"
           >
-            <span>{t.footer.allKeepsakes}</span>
+            <span>All Keepsakes</span>
           </Link>
         </div>
 
         {/* Reusable Search & Filter Component */}
         <div className="mb-8">
           <SearchFilterBar
-            title={language === 'bn' ? 'ডিসকাউন্ট ও বিশেষ অফারের কিপসেক' : 'Shop All Designs on Offer'}
+            title="Shop All Designs on Offer"
             itemCount={processedOffers.length}
-            itemCountLabel={language === 'bn' ? 'টি অফার ডিজাইন' : 'designs available'}
+            itemCountLabel="designs available"
             searchValue={offerSearch}
             onSearchChange={setOfferSearch}
-            searchPlaceholder={t.productCatalog.searchPlaceholder}
-            categories={offerCategories}
+            searchPlaceholder="Search by name or design code..."
+            categories={OFFER_CATEGORIES}
             selectedCategory={selectedCat}
             onSelectCategory={setSelectedCat}
             initialVisibleCount={8}
             sortValue={sortOption}
             onSortChange={setSortOption}
+            sortOptions={[
+              { id: 'discount-high', label: 'Highest Discount' },
+              { id: 'price-low', label: 'Price: Low to High' },
+              { id: 'price-high', label: 'Price: High to Low' },
+              { id: 'rating', label: 'Customer Rating' },
+              { id: 'default', label: 'Default' },
+            ]}
           />
         </div>
 
@@ -180,19 +180,15 @@ export const SpecialOffersPage: React.FC = () => {
         ) : (
           <div className="py-16 text-center bg-[#F2EDE2] rounded-3xl border border-[#D3CBBA] p-8">
             <Tag className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
-            <h3 className="text-base font-bold text-zinc-900">
-              {language === 'bn' ? 'কোনো অফার পণ্য পাওয়া যায়নি' : 'No offer items found'}
-            </h3>
+            <h3 className="text-base font-bold text-zinc-900">No offer items found</h3>
             <p className="text-xs text-zinc-600 mt-1 max-w-sm mx-auto">
-              {language === 'bn'
-                ? 'সার্চ ফিল্টার রিসেট করে সকল বিশেষ অফার দেখুন।'
-                : 'Try adjusting your search query or clear filters to view all promotional keepsakes.'}
+              Try adjusting your search query or clear filters to view all promotional keepsakes.
             </p>
             <button
               onClick={handleResetFilters}
               className="mt-4 px-5 py-2.5 bg-black text-[#E8E2D3] rounded-full text-xs font-bold uppercase tracking-wider active:scale-95 shadow-sm"
             >
-              {language === 'bn' ? 'ফিল্টার রিসেট করুন' : 'Reset All Filters'}
+              Reset All Filters
             </button>
           </div>
         )}
@@ -202,15 +198,13 @@ export const SpecialOffersPage: React.FC = () => {
           <div className="max-w-xl">
             <div className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-amber-900 mb-1">
               <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-              <span>{language === 'bn' ? 'কাস্টম পার্সোনালাইজেশন খুঁজছেন?' : 'Looking for bespoke personalization?'}</span>
+              <span>Looking for bespoke personalization?</span>
             </div>
             <h3 className="text-xl sm:text-2xl font-bold text-zinc-900 font-serif">
-              {language === 'bn' ? 'আপনার নিজস্ব পছন্দের কিপসেক তৈরি করুন' : 'Design Your Custom Keepsake Piece'}
+              Design Your Custom Keepsake Piece
             </h3>
-            <p className="text-xs text-sm text-zinc-700 mt-1">
-              {language === 'bn'
-                ? 'বিয়ের মালা, শিশুর স্মৃতি বা মনোগ্রাম অক্ষরের সাথে কাস্টম গোল্ড ফয়েল ও কাঠের আলোযুক্ত ফ্রেম সাজিয়ে নিন।'
-                : 'Preserve wedding bouquets, baby footprints, or monogram initials with custom gold foils, colors & fonts.'}
+            <p className="text-xs sm:text-sm text-zinc-700 mt-1">
+              Preserve wedding bouquets, baby footprints, or monogram initials with custom gold foils, colors & fonts.
             </p>
           </div>
 
@@ -218,7 +212,7 @@ export const SpecialOffersPage: React.FC = () => {
             to="/how-to-order"
             className="px-6 py-3 bg-black hover:bg-zinc-800 text-[#E8E2D3] text-xs font-bold uppercase tracking-wider rounded-full transition-transform active:scale-95 shadow-md shrink-0"
           >
-            {language === 'bn' ? 'অর্ডার করার নিয়ম' : 'How To Order'}
+            How To Order
           </Link>
         </div>
 

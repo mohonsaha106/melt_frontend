@@ -1,6 +1,5 @@
 import React from 'react';
 import { useStore } from '../context/StoreContext';
-import { useLanguage } from '../context/LanguageContext';
 import { PRODUCTS } from '../data/products';
 import { X, Heart, ShoppingBag, Trash2, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -14,8 +13,6 @@ export const WishlistDrawer: React.FC = () => {
     addToCart,
     openCart
   } = useStore();
-
-  const { t, formatPrice, tNumber, getProductName, language } = useLanguage();
 
   if (!isWishlistOpen) return null;
 
@@ -50,9 +47,9 @@ export const WishlistDrawer: React.FC = () => {
           <div className="p-5 sm:p-6 border-b border-black/10 flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Heart className="w-5 h-5 text-red-500 fill-red-500" />
-              <h2 className="text-lg font-bold text-[#111111]">{t.wishlist.title}</h2>
+              <h2 className="text-lg font-bold text-[#111111]">Saved Keepsakes</h2>
               <span className="px-2 py-0.5 bg-[#DFD8C7] text-zinc-900 text-xs font-bold rounded-full border border-black/10">
-                {tNumber(wishlist.length)}
+                {wishlist.length}
               </span>
             </div>
             <button
@@ -74,19 +71,19 @@ export const WishlistDrawer: React.FC = () => {
                   <div className="w-16 h-16 rounded-xl bg-[#DFD8C7] border border-black/10 flex items-center justify-center p-1 flex-shrink-0 overflow-hidden">
                     <img
                       src={product.imageUrl}
-                      alt={getProductName(product.id, product.name)}
+                      alt={product.name}
                       className="w-full h-full object-cover rounded-lg"
                     />
                   </div>
 
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-semibold text-[#111111] truncate">
-                      {getProductName(product.id, product.name)}
+                      {product.name}
                     </h4>
                     <div className="flex items-center space-x-2 text-xs text-zinc-600 mt-0.5">
                       <span className="font-mono">{product.sku}</span>
                       <span>•</span>
-                      <span className="font-bold text-[#111111]">{formatPrice(product.price)}</span>
+                      <span className="font-bold text-[#111111]">৳{product.price}</span>
                     </div>
 
                     <div className="mt-3 flex items-center space-x-2">
@@ -95,12 +92,12 @@ export const WishlistDrawer: React.FC = () => {
                         className="px-3 py-1.5 bg-black hover:bg-zinc-900 text-[#E8E2D3] text-xs font-semibold rounded-lg flex items-center space-x-1 transition-colors"
                       >
                         <ShoppingBag className="w-3 h-3" />
-                        <span>{language === 'bn' ? 'কার্টে নিন' : 'Add to Cart'}</span>
+                        <span>Add to Cart</span>
                       </button>
                       <button
                         onClick={() => toggleWishlist(product.id)}
                         className="p-1.5 text-zinc-500 hover:text-red-500 transition-colors"
-                        title={t.wishlist.remove}
+                        title="Remove"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -113,9 +110,9 @@ export const WishlistDrawer: React.FC = () => {
                 <div className="w-16 h-16 rounded-full bg-[#DFD8C7] flex items-center justify-center mx-auto text-zinc-600">
                   <Heart className="w-8 h-8" />
                 </div>
-                <h3 className="text-base font-bold text-[#111111]">{t.wishlist.emptyTitle}</h3>
+                <h3 className="text-base font-bold text-[#111111]">No saved keepsakes yet</h3>
                 <p className="text-xs text-zinc-600 max-w-xs mx-auto">
-                  {t.wishlist.emptyDesc}
+                  Click the heart icon on any handcrafted piece to save it to your wishlist.
                 </p>
               </div>
             )}
@@ -128,11 +125,7 @@ export const WishlistDrawer: React.FC = () => {
                 onClick={handleAddAllToCart}
                 className="w-full py-3.5 bg-black hover:bg-zinc-900 text-[#E8E2D3] text-xs sm:text-sm font-bold uppercase tracking-wider rounded-2xl flex items-center justify-center space-x-2 shadow-md transition-all active:scale-98"
               >
-                <span>
-                  {language === 'bn' 
-                    ? `সবগুলো কার্টে যোগ করুন (${tNumber(wishlistedProducts.length)})` 
-                    : `Add All (${wishlistedProducts.length}) to Cart`}
-                </span>
+                <span>Add All ({wishlistedProducts.length}) to Cart</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -142,4 +135,3 @@ export const WishlistDrawer: React.FC = () => {
     </div>
   );
 };
-

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useStore } from '../context/StoreContext';
-import { useLanguage } from '../context/LanguageContext';
 import { ShoppingBag, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -15,8 +14,6 @@ export const FloatingBottomCartBar: React.FC = () => {
     setIsCheckoutOpen,
     isMinimumOrderMet
   } = useStore();
-
-  const { t, formatPrice, tNumber } = useLanguage();
 
   if (cart.length === 0 || isCartOpen || isCheckoutOpen) return null;
 
@@ -39,12 +36,12 @@ export const FloatingBottomCartBar: React.FC = () => {
           </div>
           <div>
             <div className="text-xs font-bold text-[#E8E2D3] flex items-center space-x-1.5">
-              <span>{tNumber(totalCartItemCount)} {t.floatingCart.itemsInCart}</span>
+              <span>{totalCartItemCount} keepsake{totalCartItemCount > 1 ? 's' : ''} in cart</span>
               <span className="text-zinc-500">•</span>
-              <span className="text-amber-400">{formatPrice(cartSubtotal)}</span>
+              <span className="text-amber-400">৳{cartSubtotal}</span>
             </div>
             <p className="text-[10px] text-zinc-400 hidden sm:block">
-              {t.floatingCart.tagline}
+              Preserve your memories today
             </p>
           </div>
         </div>
@@ -60,11 +57,10 @@ export const FloatingBottomCartBar: React.FC = () => {
           }}
           className="px-4 py-2 bg-[#E8E2D3] text-black hover:bg-[#DFD8C7] text-xs font-bold uppercase tracking-wider rounded-full flex items-center space-x-1.5 transition-transform active:scale-95 shadow-sm flex-shrink-0"
         >
-          <span>{t.floatingCart.checkoutBtn}</span>
+          <span>Checkout</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
     </motion.div>
   );
 };
-

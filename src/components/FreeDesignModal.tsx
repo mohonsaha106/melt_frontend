@@ -1,6 +1,5 @@
 import React from 'react';
 import { useStore } from '../context/StoreContext';
-import { useLanguage } from '../context/LanguageContext';
 import { FREE_GIFT_CATALOG } from '../data/products';
 import { X, Gift, Plus, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -14,8 +13,6 @@ export const FreeDesignModal: React.FC = () => {
     eligibleFreeGiftCount,
     remainingFreeGiftSlots
   } = useStore();
-
-  const { t, formatPrice, tNumber, getProductName, language } = useLanguage();
 
   if (!isFreeGiftModalOpen) return null;
 
@@ -45,19 +42,17 @@ export const FreeDesignModal: React.FC = () => {
             </div>
             <div>
               <h3 className="text-base sm:text-lg font-bold">
-                {t.freeGiftModal.title}
+                Pick Your Free Keepsake Gift
               </h3>
               <p className="text-xs text-[#E8E2D3]/70">
-                {language === 'bn' 
-                  ? `আপনি ${tNumber(eligibleFreeGiftCount)}টি ফ্রি উপহার আনলক করেছেন!`
-                  : `You have unlocked ${eligibleFreeGiftCount} complimentary handcrafted gift${eligibleFreeGiftCount > 1 ? 's' : ''}!`}
+                You have unlocked {eligibleFreeGiftCount} complimentary handcrafted gift{eligibleFreeGiftCount > 1 ? 's' : ''}!
               </p>
             </div>
           </div>
 
           <div className="flex items-center space-x-3">
             <span className="font-mono text-xs font-bold px-3 py-1 bg-zinc-900 border border-zinc-700 rounded-full text-amber-400">
-              {tNumber(freeGifts.length)}/{tNumber(eligibleFreeGiftCount)} {t.freeGiftModal.selectedBadge}
+              {freeGifts.length}/{eligibleFreeGiftCount} SELECTED
             </span>
             <button
               onClick={() => setIsFreeGiftModalOpen(false)}
@@ -71,9 +66,9 @@ export const FreeDesignModal: React.FC = () => {
         {/* Free Designs Catalog Grid */}
         <div className="p-6 sm:p-8 max-h-[70vh] overflow-y-auto">
           <div className="text-center mb-6">
-            <h4 className="text-xl font-bold text-[#111111]">{t.freeGiftModal.title}</h4>
+            <h4 className="text-xl font-bold text-[#111111]">Choose From Our Bestseller Keepsakes</h4>
             <p className="text-xs text-zinc-600 mt-1">
-              {t.freeGiftModal.subtitle}
+              Select any complimentary handmade resin item below to add it directly to your parcel at ৳0.
             </p>
           </div>
 
@@ -88,22 +83,22 @@ export const FreeDesignModal: React.FC = () => {
                 >
                   <div className="aspect-square bg-[#DFD8C7] rounded-xl p-3 flex items-center justify-center relative overflow-hidden border border-black/5">
                     <span className="absolute top-2 left-2 px-2 py-0.5 bg-black text-[#E8E2D3] text-[10px] font-bold rounded">
-                      {language === 'bn' ? 'ফ্রি গিফট' : 'FREE GIFT'}
+                      FREE GIFT
                     </span>
                     <img
                       src={product.imageUrl}
-                      alt={getProductName(product.id, product.name)}
+                      alt={product.name}
                       className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
 
                   <div className="mt-3">
                     <h5 className="text-xs sm:text-sm font-semibold text-[#111111] truncate">
-                      {getProductName(product.id, product.name)}
+                      {product.name}
                     </h5>
                     <div className="flex items-center justify-between mt-1">
-                      <span className="text-xs font-bold text-emerald-700">{formatPrice(0)} {language === 'bn' ? 'ফ্রি' : 'FREE'}</span>
-                      <span className="text-[11px] text-zinc-500 line-through">{formatPrice(product.price)}</span>
+                      <span className="text-xs font-bold text-emerald-700">৳0 FREE</span>
+                      <span className="text-[11px] text-zinc-500 line-through">৳{product.price}</span>
                     </div>
 
                     <button
@@ -118,12 +113,12 @@ export const FreeDesignModal: React.FC = () => {
                       {isAlreadyAdded ? (
                         <>
                           <Check className="w-3.5 h-3.5" />
-                          <span>{t.freeGiftModal.addedBadge}</span>
+                          <span>Selected</span>
                         </>
                       ) : (
                         <>
                           <Plus className="w-3.5 h-3.5" />
-                          <span>{t.freeGiftModal.addGiftBtn}</span>
+                          <span>Claim Gift</span>
                         </>
                       )}
                     </button>
@@ -138,20 +133,16 @@ export const FreeDesignModal: React.FC = () => {
         <div className="p-4 bg-[#DFD8C7] border-t border-black/10 flex items-center justify-between">
           <div className="text-xs text-zinc-700">
             {remainingFreeGiftSlots > 0 ? (
-              <span>
-                {language === 'bn' 
-                  ? `আপনার আরও ${tNumber(remainingFreeGiftSlots)}টি ফ্রি গিফট স্লট বাকি আছে।`
-                  : `You still have ${remainingFreeGiftSlots} free gift slot${remainingFreeGiftSlots > 1 ? 's' : ''} available.`}
-              </span>
+              <span>You still have <strong>{remainingFreeGiftSlots}</strong> free gift slot{remainingFreeGiftSlots > 1 ? 's' : ''} available.</span>
             ) : (
-              <span className="text-emerald-700 font-semibold">{t.cart.allGiftsAdded}</span>
+              <span className="text-emerald-700 font-semibold">All complimentary gifts have been selected!</span>
             )}
           </div>
           <button
             onClick={() => setIsFreeGiftModalOpen(false)}
             className="px-5 py-2 bg-black text-[#E8E2D3] text-xs font-bold rounded-xl hover:bg-zinc-900 transition-colors"
           >
-            {t.freeGiftModal.doneBtn}
+            Done
           </button>
         </div>
       </motion.div>

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { StoreProvider } from './context/StoreContext';
-import { LanguageProvider } from './context/LanguageContext';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -92,11 +91,9 @@ export const AppContent: React.FC = () => {
 export default function App() {
   return (
     <BrowserRouter>
-      <LanguageProvider>
-        <StoreProvider>
-          <AppContent />
-        </StoreProvider>
-      </LanguageProvider>
+      <StoreProvider>
+        <AppContent />
+      </StoreProvider>
     </BrowserRouter>
   );
 }

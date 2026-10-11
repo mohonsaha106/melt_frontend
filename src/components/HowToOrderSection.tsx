@@ -1,35 +1,31 @@
-import React from 'react';
 import { ShoppingBag, Truck, CreditCard, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useLanguage } from '../context/LanguageContext';
 
 export const HowToOrderSection: React.FC = () => {
-  const { t, language } = useLanguage();
-
   const steps = [
     {
-      step: language === 'bn' ? '০১' : '01',
+      step: '01',
       icon: ShoppingBag,
-      title: t.howToOrderPage.step1Title,
-      desc: t.howToOrderPage.step1Desc
+      title: 'Pick or Customise Keepsake',
+      desc: 'Browse our resin keepsakes catalog or choose your favorite monogram initial, flower frame & custom design.'
     },
     {
-      step: language === 'bn' ? '০২' : '02',
+      step: '02',
       icon: CreditCard,
-      title: t.howToOrderPage.step2Title,
-      desc: t.howToOrderPage.step2Desc
+      title: 'Pay ৳50 Advance',
+      desc: 'To confirm your handcrafted casting order and courier dispatch, pay a small ৳50 token advance via bKash / Nagad.'
     },
     {
-      step: language === 'bn' ? '০৩' : '03',
+      step: '03',
       icon: Sparkles,
-      title: t.howToOrderPage.step3Title,
-      desc: t.howToOrderPage.step3Desc
+      title: 'Artisan Casting & Polishing',
+      desc: 'Our resin artists carefully arrange botanicals, pour UV crystal epoxy, cure for 72 hours, and hand-polish.'
     },
     {
-      step: language === 'bn' ? '০৪' : '04',
+      step: '04',
       icon: Truck,
-      title: t.howToOrderPage.step4Title,
-      desc: t.howToOrderPage.step4Desc
+      title: 'Doorstep Courier & COD',
+      desc: 'We package your piece in bubble-cushioned gift packaging and deliver BD-wide. Pay due on delivery!'
     }
   ];
 
@@ -38,13 +34,13 @@ export const HowToOrderSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-zinc-500 font-mono">
-            {t.howToOrderPage.badge}
+            CASH ON DELIVERY NATIONWIDE
           </span>
           <h2 className="font-serif text-3xl sm:text-5xl font-semibold text-zinc-900 tracking-tight mt-1">
-            {t.howToOrderPage.title}
+            How Ordering Works in Bangladesh
           </h2>
           <p className="mt-3 text-sm text-zinc-600">
-            {t.howToOrderPage.subtitle}
+            Hassle-free custom handcrafted keepsake delivery with simple token advance confirmation.
           </p>
         </div>
 
@@ -78,7 +74,7 @@ export const HowToOrderSection: React.FC = () => {
 
                 <div className="mt-6 pt-4 border-t border-[#D3CBBA] flex items-center space-x-2 text-[11px] text-zinc-500">
                   <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                  <span>{language === 'bn' ? '১০০% নিখুঁত হ্যান্ডক্রাফটেড কিপসেক' : '100% Guaranteed Keepsake'}</span>
+                  <span>100% Guaranteed Keepsake</span>
                 </div>
               </motion.div>
             );

@@ -15,7 +15,6 @@ import {
   Check
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLanguage } from '../context/LanguageContext';
 
 export interface ReviewItem {
   id: string;
@@ -117,7 +116,6 @@ const REVIEW_ITEMS: ReviewItem[] = [
 ];
 
 export const ReviewsPage: React.FC = () => {
-  const { t, language, tNumber } = useLanguage();
   const [activeItem, setActiveItem] = useState<ReviewItem | null>(null);
   const [likedItems, setLikedItems] = useState<Record<string, boolean>>({});
   const [savedItems, setSavedItems] = useState<Record<string, boolean>>({});
@@ -125,10 +123,8 @@ export const ReviewsPage: React.FC = () => {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-    document.title = language === 'bn' 
-      ? 'গ্রাহকদের ফটো রিভিউ | মেল্ট স্পার্কল বাংলাদেশ' 
-      : 'Customer Reviews | Melt Sparkle';
-  }, [language]);
+    document.title = 'Customer Reviews | Melt Sparkle';
+  }, []);
 
   // Prevent background scroll when modal is active without causing layout shift
   useEffect(() => {
@@ -208,10 +204,10 @@ export const ReviewsPage: React.FC = () => {
           <nav className="flex items-center space-x-2 text-xs text-zinc-600">
             <Link to="/" className="hover:text-black transition-colors font-medium flex items-center gap-1">
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>{t.nav.home}</span>
+              <span>Home</span>
             </Link>
             <span>/</span>
-            <span className="font-semibold text-zinc-900 uppercase tracking-wider text-[11px]">{t.reviewsPage.title}</span>
+            <span className="font-semibold text-zinc-900 uppercase tracking-wider text-[11px]">Customer Reviews</span>
           </nav>
 
           <Link
@@ -219,7 +215,7 @@ export const ReviewsPage: React.FC = () => {
             className="text-xs font-semibold text-zinc-800 hover:text-black flex items-center space-x-1.5 py-1 px-3.5 rounded-full bg-[#DFD8C7] hover:bg-[#D3CBBA] border border-[#D3CBBA] transition-colors"
           >
             <Sparkles className="w-3 h-3 text-amber-700" />
-            <span>{t.howToOrderPage.browseCatalog}</span>
+            <span>Shop Keepsakes</span>
           </Link>
         </div>
 
@@ -269,7 +265,7 @@ export const ReviewsPage: React.FC = () => {
                     aria-label="Save pin"
                   >
                     <Bookmark className="w-3.5 h-3.5 fill-current" />
-                    <span>{isSaved ? (language === 'bn' ? 'সংরক্ষিত' : 'Saved') : (language === 'bn' ? 'সেভ' : 'Save')}</span>
+                    <span>{isSaved ? 'Saved' : 'Save'}</span>
                   </button>
                 </div>
 
@@ -279,8 +275,8 @@ export const ReviewsPage: React.FC = () => {
                   <button
                     onClick={(e) => handleShare(item, e)}
                     className="p-2 rounded-full bg-white/90 hover:bg-white text-zinc-900 shadow-md backdrop-blur-md transition-all active:scale-90"
-                    title={t.reviewsPage.shareBtn}
-                    aria-label={t.reviewsPage.shareBtn}
+                    title="Share"
+                    aria-label="Share"
                   >
                     <Share2 className="w-4 h-4" />
                   </button>
@@ -289,15 +285,15 @@ export const ReviewsPage: React.FC = () => {
                   <button
                     onClick={(e) => toggleLike(item.id, e)}
                     className="flex items-center space-x-1 py-1.5 px-3 rounded-full bg-white/90 hover:bg-white text-zinc-900 shadow-md backdrop-blur-md transition-all active:scale-90 text-xs font-semibold"
-                    title={t.reviewsPage.likeCount}
-                    aria-label={t.reviewsPage.likeCount}
+                    title="Like"
+                    aria-label="Like"
                   >
                     <Heart
                       className={`w-3.5 h-3.5 transition-colors ${
                         isLiked ? 'text-red-500 fill-red-500' : 'text-zinc-700'
                       }`}
                     />
-                    <span>{tNumber(currentLikes)}</span>
+                    <span>{currentLikes}</span>
                   </button>
                 </div>
               </div>
@@ -310,15 +306,13 @@ export const ReviewsPage: React.FC = () => {
           <div className="max-w-xl">
             <div className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-amber-900 mb-1.5">
               <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-              <span>{language === 'bn' ? 'আপনার কিপসেক ফটো রিভিউ শেয়ার করুন' : 'Share Your Keepsake Photo Review'}</span>
+              <span>Share Your Keepsake Photo Review</span>
             </div>
             <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 font-serif">
-              {language === 'bn' ? 'আপনার রিভিউ এখানে দেখতে চান?' : 'Want Your Review Featured Here?'}
+              Want Your Review Featured Here?
             </h3>
             <p className="text-xs sm:text-sm text-zinc-700 mt-2 leading-relaxed">
-              {language === 'bn' 
-                ? <>ফেসবুক বা হোয়াটসঅ্যাপে আপনার কিপসেকের আনবক্সিং ছবি বা মতামত পাঠান এবং পরবর্তী অর্ডারে পান <strong>১০% ডিসকাউন্ট ভাউচার</strong>!</>
-                : <>Send us your keepsake unboxing photo or chat feedback on Facebook or WhatsApp to receive a <strong>10% OFF voucher</strong> on your next handcrafted order!</>}
+              Send us your keepsake unboxing photo or chat feedback on Facebook or WhatsApp to receive a <strong>10% OFF voucher</strong> on your next handcrafted order!
             </p>
           </div>
 
@@ -330,7 +324,7 @@ export const ReviewsPage: React.FC = () => {
               className="px-6 py-3.5 bg-black hover:bg-zinc-800 text-[#E8E2D3] text-xs font-bold uppercase tracking-wider rounded-full transition-transform active:scale-95 shadow-md flex items-center space-x-2"
             >
               <Facebook className="w-3.5 h-3.5" />
-              <span>{language === 'bn' ? 'ফেসবুকে পাঠান' : 'Send via Facebook'}</span>
+              <span>Send via Facebook</span>
             </a>
             <a
               href="https://wa.me/8801712345678"
@@ -339,7 +333,7 @@ export const ReviewsPage: React.FC = () => {
               className="px-6 py-3.5 bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold uppercase tracking-wider rounded-full transition-transform active:scale-95 shadow-md flex items-center space-x-2"
             >
               <MessageSquare className="w-3.5 h-3.5" />
-              <span>{language === 'bn' ? 'হোয়াটসঅ্যাপে পাঠান' : 'Send via WhatsApp'}</span>
+              <span>Send via WhatsApp</span>
             </a>
           </div>
         </div>
@@ -374,7 +368,7 @@ export const ReviewsPage: React.FC = () => {
                 onClick={(e) => e.stopPropagation()}
                 className="relative max-w-[92vw] md:max-w-[85vw] lg:max-w-[75vw] max-h-[94vh] flex flex-col items-center justify-center pointer-events-auto"
               >
-                {/* Top Floating Control Bar */}
+                {/* Top Floating Control Bar - Exactly 3 buttons: Left (Shop Similar + Share), Right (Close) */}
                 <div className="w-full flex items-center justify-between pb-3 text-white px-1 sm:px-2">
                   {/* Left Side: Shop Similar & Share */}
                   <div className="flex items-center space-x-2">
@@ -383,14 +377,14 @@ export const ReviewsPage: React.FC = () => {
                       onClick={() => setActiveItem(null)}
                       className="inline-flex items-center space-x-1.5 px-3.5 sm:px-4 py-2 rounded-full bg-[#E8E2D3] hover:bg-white text-black text-xs font-bold tracking-wide transition-all active:scale-95 shadow-md select-none"
                     >
-                      <span>{t.reviewsPage.lightboxViewReview}</span>
+                      <span>Shop Similar</span>
                     </Link>
 
                     <button
                       onClick={(e) => handleShare(activeItem, e)}
                       className="p-2 rounded-full bg-white/20 hover:bg-white/30 text-white backdrop-blur-md transition-all active:scale-90 border border-white/10"
-                      title={t.reviewsPage.shareBtn}
-                      aria-label={t.reviewsPage.shareBtn}
+                      title="Share link"
+                      aria-label="Share review"
                     >
                       <Share2 className="w-4 h-4" />
                     </button>
@@ -453,7 +447,7 @@ export const ReviewsPage: React.FC = () => {
               className="fixed bottom-6 right-6 z-[10000] bg-black text-[#E8E2D3] px-4 py-3 rounded-2xl shadow-xl flex items-center space-x-2.5 text-xs font-semibold border border-white/20"
             >
               <Check className="w-4 h-4 text-emerald-400" />
-              <span>{language === 'bn' ? 'লিংক ক্লিপবোর্ডে কপি হয়েছে!' : 'Link copied to clipboard!'}</span>
+              <span>Link copied to clipboard!</span>
             </motion.div>
           )}
         </AnimatePresence>,
