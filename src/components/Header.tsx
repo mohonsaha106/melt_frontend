@@ -15,7 +15,8 @@ import {
   ChevronRight, 
   Tag,
   Truck,
-  MessageCircle
+  MessageCircle,
+  LayoutDashboard
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -59,6 +60,7 @@ export const Header: React.FC = () => {
   const isHowToOrderActive = isPathActive(['/how-to-order', '/howtoorder', '/order-process']);
   const isFaqActive = isPathActive(['/faq', '/faqs']);
   const isAboutActive = isPathActive(['/about', '/about-us', '/contact']);
+  const isAdminActive = isPathActive(['/admin']);
 
   return (
     <>
@@ -151,7 +153,7 @@ export const Header: React.FC = () => {
             </div>
 
             {/* Desktop Navigation Links */}
-            <nav className="flex items-center space-x-7 text-xs font-semibold tracking-wider uppercase text-zinc-800">
+            <nav className="flex items-center space-x-6 xl:space-x-7 text-xs font-semibold tracking-wider uppercase text-zinc-800">
               <Link
                 to="/shop"
                 className={`py-1 relative transition-colors ${
@@ -224,6 +226,17 @@ export const Header: React.FC = () => {
                 }`}
               >
                 ABOUT
+              </Link>
+
+              <Link
+                to="/admin"
+                className={`py-1 relative transition-colors ${
+                  isAdminActive
+                    ? 'text-black font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:scale-x-100'
+                    : 'text-zinc-700 hover:text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
+                }`}
+              >
+                ADMIN
               </Link>
             </nav>
 
@@ -464,6 +477,23 @@ export const Header: React.FC = () => {
                     <div className="flex items-center space-x-3">
                       <Info className="w-4 h-4 text-zinc-600" />
                       <span className={isAboutActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>About Us</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-zinc-400" />
+                  </Link>
+
+                  {/* Admin Panel */}
+                  <Link
+                    to="/admin"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`w-full flex items-center justify-between py-2.5 px-3 text-sm rounded-xl text-left transition-colors ${
+                      isAdminActive
+                        ? 'font-bold text-black bg-[#D4CCB8] border-l-4 border-black pl-3.5'
+                        : 'font-medium text-zinc-800 hover:text-black hover:bg-[#DFD8C7]'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <LayoutDashboard className="w-4 h-4 text-zinc-600" />
+                      <span className={isAdminActive ? 'underline decoration-black decoration-2 underline-offset-4' : ''}>Admin Panel</span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-zinc-400" />
                   </Link>
