@@ -147,6 +147,7 @@ export const Hero: React.FC = () => {
 
   return (
     <section 
+      id="hero-section"
       className="relative overflow-hidden bg-[#E8E2D3] border-b border-[#D3CBBA] pt-4 pb-8 sm:pt-6 sm:pb-12 lg:pt-7 lg:pb-14 select-none"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}

@@ -40,7 +40,7 @@ export default {
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
         sans: ['"DM Sans"', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['"DM Mono"', 'monospace'],
-        bengali: ['"Hind Siliguri"', 'sans-serif'],
+        bengali: ['"Noto Sans Bengali"', '"Anek Bangla"', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',

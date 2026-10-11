@@ -66,9 +66,7 @@ export const ShopPage: React.FC = () => {
     }
   }, [searchParams]);
 
-  // Scroll to top on page load
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
     document.title = 'Shop All Handcrafted Keepsakes & Resin Art | Melt Sparkle';
   }, []);
 

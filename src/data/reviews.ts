@@ -61,43 +61,51 @@ export const REVIEWS: Review[] = [
 export interface FAQItem {
   question: string;
   answer: string;
-  category: 'Durability' | 'Application' | 'Safety' | 'Delivery & Payment';
+  category: string;
+  categoryEn?: string;
 }
 
 export const FAQ_LIST: FAQItem[] = [
   {
-    question: 'How do I send my bridal flowers or keepsake items for preservation?',
-    answer: 'It is very simple!\n1. After placing your order on our website or messaging our Facebook page (https://www.facebook.com/Meltsparkle), our team provides simple packaging guidelines.\n2. Send your fresh or dried flowers/items via courier or rider to our Dhaka studio.\n3. We professionally dry and dehydrate the petals in silica gel before casting them in crystal resin.',
-    category: 'Application'
+    question: 'বিয়ের ফুল বা স্মৃতিচিহ্ন সংরক্ষণের জন্য কীভাবে পাঠাব?',
+    answer: 'এটি খুবই সহজ!\n১. আমাদের ওয়েবসাইটে অর্ডার করার পর বা ফেসবুক পেইজে (facebook.com/Meltsparkle) নক দেওয়ার পর আমাদের টিম সহজ প্যাকেজিং গাইডলাইন প্রদান করবে।\n২. কুরিয়ার বা রাইডারের মাধ্যমে আপনার তাজা বা শুকনা ফুল আমাদের ঢাকা স্টুডিওতে পাঠান।\n৩. আমরা সিলিকা জেলের সাহায্যে পাপড়িগুলো ডিহাইড্রেট করে নিখুঁত ক্রিস্টাল রেজিনে কাস্টিং করি।',
+    category: 'ফুল সংরক্ষণ',
+    categoryEn: 'Flower Preservation'
   },
   {
-    question: 'Will the resin turn yellow over time?',
-    answer: 'No. At Meltsparkle, we exclusively use premium artist-grade, UV-stabilized, non-yellowing epoxy resin. This prevents discoloration and keeps your preserved memories crystal-clear for decades when kept away from direct prolonged outdoor sun exposure.',
-    category: 'Durability'
+    question: 'সময়ের সাথে কি রেজিনের রং হলুদ বা ঘোলা হয়ে যাবে?',
+    answer: 'একদমই না। Meltsparkle-এ আমরা বিশেষভাবে প্রিমিয়াম আর্টিস্ট-গ্রেড, ইউভি-স্ট্যাবিলাইজড নন-ইয়েলোয়িং ইপোক্সি রেজিন ব্যবহার করি। সরাসরি প্রখর রোদে দীর্ঘক্ষণ ফেলে না রাখলে এটি বছরের পর বছর ক্রিস্টাল কাঁচের মতো স্বচ্ছ থাকবে।',
+    category: 'স্থায়িত্ব ও কোয়ালিটি',
+    categoryEn: 'Durability & Quality'
   },
   {
-    question: 'How long does it take to handcraft a custom resin order?',
-    answer: '• Readymade / Personalized Keychains & Bookmarks: 2–4 business days.\n• Custom Clocks & Trays: 4–6 business days.\n• Wedding Flower Preservation Frames: 10–14 days (due to delicate petal dehydration & multi-layer curing processes).',
-    category: 'Durability'
+    question: 'কাস্টম রেজিন অর্ডার তৈরিতে কতদিন সময় লাগে?',
+    answer: '• রেডিমেড বা পার্সোনালাইজড কিচেন ও বুকমার্ক: ২–৪ কার্যদিবস।\n• কাস্টম ওয়াল ক্লক ও ট্রে: ৪–৬ কার্যদিবস।\n• বিয়ের ফুলের ফ্রেম: ১০–১৪ দিন (কারণ পাপড়িগুলো নিখুঁতভাবে শুকানো এবং কয়েক স্তরে রেজিন কিউরিং করার প্রয়োজন হয়)।',
+    category: 'স্থায়িত্ব ও কোয়ালিটি',
+    categoryEn: 'Durability & Quality'
   },
   {
-    question: 'How should I care for and clean my resin products?',
-    answer: '• Clean gently with a soft microfiber cloth and mild soapy water if needed.\n• Avoid harsh chemical solvents, acetone, alcohol wipes, or abrasive pads.\n• Keep away from open flames and direct continuous extreme heat.',
-    category: 'Safety'
+    question: 'রেজিন প্রোডাক্টের যত্ন ও পরিষ্কার করার নিয়ম কী?',
+    answer: '• যেকোনো নরম মাইক্রোফাইবার কাপড় ও হালকা সাবান পানি দিয়ে আলতোভাবে মুছে নিন।\n• কোনো হার্শ কেমিক্যাল, অ্যাসিটোন, অ্যালকোহল বা শক্ত মাজুনি ব্যবহার করবেন না।\n• সরাসরি খোলা আগুন ও অতিরিক্ত তাপ থেকে দূরে রাখুন।',
+    category: 'ব্যবহার ও যত্ন',
+    categoryEn: 'Usage & Care'
   },
   {
-    question: 'How does Cash on Delivery (COD) and the ৳50 Advance work?',
-    answer: 'We deliver nationwide across all 64 districts in Bangladesh! To confirm your handcrafted customization and book the courier parcel, we collect a small ৳50 token advance via bKash / Nagad / Rocket. The remaining due balance is paid to the courier upon delivery at your doorstep.',
-    category: 'Delivery & Payment'
+    question: 'ক্যাশ অন ডেলিভারি (COD) এবং ৫০ টাকা অগ্রিম কীভাবে কাজ করে?',
+    answer: 'আমরা সারা বাংলাদেশে ৬৪টি জেলাতেই ক্যাশ অন ডেলিভারি সুবিধা দিই! কাস্টমাইজেশন ও কুরিয়ার পার্সেল বুকিং নিশ্চিত করতে বিকাশ, নগদ বা রকেটের মাধ্যমে মাত্র ৫০ টাকা টোকেন অগ্রিম নেওয়া হয়। বাকি সম্পূর্ণ টাকা পার্সেল হাতে পেয়ে ডেলিভারিম্যানকে পরিশোধ করবেন।',
+    category: 'ডেলিভারি ও পেমেন্ট',
+    categoryEn: 'Delivery & Payment'
   },
   {
-    question: 'What are the delivery charges and delivery times?',
-    answer: 'Inside Dhaka: ৳60 (1–2 days delivery). Outside Dhaka (all 64 districts): ৳110 (2–4 days delivery via Steadfast / RedX). Orders over ৳1,500 receive 100% FREE delivery!',
-    category: 'Delivery & Payment'
+    question: 'ডেলিভারি চার্জ ও ডেলিভারির সময় কেমন?',
+    answer: 'ঢাকা সিটির ভেতরে: ৳৬০ (১–২ দিন ডেলিভারি)। ঢাকা সিটির বাইরে (৬৪ জেলা): ৳১১০ (২–৪ দিন ডেলিভারি, স্টেডফাস্ট ও রেডেক্স কুরিয়ারে)। ১,৫০০ টাকার বেশি অর্ডারে সারা দেশে ডেলিভারি সম্পূর্ণ ফ্রি!',
+    category: 'ডেলিভারি ও পেমেন্ট',
+    categoryEn: 'Delivery & Payment'
   },
   {
-    question: 'What are the Buy 4 Get 1 Free and gift rewards?',
-    answer: 'We love giving surprises!\n• Buy 4+ items → Get 1 FREE handcrafted gift of your choice!\n• Buy 7+ items → Get 2 FREE gifts!\n• Buy 10+ items → Get 3 FREE gifts!\nThe promotional gift selector automatically unlocks inside your cart drawer.',
-    category: 'Delivery & Payment'
+    question: '৪টি কিনলে ১টি ফ্রি অফারটি কীভাবে পাওয়া যায়?',
+    answer: 'আমরা কাস্টমারদের উপহার দিতে ভালোবাসি!\n• ৪টি বা তার বেশি কিনলে → ১টি উপহার সম্পূর্ণ ফ্রি!\n• ৭টি বা তার বেশি কিনলে → ২টি উপহার সম্পূর্ণ ফ্রি!\n• ১০টি বা তার বেশি কিনলে → ৩টি উপহার সম্পূর্ণ ফ্রি!\nকার্ট ড্রয়ারে পণ্য যোগ করলেই স্বয়ংক্রিয়ভাবে ফ্রি গিফট সিলেক্টর আনলক হয়ে যাবে।',
+    category: 'ডেলিভারি ও পেমেন্ট',
+    categoryEn: 'Delivery & Payment'
   }
 ];

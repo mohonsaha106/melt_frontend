@@ -3,7 +3,7 @@ import { ShieldCheck, Droplets, Clock } from 'lucide-react';
 
 export const HighlightBanner: React.FC = () => {
   return (
-    <div className="bg-[#0A0A0A] text-[#E8E2D3] py-8 sm:py-10 border-y border-zinc-800">
+    <div id="highlight-banner" className="bg-[#0A0A0A] text-[#E8E2D3] py-8 sm:py-10 border-y border-zinc-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row items-center justify-center text-center gap-4 sm:gap-8">
           <div className="flex items-center space-x-2 text-[#E8E2D3]">

@@ -1,20 +1,20 @@
 import React from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
+import { navigateToSection } from '../utils/navigation';
 import { 
   Instagram, 
   Facebook, 
   Phone, 
   Mail, 
   MapPin, 
-  ArrowUp,
-  MessageCircle,
-  Tag
+  ArrowUp, 
+  MessageCircle, 
+  Tag 
 } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const {
     setSelectedCategory,
@@ -28,18 +28,7 @@ export const Footer: React.FC = () => {
   };
 
   const scrollToSection = (id: string) => {
-    if (location.pathname !== '/') {
-      navigate('/');
-      setTimeout(() => {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 120);
-    } else {
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
+    navigateToSection(id, navigate);
   };
 
   return (

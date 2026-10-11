@@ -127,7 +127,7 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
     <div className={`w-full flex flex-col space-y-4 ${className}`}>
       {/* 1. Header: Title & Item Count */}
       {(title || itemCount !== undefined || subtitle) && (
-        <div className="flex flex-col space-y-0.5">
+        <div className="flex flex-col space-y-0.5 text-center items-center">
           {title && (
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 font-serif">
               {title}

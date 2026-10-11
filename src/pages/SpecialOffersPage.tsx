@@ -38,9 +38,7 @@ export const SpecialOffersPage: React.FC = () => {
   const [selectedPlacement, setSelectedPlacement] = useState<Placement | null>(null);
   const [minRating, setMinRating] = useState<number>(0);
 
-  // Scroll to top on page load
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
     document.title = 'Special Offers & Deals | Melt Sparkle';
   }, []);
 

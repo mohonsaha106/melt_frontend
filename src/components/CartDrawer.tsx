@@ -1,5 +1,7 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
+import { navigateToSection } from '../utils/navigation';
 import { 
   X, 
   Trash2, 
@@ -16,6 +18,7 @@ import {
 import { motion } from 'framer-motion';
 
 export const CartDrawer: React.FC = () => {
+  const navigate = useNavigate();
   const {
     cart,
     isCartOpen,
@@ -245,8 +248,7 @@ export const CartDrawer: React.FC = () => {
                   onClick={() => {
                     setIsCartOpen(false);
                     setSelectedCategory('all');
-                    const el = document.getElementById('product-catalog');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    navigateToSection('product-catalog', navigate);
                   }}
                   className="px-6 py-2.5 bg-black text-[#E8E2D3] text-xs font-bold uppercase tracking-wider rounded-full hover:bg-zinc-900 transition-colors shadow-sm"
                 >

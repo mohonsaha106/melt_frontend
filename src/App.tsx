@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { StoreProvider } from './context/StoreContext';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Header } from './components/Header';
@@ -21,20 +21,12 @@ import { HowToApplyModal } from './components/HowToApplyModal';
 import { SearchModal } from './components/SearchModal';
 import { FloatingBottomCartBar } from './components/FloatingBottomCartBar';
 import { FloatingMessengerButton } from './components/FloatingMessengerButton';
-
-// Helper to scroll to top automatically on route changes
-const ScrollToTop: React.FC = () => {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [pathname]);
-  return null;
-};
+import { ScrollAndSectionManager } from './components/ScrollAndSectionManager';
 
 export const AppContent: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#E8E2D3] flex flex-col selection:bg-black selection:text-[#E8E2D3] text-[#111111]">
-      <ScrollToTop />
+      <ScrollAndSectionManager />
 
       {/* Top Ticker Bar */}
       <AnnouncementBar />

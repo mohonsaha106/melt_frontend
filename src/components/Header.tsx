@@ -38,6 +38,9 @@ export const Header: React.FC = () => {
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    sessionStorage.setItem('melt_reset_to_top', 'true');
+    sessionStorage.removeItem('melt_homepage_section');
+    sessionStorage.removeItem('melt_homepage_scrollY');
     if (location.pathname !== '/') {
       navigate('/');
     }

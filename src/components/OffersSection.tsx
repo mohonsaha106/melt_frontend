@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { PRODUCTS } from '../data/products';
 import { ProductCard } from './ProductCard';
-import { Tag, Sparkles, ArrowRight } from 'lucide-react';
+import { Tag, ArrowRight } from 'lucide-react';
 
 export const OffersSection: React.FC = () => {
   // Filter products that have promotional pricing (originalPrice > price)
@@ -44,28 +44,17 @@ export const OffersSection: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-10 gap-3">
-          <div>
-            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-600/20 text-rose-700 text-[11px] font-bold uppercase tracking-wider mb-2 sm:mb-3">
-              <Tag className="w-3.5 h-3.5 text-rose-600" />
-              <span>LIMITED TIME DEALS</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-zinc-900 font-serif">
-              Products on Offer
-            </h2>
-            <p className="mt-1.5 text-xs sm:text-sm text-zinc-600 max-w-xl">
-              Enjoy exclusive savings on our bestselling handcrafted resin keepsakes and memory art pieces.
-            </p>
+        <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10 flex flex-col items-center">
+          <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-600/20 text-rose-700 text-[11px] font-bold uppercase tracking-wider mb-2 sm:mb-3">
+            <Tag className="w-3.5 h-3.5 text-rose-600" />
+            <span>LIMITED TIME DEALS</span>
           </div>
-
-          <Link
-            to="/sepcial-offer"
-            className="hidden sm:inline-flex items-center space-x-2 text-xs font-semibold text-zinc-800 hover:text-black bg-[#DFD8C7] hover:bg-[#D3CBBA] px-3.5 py-1.5 rounded-full self-start sm:self-auto border border-[#D3CBBA] transition-colors"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-            <span>View All {offerProducts.length} Offers</span>
-            <ArrowRight className="w-3 h-3" />
-          </Link>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-zinc-900 font-serif">
+            Products on Offer
+          </h2>
+          <p className="mt-1.5 text-xs sm:text-sm text-zinc-600 max-w-xl mx-auto">
+            Enjoy exclusive savings on our bestselling handcrafted resin keepsakes and memory art pieces.
+          </p>
         </div>
 
         {/* Product Cards Grid: Mobile-first 2 columns, tablet 3, desktop 4 */}

@@ -122,7 +122,6 @@ export const ReviewsPage: React.FC = () => {
   const [copiedToast, setCopiedToast] = useState(false);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
     document.title = 'Customer Reviews | Melt Sparkle';
   }, []);
 
@@ -226,7 +225,7 @@ export const ReviewsPage: React.FC = () => {
             - GPU & Layout containment prevents any column shaking
            ========================================= */}
         <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-4 gap-3 sm:gap-4 md:gap-5">
-          {REVIEW_ITEMS.map((item) => {
+          {REVIEW_ITEMS.map((item, idx) => {
             const isLiked = likedItems[item.id];
             const isSaved = savedItems[item.id];
             const currentLikes = isLiked ? item.likes + 1 : item.likes;
@@ -237,16 +236,16 @@ export const ReviewsPage: React.FC = () => {
                 onClick={() => setActiveItem(item)}
                 style={{
                   breakInside: 'avoid',
-                  contain: 'layout paint',
-                  transform: 'translateZ(0)',
+                  WebkitMaskImage: '-webkit-radial-gradient(white, black)',
                 }}
-                className="inline-block w-full mb-3 sm:mb-4 md:mb-5 group relative rounded-2xl sm:rounded-3xl overflow-hidden bg-black/5 shadow-xs hover:shadow-xl transition-shadow duration-300 cursor-pointer select-none"
+                className="break-inside-avoid inline-block w-full mb-3 sm:mb-4 md:mb-5 group relative rounded-2xl sm:rounded-3xl overflow-hidden bg-black/5 shadow-xs hover:shadow-xl transition-all duration-300 cursor-pointer select-none"
               >
                 {/* Image (Natural height flow - all review chats contained directly inside image) */}
                 <img
                   src={item.imageUrl}
                   alt="Customer Review Screenshot"
-                  loading="lazy"
+                  loading={idx < 4 ? 'eager' : 'lazy'}
+                  decoding="async"
                   className="w-full h-auto object-cover select-none block transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                 />
 

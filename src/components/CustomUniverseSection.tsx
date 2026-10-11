@@ -1,26 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { PenTool, Type, ArrowUpRight } from 'lucide-react';
+import { PenTool, Flower2, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const CustomUniverseSection: React.FC = () => {
   return (
-    <section id="custom-universe" className="py-16 sm:py-24 bg-[#E8E2D3] border-b border-[#D3CBBA] relative overflow-hidden">
+    <section id="custom-universe" className="py-16 sm:py-24 bg-[#E8E2D3] border-b border-[#D3CBBA] relative overflow-hidden font-bengali">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-14">
           <div className="flex items-center justify-center space-x-3 mb-3">
             <span className="h-[1px] w-8 bg-[#D3CBBA]" />
-            <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-zinc-500 font-mono">
-              TWO WAYS TO PRESERVE
+            <span className="text-xs font-bold tracking-wider uppercase text-zinc-500">
+              স্মৃতি সংরক্ষণের দুটি উপায়
             </span>
             <span className="h-[1px] w-8 bg-[#D3CBBA]" />
           </div>
-          <h2 className="font-serif text-3xl sm:text-5xl font-semibold text-zinc-900 tracking-tight">
-            Keeping your <span className="font-serif italic font-bold">memories alive.</span>
+          <h2 className="text-3xl sm:text-5xl font-bold text-zinc-900 tracking-tight leading-snug">
+            স্মৃতি থাকুক <span className="font-serif italic font-bold">চিরসবুজ ও অম্লান</span>
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-zinc-600 leading-relaxed">
-            Two distinct paths to your dream resin keepsake. Personalize a monogram treasure or preserve your sacred moments forever.
+          <p className="mt-3 text-sm sm:text-base text-zinc-600 leading-relaxed max-w-xl mx-auto">
+            আপনার পছন্দের রেজিন কিপসেক তৈরির দুটি দারুণ সুযোগ — নিজের মনোগ্রাম কাস্টমাইজ করুন অথবা জীবনের সেরা মুহূর্তের স্মৃতি চিরতরে সংরক্ষণ করুন।
           </p>
         </div>
 
@@ -32,8 +32,8 @@ export const CustomUniverseSection: React.FC = () => {
             className="group relative bg-[#F2EDE2] border border-[#D3CBBA] rounded-2xl p-8 sm:p-10 flex flex-col justify-between overflow-hidden hover:border-black/50 hover:shadow-xl transition-all duration-300"
           >
             {/* Background 01 Watermark */}
-            <span className="absolute top-4 right-6 font-mono text-7xl sm:text-8xl font-black text-[#DDD5C3]/40 pointer-events-none select-none group-hover:text-[#DDD5C3]/70 transition-colors">
-              01
+            <span className="absolute top-4 right-6 text-7xl sm:text-8xl font-black text-[#DDD5C3]/40 pointer-events-none select-none group-hover:text-[#DDD5C3]/70 transition-colors">
+              ০১
             </span>
 
             <div className="relative z-10">
@@ -41,23 +41,23 @@ export const CustomUniverseSection: React.FC = () => {
                 <PenTool className="w-5 h-5 text-amber-600" />
               </div>
 
-              <span className="text-[11px] font-bold tracking-[0.15em] text-zinc-500 uppercase font-mono">
-                EXPERIENCE 01
+              <span className="text-xs font-bold tracking-wider text-zinc-500 uppercase">
+                সার্ভিস ০১
               </span>
-              <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1 mb-3 font-serif">
-                Custom Name & Monograms
+              <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1 mb-3">
+                কাস্টম নাম ও মনোগ্রাম
               </h3>
               <p className="text-sm text-zinc-600 leading-relaxed max-w-sm">
-                Your name, initial, or couple initials cast with 24K gold foil, baby’s breath florals, and glowing LED wooden base.
+                আপনার নাম, নিজস্ব বা কাপল ইনিশিয়াল কাস্ট করা হবে ২৪ ক্যারেট গোল্ড লিফ, ন্যাচারাল ফুল ও গ্লোয়িং এলইডি উডেন বেসের সাথে।
               </p>
             </div>
 
             <div className="mt-8 pt-6 border-t border-[#D3CBBA] relative z-10 flex items-center justify-between">
               <Link
                 to="/shop"
-                className="w-full flex items-center justify-between text-xs font-bold tracking-wider uppercase text-zinc-900 hover:text-black group/btn"
+                className="w-full flex items-center justify-between text-xs sm:text-sm font-bold tracking-wider uppercase text-zinc-900 hover:text-black group/btn"
               >
-                <span>EXPLORE MONOGRAMS</span>
+                <span>মনোগ্রাম কালেকশন দেখুন</span>
                 <div className="w-8 h-8 rounded-lg bg-[#DFD8C7] group-hover/btn:bg-black group-hover/btn:text-[#E8E2D3] flex items-center justify-center transition-colors">
                   <ArrowUpRight className="w-4 h-4" />
                 </div>
@@ -71,32 +71,32 @@ export const CustomUniverseSection: React.FC = () => {
             className="group relative bg-[#F2EDE2] border border-[#D3CBBA] rounded-2xl p-8 sm:p-10 flex flex-col justify-between overflow-hidden hover:border-black/50 hover:shadow-xl transition-all duration-300"
           >
             {/* Background 02 Watermark */}
-            <span className="absolute top-4 right-6 font-mono text-7xl sm:text-8xl font-black text-[#DDD5C3]/40 pointer-events-none select-none group-hover:text-[#DDD5C3]/70 transition-colors">
-              02
+            <span className="absolute top-4 right-6 text-7xl sm:text-8xl font-black text-[#DDD5C3]/40 pointer-events-none select-none group-hover:text-[#DDD5C3]/70 transition-colors">
+              ০২
             </span>
 
             <div className="relative z-10">
               <div className="w-12 h-12 rounded-xl bg-[#E8E2D3] border border-[#D3CBBA] flex items-center justify-center text-zinc-900 shadow-sm mb-6">
-                <Type className="w-5 h-5 text-emerald-600" />
+                <Flower2 className="w-5 h-5 text-emerald-600" />
               </div>
 
-              <span className="text-[11px] font-bold tracking-[0.15em] text-zinc-500 uppercase font-mono">
-                EXPERIENCE 02
+              <span className="text-xs font-bold tracking-wider text-zinc-500 uppercase">
+                সার্ভিস ০২
               </span>
-              <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1 mb-3 font-serif">
-                Flower & Garland Preservation
+              <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1 mb-3">
+                বিয়ের মালা ও ফুল সংরক্ষণ
               </h3>
               <p className="text-sm text-zinc-600 leading-relaxed max-w-sm">
-                Send us your wedding garland or milestone flowers. We carefully dehydrate and encapsulate them forever in archival crystal resin.
+                আমাদের কাছে পাঠিয়ে দিন আপনার বিয়ের মালা বা বিশেষ স্মৃতির ফুল। আমরা নিখুঁতভাবে ডিহাইড্রেট করে ক্রিস্টাল রেজিনে আজীবনের জন্য সংরক্ষণ করব।
               </p>
             </div>
 
             <div className="mt-8 pt-6 border-t border-[#D3CBBA] relative z-10 flex items-center justify-between">
               <Link
                 to="/how-to-order"
-                className="w-full flex items-center justify-between text-xs font-bold tracking-wider uppercase text-zinc-900 hover:text-black group/btn"
+                className="w-full flex items-center justify-between text-xs sm:text-sm font-bold tracking-wider uppercase text-zinc-900 hover:text-black group/btn"
               >
-                <span>HOW TO PRESERVE</span>
+                <span>সংরক্ষণ পদ্ধতি জানুন</span>
                 <div className="w-8 h-8 rounded-lg bg-[#DFD8C7] group-hover/btn:bg-black group-hover/btn:text-[#E8E2D3] flex items-center justify-center transition-colors">
                   <ArrowUpRight className="w-4 h-4" />
                 </div>

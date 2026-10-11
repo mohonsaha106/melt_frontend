@@ -7,10 +7,10 @@ export const FAQSection: React.FC = () => {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
   const [selectedCat, setSelectedCat] = useState<string>('All');
 
-  const categories = ['All', 'Durability', 'Application', 'Safety', 'Delivery & Payment'];
+  const categories = ['All', 'Flower Preservation', 'Durability & Quality', 'Usage & Care', 'Delivery & Payment'];
 
   const filteredFaqs = FAQ_LIST.filter(
-    (item) => selectedCat === 'All' || item.category === selectedCat
+    (item) => selectedCat === 'All' || item.category === selectedCat || item.categoryEn === selectedCat
   );
 
   return (
