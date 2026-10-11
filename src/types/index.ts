@@ -95,5 +95,5 @@ export interface OrderDetails {
   advanceAmount: number;
   dueAmount: number;
   createdAt: string;
-  status: 'Order Placed' | 'Advance Confirmed' | 'Processing' | 'Shipped' | 'Delivered';
+  status: 'Order Placed' | 'Advance Confirmed' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
 }

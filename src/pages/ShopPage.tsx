@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { useStore } from '../context/StoreContext';
 import { PRODUCTS } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
 import { SearchFilterBar, CategoryFilterItem } from '../components/SearchFilterBar';
@@ -71,9 +72,28 @@ export const ShopPage: React.FC = () => {
   }, []);
 
 
+  const { products, categories, websiteSettings } = useStore();
+  const sourceProducts = products && products.length > 0 ? products : PRODUCTS;
+
+  const dynamicCategories: CategoryFilterItem[] = useMemo(() => {
+    const list: CategoryFilterItem[] = [{ id: 'all', label: 'All Designs' }];
+    if (categories && categories.length > 0) {
+      categories.forEach(c => {
+        list.push({ id: c.categorySlug, label: c.name });
+      });
+    } else {
+      SHOP_CATEGORIES.forEach(c => {
+        if (c.id !== 'all') list.push(c);
+      });
+    }
+    list.push({ id: 'under-500', label: 'Under ৳500' });
+    list.push({ id: 'under-1500', label: 'Under ৳1500' });
+    return list;
+  }, [categories]);
+
   // Filter and sort all products dynamically based on search, category, and advanced filters
   const processedProducts = useMemo(() => {
-    return PRODUCTS.filter((product) => {
+    return sourceProducts.filter((product) => {
       // 1. Category Tag Filter
       if (selectedCat !== 'all') {
         if (selectedCat === 'under-500') {
@@ -92,7 +112,7 @@ export const ShopPage: React.FC = () => {
           if (!product.description.toLowerCase().includes('gold')) return false;
         } else if (selectedCat === 'arabic') {
           if (!product.sku.includes('111') && !product.name.toLowerCase().includes('arabic') && !product.name.toLowerCase().includes('calligraphy')) return false;
-        } else if (product.category !== selectedCat) {
+        } else if (product.category !== selectedCat && product.category?.toLowerCase() !== selectedCat.toLowerCase()) {
           return false;
         }
       }
@@ -191,13 +211,13 @@ export const ShopPage: React.FC = () => {
         {/* Reusable Search & Filter Component */}
         <div className="mb-8">
           <SearchFilterBar
-            title="The Complete Keepsake Collection"
+            title={websiteSettings?.shopPage?.title || 'The Complete Keepsake Collection'}
             itemCount={processedProducts.length}
             itemCountLabel="handcrafted pieces available"
             searchValue={shopSearch}
             onSearchChange={setShopSearch}
             searchPlaceholder="Search products by name, SKU, or style..."
-            categories={SHOP_CATEGORIES}
+            categories={dynamicCategories}
             selectedCategory={selectedCat}
             onSelectCategory={handleSelectCategory}
             initialVisibleCount={8}

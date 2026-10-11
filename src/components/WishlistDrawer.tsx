@@ -11,12 +11,14 @@ export const WishlistDrawer: React.FC = () => {
     setIsWishlistOpen,
     toggleWishlist,
     addToCart,
-    openCart
+    openCart,
+    products
   } = useStore();
 
   if (!isWishlistOpen) return null;
 
-  const wishlistedProducts = PRODUCTS.filter(p => wishlist.includes(p.id));
+  const catalog = products && products.length > 0 ? products : PRODUCTS;
+  const wishlistedProducts = catalog.filter(p => wishlist.includes(p.id));
 
   const handleAddAllToCart = () => {
     wishlistedProducts.forEach(p => addToCart(p, 'S'));

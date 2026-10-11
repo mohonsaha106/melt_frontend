@@ -1,6 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { StoreProvider } from './context/StoreContext';
+import { AdminProvider } from './context/AdminContext';
+import { AdminPage } from './pages/AdminPage';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -24,6 +26,19 @@ import { FloatingMessengerButton } from './components/FloatingMessengerButton';
 import { ScrollAndSectionManager } from './components/ScrollAndSectionManager';
 
 export const AppContent: React.FC = () => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
+  // Pure Admin Dashboard Interface (isolated from customer shop chrome)
+  if (isAdminRoute) {
+    return (
+      <Routes>
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/*" element={<AdminPage />} />
+      </Routes>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#E8E2D3] flex flex-col selection:bg-black selection:text-[#E8E2D3] text-[#111111]">
       <ScrollAndSectionManager />
@@ -83,9 +98,11 @@ export const AppContent: React.FC = () => {
 export default function App() {
   return (
     <BrowserRouter>
-      <StoreProvider>
-        <AppContent />
-      </StoreProvider>
+      <AdminProvider>
+        <StoreProvider>
+          <AppContent />
+        </StoreProvider>
+      </AdminProvider>
     </BrowserRouter>
   );
 }

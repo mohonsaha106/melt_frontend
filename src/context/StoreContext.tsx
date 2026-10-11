@@ -1,8 +1,13 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { Product, CartItem, Placement, TattooCategory, OrderDetails } from '../types';
+import { CategoryItem, WebsiteSectionsSettings } from '../types/admin';
 import confetti from 'canvas-confetti';
+import { useAdmin } from './AdminContext';
 
 interface StoreContextType {
+  // Categories & Settings from Admin
+  categories: CategoryItem[];
+  websiteSettings: WebsiteSectionsSettings;
   // Cart State
   cart: CartItem[];
   addToCart: (product: Product, size?: 'S' | 'M' | 'L' | 'Pack', customDetails?: { text: string; font: string }) => void;
@@ -55,6 +60,9 @@ interface StoreContextType {
   sortBy: 'featured' | 'price-low' | 'price-high' | 'rating';
   setSortBy: (sort: 'featured' | 'price-low' | 'price-high' | 'rating') => void;
 
+  // Catalog
+  products: Product[];
+
   // Calculated Totals
   cartSubtotal: number;
   totalCartItemCount: number;
@@ -71,6 +79,8 @@ const MINIMUM_ORDER_AMOUNT = 250;
 const FREE_SHIPPING_THRESHOLD = 1500;
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { products, categories, websiteSettings } = useAdmin();
+
   // Load Cart from localStorage
   const [cart, setCart] = useState<CartItem[]>(() => {
     try {
@@ -354,6 +364,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         isMinimumOrderMet,
         freeShippingRemaining,
         isFreeShippingUnlocked,
+        products,
+        categories,
+        websiteSettings,
       }}
     >
       {children}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAdmin } from '../context/AdminContext';
 import { 
   Sparkles, 
   ArrowLeft, 
@@ -17,6 +18,7 @@ import {
 } from 'lucide-react';
 
 export const AboutPage: React.FC = () => {
+  const { addInquiry } = useAdmin();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -33,6 +35,16 @@ export const AboutPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
+
+    addInquiry({
+      customerName: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      topic: formData.topic,
+      message: formData.message,
+      status: 'New'
+    });
+
     setIsSubmitted(true);
   };
 

@@ -1,8 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Heart, ArrowRight } from 'lucide-react';
+import { useStore } from '../context/StoreContext';
 
 export const ReviewSection: React.FC = () => {
+  const { websiteSettings } = useStore();
+  const revSettings = websiteSettings?.reviews || {
+    badge: 'REAL CUSTOMER REVIEWS',
+    title: 'Loved by 15,000+ Customers',
+    subtitle: 'Real customer chats, unboxing photos, and keepsakes shared across Bangladesh.',
+    buttonText: 'Explore All 18+ Customer Reviews'
+  };
+
   const homeReviewImages = [
     {
       id: 'h-rev-1',
@@ -52,16 +61,20 @@ export const ReviewSection: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center space-x-1.5 text-xs font-bold uppercase tracking-widest text-amber-900 mb-2 font-mono">
-            <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-            <span>REAL CUSTOMER REVIEWS</span>
-          </div>
+          {revSettings.badge && (
+            <div className="inline-flex items-center space-x-1.5 text-xs font-bold uppercase tracking-widest text-amber-900 mb-2 font-mono">
+              <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+              <span>{revSettings.badge}</span>
+            </div>
+          )}
           <h2 className="font-serif text-3xl sm:text-5xl font-semibold text-zinc-900 tracking-tight">
-            Loved by 15,000+ Customers
+            {revSettings.title}
           </h2>
-          <p className="mt-3 text-sm text-zinc-600">
-            Real customer chats, unboxing photos, and keepsakes shared across Bangladesh.
-          </p>
+          {revSettings.subtitle && (
+            <p className="mt-3 text-sm text-zinc-600">
+              {revSettings.subtitle}
+            </p>
+          )}
         </div>
 
         {/* Pinterest-style Image Masonry Grid (Images Only, Zero Text Below) */}
@@ -99,7 +112,7 @@ export const ReviewSection: React.FC = () => {
             to="/reviews"
             className="inline-flex items-center space-x-2 px-8 py-3.5 bg-black hover:bg-zinc-800 text-[#E8E2D3] text-xs font-bold uppercase tracking-widest rounded-full transition-all duration-200 shadow-md hover:shadow-xl active:scale-95"
           >
-            <span>Explore All 18+ Customer Reviews</span>
+            <span>{revSettings.buttonText || 'Explore All 18+ Customer Reviews'}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

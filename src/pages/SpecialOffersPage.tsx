@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useStore } from '../context/StoreContext';
 import { PRODUCTS } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
 import { SearchFilterBar, CategoryFilterItem } from '../components/SearchFilterBar';
@@ -28,6 +29,7 @@ const OFFER_CATEGORIES: CategoryFilterItem[] = [
 ];
 
 export const SpecialOffersPage: React.FC = () => {
+  const { products } = useStore();
   const [selectedCat, setSelectedCat] = useState('all');
   const [sortOption, setSortOption] = useState('discount-high');
   const [offerSearch, setOfferSearch] = useState('');
@@ -42,10 +44,12 @@ export const SpecialOffersPage: React.FC = () => {
     document.title = 'Special Offers & Deals | Melt Sparkle';
   }, []);
 
+  const catalog = products && products.length > 0 ? products : PRODUCTS;
+
   // Filter products that have promotional pricing (originalPrice > price)
   const baseOffers = useMemo(() => {
-    return PRODUCTS.filter((p) => p.originalPrice && p.originalPrice > p.price);
-  }, []);
+    return catalog.filter((p) => p.originalPrice && p.originalPrice > p.price);
+  }, [catalog]);
 
   // Filter and sort offer products dynamically based on search, category, and advanced filters
   const processedOffers = useMemo(() => {

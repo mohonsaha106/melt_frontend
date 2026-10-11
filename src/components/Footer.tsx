@@ -259,8 +259,12 @@ export const Footer: React.FC = () => {
 
         {/* Bottom copyright & payment methods */}
         <div className="mt-16 pt-8 border-t border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
-          <div>
-            © 2026 Meltsparkle Bangladesh. All rights reserved. • Keeping memories alive!
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span>© 2026 Meltsparkle Bangladesh. All rights reserved. • Keeping memories alive!</span>
+            <span className="text-zinc-700">•</span>
+            <Link to="/admin" className="text-zinc-600 hover:text-amber-400 font-mono text-[11px] transition-colors">
+              Admin Portal
+            </Link>
           </div>
 
           {/* Supported Payments */}

@@ -9,7 +9,8 @@ export const SearchModal: React.FC = () => {
   const {
     isSearchModalOpen,
     setIsSearchModalOpen,
-    setQuickViewProduct
+    setQuickViewProduct,
+    products
   } = useStore();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -44,6 +45,8 @@ export const SearchModal: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isSearchModalOpen, setIsSearchModalOpen]);
 
+  const activeCatalog = products && products.length > 0 ? products : PRODUCTS;
+
   // Real-time filtering matching SKU, name, category, placements, and description
   const filteredProducts = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -51,7 +54,7 @@ export const SearchModal: React.FC = () => {
       return [];
     }
 
-    return PRODUCTS.filter((product) => {
+    return activeCatalog.filter((product) => {
       const matchName = product.name.toLowerCase().includes(query);
       const matchSku = product.sku.toLowerCase().includes(query);
       const matchCategory = product.category.toLowerCase().includes(query);
@@ -61,7 +64,7 @@ export const SearchModal: React.FC = () => {
 
       return matchName || matchSku || matchCategory || matchDescription || matchPlacements || matchTag;
     });
-  }, [searchQuery]);
+  }, [searchQuery, activeCatalog]);
 
   // Reset selected index when query changes
   useEffect(() => {

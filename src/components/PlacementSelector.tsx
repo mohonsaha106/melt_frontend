@@ -1,16 +1,24 @@
 import React from 'react';
-import { PLACEMENTS, PlacementItem } from '../data/categories';
+import { useStore } from '../context/StoreContext';
+import { PLACEMENTS } from '../data/categories';
+import { CategoryItem } from '../types/admin';
 import { Sparkles, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 export const PlacementSelector: React.FC = () => {
-  // 5 categories for small devices (plus 1 "View All" button = 6 items total)
-  const firstCategories = PLACEMENTS.slice(0, 5);
-  // Next 4 categories for md and large devices (total 5 + 4 + 1 "View All" = 10 items total)
-  const additionalCategories = PLACEMENTS.slice(5, 9);
+  const { categories, websiteSettings } = useStore();
 
-  const renderCategoryCard = (item: PlacementItem, idx: number, extraClass = '') => (
+  const activeCategories: CategoryItem[] = (categories && categories.length > 0)
+    ? categories
+    : (PLACEMENTS as unknown as CategoryItem[]);
+
+  // 5 categories for small devices (plus 1 "View All" button = 6 items total)
+  const firstCategories = activeCategories.slice(0, 5);
+  // Next 4 categories for md and large devices (total 5 + 4 + 1 "View All" = 10 items total)
+  const additionalCategories = activeCategories.slice(5, 9);
+
+  const renderCategoryCard = (item: CategoryItem, idx: number, extraClass = '') => (
     <motion.div
       key={item.name}
       initial={{ opacity: 0, y: 15 }}
@@ -144,15 +152,17 @@ export const PlacementSelector: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14 flex flex-col items-center">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-600/20 text-amber-900 text-[11px] font-bold uppercase tracking-wider mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-            <span>SHOP BY CATEGORY</span>
-          </div>
+          {websiteSettings?.categories?.badge && (
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-600/20 text-amber-900 text-[11px] font-bold uppercase tracking-wider mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+              <span>{websiteSettings.categories.badge}</span>
+            </div>
+          )}
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-zinc-900 tracking-tight">
-            Explore Keepsake Categories
+            {websiteSettings?.categories?.title || 'Explore Keepsake Categories'}
           </h2>
           <p className="mt-2 text-xs sm:text-sm md:text-base text-zinc-600 leading-relaxed mx-auto">
-            Click any category below to browse our complete collection of handcrafted resin keepsakes, bridal preservation, and custom gifts.
+            {websiteSettings?.categories?.subtitle || 'Click any category below to browse our complete collection of handcrafted resin keepsakes, bridal preservation, and custom gifts.'}
           </p>
         </div>
 

@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useStore } from '../context/StoreContext';
 import { PenTool, Flower2, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const CustomUniverseSection: React.FC = () => {
+  const { websiteSettings } = useStore();
+
   return (
     <section id="custom-universe" className="py-16 sm:py-24 bg-[#E8E2D3] border-b border-[#D3CBBA] relative overflow-hidden font-bengali">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,15 +15,15 @@ export const CustomUniverseSection: React.FC = () => {
           <div className="flex items-center justify-center space-x-3 mb-3">
             <span className="h-[1px] w-8 bg-[#D3CBBA]" />
             <span className="text-xs font-bold tracking-wider uppercase text-zinc-500">
-              স্মৃতি সংরক্ষণের দুটি উপায়
+              {websiteSettings?.customUniverse?.badge || 'স্মৃতি সংরক্ষণের দুটি উপায়'}
             </span>
             <span className="h-[1px] w-8 bg-[#D3CBBA]" />
           </div>
           <h2 className="text-3xl sm:text-5xl font-bold text-zinc-900 tracking-tight leading-snug">
-            স্মৃতি থাকুক <span className="font-serif italic font-bold">চিরসবুজ ও অম্লান</span>
+            {websiteSettings?.customUniverse?.title || 'স্মৃতি থাকুক চিরসবুজ ও অম্লান'}
           </h2>
           <p className="mt-3 text-sm sm:text-base text-zinc-600 leading-relaxed max-w-xl mx-auto">
-            আপনার পছন্দের রেজিন কিপসেক তৈরির দুটি দারুণ সুযোগ — নিজের মনোগ্রাম কাস্টমাইজ করুন অথবা জীবনের সেরা মুহূর্তের স্মৃতি চিরতরে সংরক্ষণ করুন।
+            {websiteSettings?.customUniverse?.subtitle || 'আপনার পছন্দের রেজিন কিপসেক তৈরির দুটি দারুণ সুযোগ — নিজের মনোগ্রাম কাস্টমাইজ করুন অথবা জীবনের সেরা মুহূর্তের স্মৃতি চিরতরে সংরক্ষণ করুন।'}
           </p>
         </div>
 

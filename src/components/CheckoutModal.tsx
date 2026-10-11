@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
+import { useAdmin } from '../context/AdminContext';
 import { OrderDetails } from '../types';
 import { X, CheckCircle, ShieldCheck, ArrowRight, MessageCircle, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -24,6 +25,8 @@ export const CheckoutModal: React.FC = () => {
     setLastOrder
   } = useStore();
 
+  const { addOrder, settings } = useAdmin();
+
   const [deliveryArea, setDeliveryArea] = useState<'dhaka' | 'outside'>('dhaka');
   const [paymentType, setPaymentType] = useState<'cod_advance' | 'full'>('cod_advance');
   const [paymentMethod, setPaymentMethod] = useState<'bkash' | 'nagad' | 'rocket'>('bkash');
@@ -40,9 +43,13 @@ export const CheckoutModal: React.FC = () => {
 
   if (!isCheckoutOpen) return null;
 
-  const deliveryFee = isFreeShippingUnlocked ? 0 : (deliveryArea === 'dhaka' ? 60 : 110);
+  const dhakaFee = settings?.deliveryDhaka ?? 60;
+  const outsideFee = settings?.deliveryOutside ?? 110;
+  const advanceToken = settings?.advanceAmount ?? 50;
+
+  const deliveryFee = isFreeShippingUnlocked ? 0 : (deliveryArea === 'dhaka' ? dhakaFee : outsideFee);
   const totalAmount = cartSubtotal + deliveryFee;
-  const advanceAmount = paymentType === 'cod_advance' ? 50 : totalAmount;
+  const advanceAmount = paymentType === 'cod_advance' ? advanceToken : totalAmount;
   const dueOnDelivery = totalAmount - advanceAmount;
 
   const handleSubmitOrder = (e: React.FormEvent) => {
@@ -88,6 +95,7 @@ export const CheckoutModal: React.FC = () => {
 
       setCompletedOrder(order);
       setLastOrder(order);
+      addOrder(order);
       clearCart();
       setIsSubmitting(false);
 
