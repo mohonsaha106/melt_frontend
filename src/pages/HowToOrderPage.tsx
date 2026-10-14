@@ -15,8 +15,12 @@ import {
   Gift
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useStore } from '../context/StoreContext';
 
 export const HowToOrderPage: React.FC = () => {
+  const { websiteSettings } = useStore();
+  const howSettings = websiteSettings?.howToOrder;
+
   useEffect(() => {
     document.title = 'অর্ডার করার নিয়ম | Melt Sparkle Bangladesh';
   }, []);
@@ -25,29 +29,29 @@ export const HowToOrderPage: React.FC = () => {
     {
       step: '০১',
       icon: ShoppingBag,
-      title: 'কিপসেক বা ডিজাইন নির্বাচন',
-      desc: 'আমাদের রেজিন ক্যাটালগ ঘুরে দেখুন অথবা আপনার পছন্দের মনোগ্রাম ইনিশিয়াল, বিয়ের ফুলের ফ্রেম ও কাস্টম ডিজাইন পছন্দ করুন।',
+      title: howSettings?.step1Title || 'কিপসেক বা ডিজাইন নির্বাচন',
+      desc: howSettings?.step1Desc || 'আমাদের রেজিন ক্যাটালগ ঘুরে দেখুন অথবা আপনার পছন্দের মনোগ্রাম ইনিশিয়াল, বিয়ের ফুলের ফ্রেম ও কাস্টম ডিজাইন পছন্দ করুন।',
       highlights: ['রেডিমেড ও কাস্টম ক্যাটালগ', 'বিয়ের ফুলের ফ্রেম ও কিপসেক', 'কাস্টম নাম ও ইনিশিয়াল এনগ্রেভিং']
     },
     {
       step: '০২',
       icon: CreditCard,
-      title: '৫০ টাকা অগ্রিম টোকেন প্রদান',
-      desc: 'হস্তনির্মিত রেজিন কাস্টিং ও কুরিয়ার পার্সেল বুকিং নিশ্চিত করতে বিকাশ বা নগদের মাধ্যমে মাত্র ৫০ টাকা অগ্রিম পরিশোধ করুন। বাকি টাকা ডেলিভারির সময়।',
+      title: howSettings?.step2Title || '৫০ টাকা অগ্রিম টোকেন প্রদান',
+      desc: howSettings?.step2Desc || 'হস্তনির্মিত রেজিন কাস্টিং ও কুরিয়ার পার্সেল বুকিং নিশ্চিত করতে বিকাশ বা নগদের মাধ্যমে মাত্র ৫০ টাকা অগ্রিম পরিশোধ করুন। বাকি টাকা ডেলিভারির সময়।',
       highlights: ['বিকাশ ও নগদ গ্রহণযোগ্য', 'তাৎক্ষণিক অর্ডার কনফার্মেশন', 'কোনো লুকানো চার্জ নেই']
     },
     {
       step: '০৩',
       icon: Sparkles,
-      title: 'আর্টিসান কাস্টিং ও ৭২ ঘণ্টা কিউরিং',
-      desc: 'আমাদের দক্ষ রেজিন আর্টিসানরা ফুল সাজিয়ে বাবল-ফ্রি ইউভি ক্রিস্টাল ইপোক্সি ঢালেন, ৭২ ঘণ্টা সময় নিয়ে নিখুঁতভাবে কিউরিং ও ডায়মন্ড হ্যান্ড-পলিশ করেন।',
+      title: howSettings?.step3Title || 'আর্টিসান কাস্টিং ও ৭২ ঘণ্টা কিউরিং',
+      desc: howSettings?.step3Desc || 'আমাদের দক্ষ রেজিন আর্টিসানরা ফুল সাজিয়ে বাবল-ফ্রি ইউভি ক্রিস্টাল ইপোক্সি ঢালেন, ৭২ ঘণ্টা সময় নিয়ে নিখুঁতভাবে কিউরিং ও ডায়মন্ড হ্যান্ড-পলিশ করেন।',
       highlights: ['৭২ ঘণ্টার ধীরস্থির কিউরিং', 'নন-ইয়েলোয়িং ক্রিস্টাল রেজিন', 'হস্তনির্মিত ডায়মন্ড পলিশিং']
     },
     {
       step: '০৪',
       icon: Truck,
-      title: 'হোম ডেলিভারি ও ক্যাশ অন ডেলিভারি',
-      desc: 'বাবল র‍্যাপ ও আকর্ষণীয় গিফট বক্সে নিরাপদে প্যাক করে সারা বাংলাদেশের যেকোনো প্রান্তে আপনার ঠিকানায় হোম ডেলিভারি করা হয়। বাকি টাকা কুরিয়ারকে পরিশোধ করুন।',
+      title: howSettings?.step4Title || 'হোম ডেলিভারি ও ক্যাশ অন ডেলিভারি',
+      desc: howSettings?.step4Desc || 'বাবল র‍্যাপ ও আকর্ষণীয় গিফট বক্সে নিরাপদে প্যাক করে সারা বাংলাদেশের যেকোনো প্রান্তে আপনার ঠিকানায় হোম ডেলিভারি করা হয়। বাকি টাকা কুরিয়ারকে পরিশোধ করুন।',
       highlights: ['স্টেডফাস্ট ও পাঠাও কুরিয়ার', 'ঢাকা সিটিতে ২-৩ দিন', 'ঢাকার বাইরে ৩-৫ দিন']
     }
   ];
@@ -96,16 +100,16 @@ export const HowToOrderPage: React.FC = () => {
         </div>
 
         {/* Page Hero Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
+        <div id="how-to-order-hero" className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center space-x-1.5 text-xs font-bold uppercase tracking-wider text-amber-900 mb-2 bg-[#DFD8C7] px-3.5 py-1 rounded-full border border-[#D3CBBA]">
             <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-            <span>সারা বাংলাদেশে ক্যাশ অন ডেলিভারি সুবিধা</span>
+            <span>{howSettings?.badge || 'সারা বাংলাদেশে ক্যাশ অন ডেলিভারি সুবিধা'}</span>
           </div>
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-zinc-900 tracking-tight mt-3 leading-tight">
-            সহজ ৪ ধাপে অর্ডার করার নিয়ম
+            {howSettings?.title || 'সহজ ৪ ধাপে অর্ডার করার নিয়ম'}
           </h1>
           <p className="mt-4 text-sm sm:text-base text-zinc-600 leading-relaxed max-w-2xl mx-auto">
-            হস্তনির্মিত ক্রিস্টাল রেজিন ও সংরক্ষিত ফুলের কিপসেক সারা বাংলাদেশে আপনার ঠিকানায় পৌঁছে দিতে মাত্র ৫০ টাকা অগ্রিম টোকেনে সহজ ও নির্ভরযোগ্য অর্ডার প্রসেস।
+            {howSettings?.subtitle || 'হস্তনির্মিত ক্রিস্টাল রেজিন ও সংরক্ষিত ফুলের কিপসেক সারা বাংলাদেশে আপনার ঠিকানায় পৌঁছে দিতে মাত্র ৫০ টাকা অগ্রিম টোকেনে সহজ ও নির্ভরযোগ্য অর্ডার প্রসেস।'}
           </p>
         </div>
 

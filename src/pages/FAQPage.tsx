@@ -14,8 +14,12 @@ import {
   Heart 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useStore } from '../context/StoreContext';
 
 export const FAQPage: React.FC = () => {
+  const { websiteSettings } = useStore();
+  const faqSettings = websiteSettings?.faqPage;
+
   const [openIdx, setOpenIdx] = useState<number | null>(0);
   const [selectedCat, setSelectedCat] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -70,16 +74,16 @@ export const FAQPage: React.FC = () => {
         </div>
 
         {/* Page Hero Header */}
-        <div className="text-center mb-10">
+        <div id="faq-hero" className="text-center mb-10">
           <div className="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-600/20 text-amber-900 text-xs font-bold uppercase tracking-wider mb-3">
             <HelpCircle className="w-3.5 h-3.5 text-amber-700" />
-            <span>কাস্টমার সাপোর্ট ও গাইডলাইন</span>
+            <span>{faqSettings?.badge || 'কাস্টমার সাপোর্ট ও গাইডলাইন'}</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-zinc-900 tracking-tight leading-tight">
-            সাধারণ জিজ্ঞাসা ও প্রশ্নোত্তর (FAQ)
+            {faqSettings?.title || 'সাধারণ জিজ্ঞাসা ও প্রশ্নোত্তর (FAQ)'}
           </h1>
           <p className="mt-3 text-xs sm:text-sm text-zinc-600 max-w-xl mx-auto leading-relaxed">
-            Meltsparkle হস্তনির্মিত রেজিন প্রোডাক্ট, বিয়ের ফুল সংরক্ষণ, কুরিয়ার ডেলিভারি ও রেজিনের যত্ন সম্পর্কিত প্রয়োজনীয় সব তথ্যের উত্তর এখানে পেয়ে যাবেন।
+            {faqSettings?.subtitle || 'Meltsparkle হস্তনির্মিত রেজিন প্রোডাক্ট, বিয়ের ফুল সংরক্ষণ, কুরিয়ার ডেলিভারি ও রেজিনের যত্ন সম্পর্কিত প্রয়োজনীয় সব তথ্যের উত্তর এখানে পেয়ে যাবেন।'}
           </p>
         </div>
 
@@ -93,7 +97,7 @@ export const FAQPage: React.FC = () => {
               setSearchQuery(e.target.value);
               setOpenIdx(0);
             }}
-            placeholder="Search questions or keywords (e.g. flower preservation, delivery, gold leaf)..."
+            placeholder={faqSettings?.searchPlaceholder || 'Search questions or keywords (e.g. flower preservation, delivery, gold leaf)...'}
             className="w-full bg-[#DFD8C7] hover:bg-[#DCD4C2] focus:bg-[#DFD8C7] border border-[#D3CBBA] rounded-full py-3 pl-11 pr-4 text-xs sm:text-sm text-zinc-900 placeholder:text-zinc-500/80 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-all shadow-xs"
           />
         </div>
@@ -219,17 +223,17 @@ export const FAQPage: React.FC = () => {
         </div>
 
         {/* Still Have Questions Banner */}
-        <div className="mt-12 text-center p-6 sm:p-8 rounded-3xl bg-[#DFD8C7] border border-[#D3CBBA] flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+        <div id="faq-support" className="mt-12 text-center p-6 sm:p-8 rounded-3xl bg-[#DFD8C7] border border-[#D3CBBA] flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="text-left max-w-md">
             <div className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-amber-900 mb-1">
               <Sparkles className="w-3.5 h-3.5 text-amber-700" />
               <span>সরাসরি আর্টিসান সাপোর্ট</span>
             </div>
             <h3 className="text-xl sm:text-2xl font-bold text-zinc-900">
-              বিশেষ কোনো প্রশ্ন আছে কি?
+              {faqSettings?.supportTitle || 'বিশেষ কোনো প্রশ্ন আছে কি?'}
             </h3>
             <p className="text-xs sm:text-sm text-zinc-700 mt-1">
-              বিয়ের মালা পাঠানোর নিয়ম, কাস্টম ফ্রেম সাইজ বা জরুরি ডেলিভারি সংক্রান্ত যেকোনো তথ্যে আমাদের টিম হোয়াটসঅ্যাপ ও ফেসবুকে সহায়তার জন্য প্রস্তুত।
+              {faqSettings?.supportSubtitle || 'বিয়ের মালা পাঠানোর নিয়ম, কাস্টম ফ্রেম সাইজ বা জরুরি ডেলিভারি সংক্রান্ত যেকোনো তথ্যে আমাদের টিম হোয়াটসঅ্যাপ ও ফেসবুকে সহায়তার জন্য প্রস্তুত।'}
             </p>
           </div>
 

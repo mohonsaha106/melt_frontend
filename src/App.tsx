@@ -29,6 +29,16 @@ export const AppContent: React.FC = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
 
+  // Notify parent admin preview studio if inside preview iframe
+  React.useEffect(() => {
+    if (typeof window !== 'undefined' && window.self !== window.top) {
+      window.parent.postMessage({
+        type: 'MELT_PREVIEW_ROUTE_CHANGE',
+        pathname: location.pathname + location.search
+      }, '*');
+    }
+  }, [location.pathname, location.search]);
+
   // Pure Admin Dashboard Interface (isolated from customer shop chrome)
   if (isAdminRoute) {
     return (

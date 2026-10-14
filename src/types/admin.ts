@@ -104,6 +104,46 @@ export interface WebsiteSectionsSettings {
     title: string;
     subtitle: string;
   };
+  // 9. How To Order Page
+  howToOrder?: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    step1Title: string;
+    step1Desc: string;
+    step2Title: string;
+    step2Desc: string;
+    step3Title: string;
+    step3Desc: string;
+    step4Title: string;
+    step4Desc: string;
+  };
+  // 10. FAQ Page
+  faqPage?: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    searchPlaceholder: string;
+    supportTitle: string;
+    supportSubtitle: string;
+  };
+  // 11. About Atelier Page
+  aboutPage?: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    stat1Value: string;
+    stat1Label: string;
+    stat2Value: string;
+    stat2Label: string;
+    stat3Value: string;
+    stat3Label: string;
+    stat4Value: string;
+    stat4Label: string;
+    contactEmail: string;
+    contactLocation: string;
+    workingHours: string;
+  };
 }
 
 export interface StoreSettings {

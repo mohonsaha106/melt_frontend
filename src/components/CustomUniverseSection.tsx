@@ -45,13 +45,13 @@ export const CustomUniverseSection: React.FC = () => {
               </div>
 
               <span className="text-xs font-bold tracking-wider text-zinc-500 uppercase">
-                সার্ভিস ০১
+                {websiteSettings?.customUniverse?.card1Subtitle || 'সার্ভিস ০১'}
               </span>
               <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1 mb-3">
-                কাস্টম নাম ও মনোগ্রাম
+                {websiteSettings?.customUniverse?.card1Title || 'কাস্টম নাম ও মনোগ্রাম'}
               </h3>
               <p className="text-sm text-zinc-600 leading-relaxed max-w-sm">
-                আপনার নাম, নিজস্ব বা কাপল ইনিশিয়াল কাস্ট করা হবে ২৪ ক্যারেট গোল্ড লিফ, ন্যাচারাল ফুল ও গ্লোয়িং এলইডি উডেন বেসের সাথে।
+                {websiteSettings?.customUniverse?.card1Description || 'আপনার নাম, নিজস্ব বা কাপল ইনিশিয়াল কাস্ট করা হবে ২৪ ক্যারেট গোল্ড লিফ, ন্যাচারাল ফুল ও গ্লোয়িং এলইডি উডেন বেসের সাথে।'}
               </p>
             </div>
 
@@ -84,13 +84,13 @@ export const CustomUniverseSection: React.FC = () => {
               </div>
 
               <span className="text-xs font-bold tracking-wider text-zinc-500 uppercase">
-                সার্ভিস ০২
+                {websiteSettings?.customUniverse?.card2Subtitle || 'সার্ভিস ০২'}
               </span>
               <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 mt-1 mb-3">
-                বিয়ের মালা ও ফুল সংরক্ষণ
+                {websiteSettings?.customUniverse?.card2Title || 'বিয়ের মালা ও ফুল সংরক্ষণ'}
               </h3>
               <p className="text-sm text-zinc-600 leading-relaxed max-w-sm">
-                আমাদের কাছে পাঠিয়ে দিন আপনার বিয়ের মালা বা বিশেষ স্মৃতির ফুল। আমরা নিখুঁতভাবে ডিহাইড্রেট করে ক্রিস্টাল রেজিনে আজীবনের জন্য সংরক্ষণ করব।
+                {websiteSettings?.customUniverse?.card2Description || 'আমাদের কাছে পাঠিয়ে দিন আপনার বিয়ের মালা বা বিশেষ স্মৃতির ফুল। আমরা নিখুঁতভাবে ডিহাইড্রেট করে ক্রিস্টাল রেজিনে আজীবনের জন্য সংরক্ষণ করব।'}
               </p>
             </div>
 

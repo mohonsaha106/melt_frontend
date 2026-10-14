@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAdmin } from '../context/AdminContext';
+import { useStore } from '../context/StoreContext';
 import { 
   Sparkles, 
   ArrowLeft, 
@@ -19,6 +20,8 @@ import {
 
 export const AboutPage: React.FC = () => {
   const { addInquiry } = useAdmin();
+  const { websiteSettings } = useStore();
+  const aboutSettings = websiteSettings?.aboutPage;
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -73,18 +76,22 @@ export const AboutPage: React.FC = () => {
         </div>
 
         {/* 1. Hero Brand Narrative */}
-        <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
+        <div id="about-hero" className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
           <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-600/20 text-amber-900 text-xs font-bold uppercase tracking-wider mb-4">
             <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-            <span>আমাদের গল্প ও লক্ষ্য</span>
+            <span>{aboutSettings?.badge || 'আমাদের গল্প ও লক্ষ্য'}</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-zinc-900 tracking-tight leading-[1.2]">
-            স্মৃতিকে চিরজীবন্ত রাখতে হস্তনির্মিত রেজিন শিল্প
+            {aboutSettings?.title || 'স্মৃতিকে চিরজীবন্ত রাখতে হস্তনির্মিত রেজিন শিল্প'}
           </h1>
 
           <p className="mt-6 text-sm sm:text-base md:text-lg text-zinc-700 leading-relaxed max-w-2xl mx-auto">
-            Meltsparkle-এর যাত্রা শুরু একটি আন্তরিক অঙ্গীকার নিয়ে: <strong className="text-zinc-900 font-bold">স্মৃতি থাকুক চিরসবুজ!</strong> বিয়ের মালা, প্রিয়জনের তোড়া থেকে শুরু করে কাস্টম মনোগ্রাম কিচেন, জিওড রেজিন ক্লক ও জুয়েলারি — প্রতিটি স্মৃতিচিহ্ন আমরা উন্নত ক্রিস্টাল রেজিন, আসল ফুল ও নিপুণ হাতের কারুকাজে বাংলাদেশে তৈরি করি।
+            {aboutSettings?.subtitle || (
+              <>
+                Meltsparkle-এর যাত্রা শুরু একটি আন্তরিক অঙ্গীকার নিয়ে: <strong className="text-zinc-900 font-bold">স্মৃতি থাকুক চিরসবুজ!</strong> বিয়ের মালা, প্রিয়জনের তোড়া থেকে শুরু করে কাস্টম মনোগ্রাম কিচেন, জিওড রেজিন ক্লক ও জুয়েলারি — প্রতিটি স্মৃতিচিহ্ন আমরা উন্নত ক্রিস্টাল রেজিন, আসল ফুল ও নিপুণ হাতের কারুকাজে বাংলাদেশে তৈরি করি।
+              </>
+            )}
           </p>
         </div>
 
@@ -92,20 +99,36 @@ export const AboutPage: React.FC = () => {
         <div className="bg-[#DFD8C7] rounded-3xl p-6 sm:p-10 border border-[#D3CBBA] shadow-sm mb-16 sm:mb-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center divide-y sm:divide-y-0 sm:divide-x divide-[#D3CBBA]">
             <div className="pt-3 sm:pt-0">
-              <div className="text-3xl sm:text-4xl font-extrabold text-zinc-900">১০০%</div>
-              <div className="text-xs font-bold uppercase tracking-wider text-zinc-600 mt-1">হাতে তৈরি শিল্প</div>
+              <div className="text-3xl sm:text-4xl font-extrabold text-zinc-900">
+                {aboutSettings?.stat1Value || '১০০%'}
+              </div>
+              <div className="text-xs font-bold uppercase tracking-wider text-zinc-600 mt-1">
+                {aboutSettings?.stat1Label || 'হাতে তৈরি শিল্প'}
+              </div>
             </div>
             <div className="pt-3 sm:pt-0">
-              <div className="text-3xl sm:text-4xl font-extrabold text-amber-900">১৫,০০০+</div>
-              <div className="text-xs font-bold uppercase tracking-wider text-zinc-600 mt-1">সংরক্ষিত স্মৃতি</div>
+              <div className="text-3xl sm:text-4xl font-extrabold text-amber-900">
+                {aboutSettings?.stat2Value || '১৫,০০০+'}
+              </div>
+              <div className="text-xs font-bold uppercase tracking-wider text-zinc-600 mt-1">
+                {aboutSettings?.stat2Label || 'সংরক্ষিত স্মৃতি'}
+              </div>
             </div>
             <div className="pt-3 sm:pt-0">
-              <div className="text-3xl sm:text-4xl font-extrabold text-zinc-900">৬৪</div>
-              <div className="text-xs font-bold uppercase tracking-wider text-zinc-600 mt-1">জেলায় ডেলিভারি</div>
+              <div className="text-3xl sm:text-4xl font-extrabold text-zinc-900">
+                {aboutSettings?.stat3Value || '৬৪'}
+              </div>
+              <div className="text-xs font-bold uppercase tracking-wider text-zinc-600 mt-1">
+                {aboutSettings?.stat3Label || 'জেলায় ডেলিভারি'}
+              </div>
             </div>
             <div className="pt-3 sm:pt-0">
-              <div className="text-3xl sm:text-4xl font-extrabold text-emerald-900">৪.৯ / ৫.০</div>
-              <div className="text-xs font-bold uppercase tracking-wider text-zinc-600 mt-1">গ্রাহক সন্তুষ্টি</div>
+              <div className="text-3xl sm:text-4xl font-extrabold text-emerald-900">
+                {aboutSettings?.stat4Value || '৪.৯ / ৫.০'}
+              </div>
+              <div className="text-xs font-bold uppercase tracking-wider text-zinc-600 mt-1">
+                {aboutSettings?.stat4Label || 'গ্রাহক সন্তুষ্টি'}
+              </div>
             </div>
           </div>
         </div>
@@ -229,12 +252,12 @@ export const AboutPage: React.FC = () => {
               </a>
 
               {/* Email & Phone Card */}
-              <div className="p-5 rounded-2xl bg-[#F2EDE2] border border-[#D3CBBA] space-y-3.5 shadow-2xs">
+              <div id="about-contact" className="p-5 rounded-2xl bg-[#F2EDE2] border border-[#D3CBBA] space-y-3.5 shadow-2xs">
                 <div className="flex items-start space-x-3.5">
                   <Mail className="w-4 h-4 text-amber-800 mt-0.5" />
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 block">ইমেইল ঠিকানা</span>
-                    <span className="text-xs sm:text-sm font-semibold text-zinc-900">contact@meltsparkle.com</span>
+                    <span className="text-xs sm:text-sm font-semibold text-zinc-900">{aboutSettings?.contactEmail || 'contact@meltsparkle.com'}</span>
                   </div>
                 </div>
 
@@ -242,7 +265,7 @@ export const AboutPage: React.FC = () => {
                   <MapPin className="w-4 h-4 text-amber-800 mt-0.5" />
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 block">স্টুডিও ও ওয়ার্কশপ</span>
-                    <span className="text-xs sm:text-sm font-semibold text-zinc-900">ঢাকা, বাংলাদেশ (সারা দেশে কুরিয়ার ডেলিভারি)</span>
+                    <span className="text-xs sm:text-sm font-semibold text-zinc-900">{aboutSettings?.contactLocation || 'ঢাকা, বাংলাদেশ (সারা দেশে কুরিয়ার ডেলিভারি)'}</span>
                   </div>
                 </div>
 
@@ -250,7 +273,7 @@ export const AboutPage: React.FC = () => {
                   <Clock className="w-4 h-4 text-amber-800 mt-0.5" />
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 block">কাস্টমার সার্ভিস সময়</span>
-                    <span className="text-xs sm:text-sm font-semibold text-zinc-900">শনিবার – বৃহস্পতিবার: সকাল ১০:০০ – রাত ৯:০০</span>
+                    <span className="text-xs sm:text-sm font-semibold text-zinc-900">{aboutSettings?.workingHours || 'শনিবার – বৃহস্পতিবার: সকাল ১০:০০ – রাত ৯:০০'}</span>
                   </div>
                 </div>
               </div>

@@ -79,7 +79,49 @@ const MINIMUM_ORDER_AMOUNT = 250;
 const FREE_SHIPPING_THRESHOLD = 1500;
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { products, categories, websiteSettings } = useAdmin();
+  const { products, categories, websiteSettings: adminWebsiteSettings } = useAdmin();
+
+  // Real-time preview settings support for admin device preview studio
+  const [previewSettings, setPreviewSettings] = useState<WebsiteSectionsSettings | null>(() => {
+    try {
+      const saved = localStorage.getItem('melt_admin_website_settings_preview');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'MELT_PREVIEW_SETTINGS_UPDATE' && event.data.settings) {
+        setPreviewSettings(event.data.settings);
+      } else if (event.data?.type === 'MELT_PREVIEW_SCROLL_TO' && event.data.sectionId) {
+        const el = document.getElementById(event.data.sectionId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    };
+
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === 'melt_admin_website_settings_preview') {
+        try {
+          setPreviewSettings(e.newValue ? JSON.parse(e.newValue) : null);
+        } catch {
+          // ignore
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    window.addEventListener('storage', handleStorage);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      window.removeEventListener('storage', handleStorage);
+    };
+  }, []);
+
+  const websiteSettings = previewSettings || adminWebsiteSettings;
 
   // Load Cart from localStorage
   const [cart, setCart] = useState<CartItem[]>(() => {

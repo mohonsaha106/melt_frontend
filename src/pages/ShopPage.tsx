@@ -209,9 +209,10 @@ export const ShopPage: React.FC = () => {
         </div>
 
         {/* Reusable Search & Filter Component */}
-        <div className="mb-8">
+        <div id="shop-catalog" className="mb-8">
           <SearchFilterBar
             title={websiteSettings?.shopPage?.title || 'The Complete Keepsake Collection'}
+            subtitle={websiteSettings?.shopPage?.subtitle || 'Explore authentic handcrafted resin treasures, botanicals, and bespoke memory art.'}
             itemCount={processedProducts.length}
             itemCountLabel="handcrafted pieces available"
             searchValue={shopSearch}

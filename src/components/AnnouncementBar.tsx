@@ -23,7 +23,7 @@ export const AnnouncementBar: React.FC = () => {
     : baseAnnouncements;
 
   return (
-    <div className="bg-[#0A0A0A] text-[#E5E5E5] text-xs font-medium tracking-wide py-2.5 overflow-hidden border-b border-zinc-800/80 select-none z-50 relative font-bengali">
+    <div id="announcement-bar" className="bg-[#0A0A0A] text-[#E5E5E5] text-xs font-medium tracking-wide py-2.5 overflow-hidden border-b border-zinc-800/80 select-none z-50 relative font-bengali">
       <div className="animate-marquee-smooth flex items-center space-x-8 whitespace-nowrap">
         {announcements.concat(announcements).map((item, idx) => {
           const Icon = item.icon;
