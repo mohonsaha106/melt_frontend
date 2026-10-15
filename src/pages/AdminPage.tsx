@@ -4,6 +4,7 @@ import { AdminLayout } from '../components/admin/AdminLayout';
 import { AdminOverview } from '../components/admin/AdminOverview';
 import { AdminCategories } from '../components/admin/AdminCategories';
 import { AdminProducts } from '../components/admin/AdminProducts';
+import { AdminReviews } from '../components/admin/AdminReviews';
 import { AdminSettings } from '../components/admin/AdminSettings';
 import { AdminTab } from '../types/admin';
 
@@ -39,6 +40,7 @@ export const AdminPage: React.FC = () => {
       {currentTab === 'overview' && <AdminOverview onNavigateTab={handleTabChange} />}
       {currentTab === 'categories' && <AdminCategories />}
       {currentTab === 'products' && <AdminProducts />}
+      {currentTab === 'reviews' && <AdminReviews />}
       {currentTab === 'settings' && <AdminSettings />}
     </AdminLayout>
   );

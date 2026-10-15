@@ -6,7 +6,8 @@ import {
   StoreSettings, 
   OrderStatus,
   CategoryItem,
-  WebsiteSectionsSettings 
+  WebsiteSectionsSettings,
+  AdminReview
 } from '../types/admin';
 import { Product } from '../types';
 import { PRODUCTS } from '../data/products';
@@ -16,7 +17,8 @@ import {
   INITIAL_PROMO_CODES, 
   INITIAL_STORE_SETTINGS,
   INITIAL_CATEGORIES,
-  INITIAL_WEBSITE_SECTIONS 
+  INITIAL_WEBSITE_SECTIONS,
+  INITIAL_ADMIN_REVIEWS
 } from '../data/adminMockData';
 
 interface AdminContextType {
@@ -31,6 +33,12 @@ interface AdminContextType {
   addProduct: (product: Omit<Product, 'id'>) => Product;
   updateProduct: (product: Product) => void;
   deleteProduct: (productId: string) => void;
+
+  // Reviews
+  reviews: AdminReview[];
+  addReview: (review: Omit<AdminReview, 'id'>) => AdminReview;
+  updateReview: (review: AdminReview) => void;
+  deleteReview: (reviewId: string) => void;
 
   // Website Settings (User Item 5: Controls all titles & subtitles of frontend sections)
   websiteSettings: WebsiteSectionsSettings;
@@ -75,6 +83,7 @@ interface AdminContextType {
     deliveredOrders: number;
     totalProducts: number;
     totalCategories: number;
+    totalReviews: number;
     newInquiriesCount: number;
     activePromosCount: number;
   };
@@ -110,6 +119,24 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       return saved ? JSON.parse(saved) : PRODUCTS;
     } catch {
       return PRODUCTS;
+    }
+  });
+
+  // Reviews State
+  const [reviews, setReviews] = useState<AdminReview[]>(() => {
+    try {
+      const saved = localStorage.getItem('melt_admin_reviews');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          const existingIds = new Set(parsed.map((p: any) => p.id));
+          const missing = INITIAL_ADMIN_REVIEWS.filter(r => !existingIds.has(r.id));
+          return [...parsed, ...missing];
+        }
+      }
+      return INITIAL_ADMIN_REVIEWS;
+    } catch {
+      return INITIAL_ADMIN_REVIEWS;
     }
   });
 
@@ -169,6 +196,14 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     localStorage.setItem('melt_admin_website_settings', JSON.stringify(websiteSettings));
   }, [websiteSettings]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('melt_admin_reviews', JSON.stringify(reviews));
+    } catch (e) {
+      console.error('Failed to save reviews to localStorage', e);
+    }
+  }, [reviews]);
 
   useEffect(() => {
     localStorage.setItem('melt_admin_inquiries', JSON.stringify(inquiries));
@@ -304,6 +339,26 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setCategories(prev => prev.filter(c => c.id !== categoryId));
   };
 
+  // Review Handlers
+  const addReview = (reviewData: Omit<AdminReview, 'id'>): AdminReview => {
+    const newId = `rev-${Date.now()}`;
+    const newRev: AdminReview = {
+      ...reviewData,
+      id: newId,
+      date: reviewData.date || new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+    };
+    setReviews(prev => [newRev, ...prev]);
+    return newRev;
+  };
+
+  const updateReview = (updated: AdminReview) => {
+    setReviews(prev => prev.map(r => r.id === updated.id ? updated : r));
+  };
+
+  const deleteReview = (reviewId: string) => {
+    setReviews(prev => prev.filter(r => r.id !== reviewId));
+  };
+
   // Website Settings Handlers (User Item 5: Controls all titles & subtitles of frontend sections)
   const updateWebsiteSettings = (newSettings: Partial<WebsiteSectionsSettings>) => {
     setWebsiteSettings(prev => ({ ...prev, ...newSettings }));
@@ -331,6 +386,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setOrders(INITIAL_ADMIN_ORDERS);
     setProducts(PRODUCTS);
     setCategories(INITIAL_CATEGORIES);
+    setReviews(INITIAL_ADMIN_REVIEWS);
     setWebsiteSettings(INITIAL_WEBSITE_SECTIONS);
     setInquiries(INITIAL_CUSTOMER_INQUIRIES);
     setPromoCodes(INITIAL_PROMO_CODES);
@@ -338,6 +394,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     localStorage.removeItem('melt_admin_orders');
     localStorage.removeItem('melt_admin_categories');
     localStorage.removeItem('melt_admin_products');
+    localStorage.removeItem('melt_admin_reviews');
     localStorage.removeItem('melt_admin_website_settings');
     localStorage.removeItem('melt_admin_inquiries');
     localStorage.removeItem('melt_admin_promos');
@@ -364,10 +421,11 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       deliveredOrders,
       totalProducts: products.length,
       totalCategories: categories.length,
+      totalReviews: reviews.length,
       newInquiriesCount,
       activePromosCount
     };
-  }, [orders, products, categories, inquiries, promoCodes]);
+  }, [orders, products, categories, reviews, inquiries, promoCodes]);
 
   return (
     <AdminContext.Provider
@@ -380,6 +438,10 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         addProduct,
         updateProduct,
         deleteProduct,
+        reviews,
+        addReview,
+        updateReview,
+        deleteReview,
         websiteSettings,
         updateWebsiteSettings,
         updateSectionSettings,

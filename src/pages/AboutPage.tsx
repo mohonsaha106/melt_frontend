@@ -17,6 +17,7 @@ import {
   Send,
   Gem
 } from 'lucide-react';
+import { CustomSelect } from '../components/ui/CustomSelect';
 
 export const AboutPage: React.FC = () => {
   const { addInquiry } = useAdmin();
@@ -355,21 +356,21 @@ export const AboutPage: React.FC = () => {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-zinc-700 mb-1.5">
-                        ইনকোয়ারির বিষয়
-                      </label>
-                      <select
+                      <CustomSelect
+                        theme="cream"
+                        label="ইনকোয়ারির বিষয়"
                         value={formData.topic}
-                        onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
-                        className="w-full bg-[#DFD8C7] hover:bg-[#DCD4C2] focus:bg-[#DFD8C7] border border-[#D3CBBA] rounded-xl py-2.5 px-3.5 text-xs sm:text-sm text-zinc-900 focus:outline-none focus:border-black focus:ring-1 focus:ring-black cursor-pointer"
-                      >
-                        <option>বিয়ের ফুল ও মালা সংরক্ষণ</option>
-                        <option>কাস্টম মনোগ্রাম কিপসেক</option>
-                        <option>জিওড রেজিন ওয়াল ক্লক</option>
-                        <option>বেবি মাইলস্টোন কিপসেক</option>
-                        <option>কর্পোরেট ও বাল্ক উপহার</option>
-                        <option>সাধারণ জিজ্ঞাসা ও ডেলিভারি</option>
-                      </select>
+                        onChange={(val) => setFormData({ ...formData, topic: val })}
+                        buttonClassName="py-2.5 px-3.5 bg-[#DFD8C7] hover:bg-[#DCD4C2] border-[#D3CBBA]"
+                        options={[
+                          { value: 'বিয়ের ফুল ও মালা সংরক্ষণ', label: 'বিয়ের ফুল ও মালা সংরক্ষণ' },
+                          { value: 'কাস্টম মনোগ্রাম কিপসেক', label: 'কাস্টম মনোগ্রাম কিপসেক' },
+                          { value: 'জিওড রেজিন ওয়াল ক্লক', label: 'জিওড রেজিন ওয়াল ক্লক' },
+                          { value: 'বেবি মাইলস্টোন কিপসেক', label: 'বেবি মাইলস্টোন কিপসেক' },
+                          { value: 'কর্পোরেট ও বাল্ক উপহার', label: 'কর্পোরেট ও বাল্ক উপহার' },
+                          { value: 'সাধারণ জিজ্ঞাসা ও ডেলিভারি', label: 'সাধারণ জিজ্ঞাসা ও ডেলিভারি' }
+                        ]}
+                      />
                     </div>
                   </div>
 

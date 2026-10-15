@@ -1,4 +1,4 @@
-import { AdminOrder, CustomerInquiry, PromoCode, StoreSettings, CategoryItem, WebsiteSectionsSettings } from '../types/admin';
+import { AdminOrder, CustomerInquiry, PromoCode, StoreSettings, CategoryItem, WebsiteSectionsSettings, AdminReview } from '../types/admin';
 
 export const INITIAL_ADMIN_ORDERS: AdminOrder[] = [
   {
@@ -469,4 +469,223 @@ export const INITIAL_WEBSITE_SECTIONS: WebsiteSectionsSettings = {
     workingHours: 'শনিবার – বৃহস্পতিবার: সকাল ১০:০০ – রাত ৯:০০'
   }
 };
+
+export const INITIAL_ADMIN_REVIEWS: AdminReview[] = [
+  {
+    id: 'rev-1',
+    author: 'Tasnim Farhana',
+    rating: 5,
+    comment: 'I sent Meltsparkle my wedding garland and reception roses. The 10-inch preservation frame turned out beyond breathtaking! The crystal resin clarity and gold leaf details will keep my wedding memories alive forever.',
+    imageUrl: '/reviews/review-1.jpg',
+    productUrl: '/#products',
+    productName: 'Wedding Garland & Flower Preservation Frame',
+    likes: 942,
+    date: '12 Oct 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-2',
+    author: 'Sadia Jahan',
+    rating: 5,
+    comment: 'Ordered custom initial keychains for my bridesmaids with their favorite dried flowers and 24K gold foil. Everyone was obsessed with the glass-like finish. Fast delivery and secure packaging!',
+    imageUrl: '/reviews/550887156_122140264028658912_2420151643039578278_n.jpg',
+    productUrl: '/#products',
+    productName: '24K Gold Leaf Initial Monogram Keychain',
+    likes: 835,
+    date: '10 Oct 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-3',
+    author: 'Tanvir Ahmed',
+    rating: 5,
+    comment: 'The emerald and gold geode wall clock looks ultra-luxurious in our living room. You can tell real artistic craftsmanship went into every swirl and crushed crystal vein.',
+    imageUrl: '/reviews/548275486_122139653252658912_1171929115424733035_n.jpg',
+    productUrl: '/#products',
+    productName: 'Royal Emerald & Gold Geode Resin Wall Clock',
+    likes: 1120,
+    date: '08 Oct 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-4',
+    author: 'Nafisa Tabassum',
+    rating: 5,
+    comment: 'Purchased the Ocean Wave coaster set and the wildflower bookmark. The water effect with real seafoam is hypnotic! The ৳50 advance COD process was very smooth.',
+    imageUrl: '/reviews/550325310_122140266320658912_7231201057920921566_n.jpg',
+    productUrl: '/#products',
+    productName: 'Ocean Wave Resin Coasters (Set of 4)',
+    likes: 674,
+    date: '05 Oct 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-5',
+    author: 'Farzana Chowdhury',
+    rating: 5,
+    comment: 'Preserving our newborn’s hospital band and first curl in a crystal resin cube. Meltsparkle handled our delicate memories with so much care. Truly keeping memories alive!',
+    imageUrl: '/reviews/547892469_122139653288658912_6983553257105059459_n.jpg',
+    productUrl: '/#products',
+    productName: 'Baby Milestone Keepsake Memory Cube',
+    likes: 512,
+    date: '01 Oct 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-6',
+    author: 'Ishrat Jahan Mim',
+    rating: 5,
+    comment: 'The floral bookmarks and trinket ring trays are so delicate and pretty! Perfect for gifting friends and family on special occasions.',
+    imageUrl: '/reviews/530862365_122136102956658912_5285189544644175084_n.jpg',
+    productUrl: '/#products',
+    productName: 'Botanical Floral Resin Bookmarks',
+    likes: 785,
+    date: '28 Sep 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-7',
+    author: 'Rina Begum',
+    rating: 5,
+    comment: 'Handcrafted floral pendant and ring with pressed rose petals.',
+    imageUrl: '/reviews/529954523_122136102572658912_4395678324086200379_n.jpg',
+    productUrl: '/#products',
+    productName: 'Botanical Resin Pendant & Ring',
+    likes: 930,
+    date: '25 Sep 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-8',
+    author: 'Sultana Razia',
+    rating: 5,
+    comment: 'Custom jewelry gift box with dried red flowers and gold chain.',
+    imageUrl: '/reviews/530369802_122136102872658912_861243861180862681_n.jpg',
+    productUrl: '/#products',
+    productName: 'Rose Petal Drop Earrings & Necklace Set',
+    likes: 640,
+    date: '22 Sep 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-9',
+    author: 'Fabiha Rahman',
+    rating: 5,
+    comment: 'Starry Night van gogh inspired resin locket pendants.',
+    imageUrl: '/reviews/530737022_122136102914658912_6299992063989738786_n.jpg',
+    productUrl: '/#products',
+    productName: 'Starry Night Celestial Resin Pendant',
+    likes: 495,
+    date: '18 Sep 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-10',
+    author: 'Anika Bushra',
+    rating: 5,
+    comment: 'Delicate resin ring with gold flake and blossom.',
+    imageUrl: '/reviews/530825121_122136104126658912_725598718912369336_n.jpg',
+    productUrl: '/#products',
+    productName: 'Golden Petal Resin Ring',
+    likes: 820,
+    date: '15 Sep 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-11',
+    author: 'Mehnaz Parveen',
+    rating: 5,
+    comment: 'Floral bookmarks and resin keychains.',
+    imageUrl: '/reviews/531991485_122136103058658912_9082694112449445704_n.jpg',
+    productUrl: '/#products',
+    productName: 'Floral Keepsake Bookmarks',
+    likes: 560,
+    date: '12 Sep 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-12',
+    author: 'Sabrina Hossain',
+    rating: 5,
+    comment: 'Customer message praising resin tray and jewelry piece.',
+    imageUrl: '/reviews/531472350_122136104528658912_2534129853920902118_n.jpg',
+    productUrl: '/#products',
+    productName: 'Custom Resin Trinket Tray',
+    likes: 730,
+    date: '10 Sep 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-13',
+    author: 'Lamia Islam',
+    rating: 5,
+    comment: 'WhatsApp review feedback on keepsake preservation.',
+    imageUrl: '/reviews/530195238_122136103994658912_7719482844536378395_n.jpg',
+    productUrl: '/#products',
+    productName: 'Preserved Garland Keepsake Frame',
+    likes: 685,
+    date: '08 Sep 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-14',
+    author: 'Nabila Karim',
+    rating: 5,
+    comment: 'Custom wedding card flower preservation in heart resin.',
+    imageUrl: '/reviews/530673008_122136104222658912_2292925792137403542_n.jpg',
+    productUrl: '/#products',
+    productName: 'Resin Keepsake Heart Ornament',
+    likes: 890,
+    date: '05 Sep 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-15',
+    author: 'Samira Haque',
+    rating: 5,
+    comment: 'Review conversation praising packing and fast courier.',
+    imageUrl: '/reviews/530234762_122136105134658912_7891032009791287219_n.jpg',
+    productUrl: '/#products',
+    productName: 'Handcrafted Resin Keepsake Gift Set',
+    likes: 615,
+    date: '02 Sep 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-16',
+    author: 'Shirin Akter',
+    rating: 5,
+    comment: 'Customer feedback on gold monogram keyring.',
+    imageUrl: '/reviews/530648732_122136103772658912_7197471774068674529_n.jpg',
+    productUrl: '/#products',
+    productName: 'Gold Monogram Initial Keychain',
+    likes: 540,
+    date: '29 Aug 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-17',
+    author: 'Maliha Tabassum',
+    rating: 5,
+    comment: 'Unboxing review photo of preserved roses.',
+    imageUrl: '/reviews/531826935_122136562982658912_6635618904649876606_n.jpg',
+    productUrl: '/#products',
+    productName: 'Preserved Floral Keepsake Dome',
+    likes: 760,
+    date: '25 Aug 2026',
+    verifiedPurchase: true
+  },
+  {
+    id: 'rev-18',
+    author: 'Sumaiya Hasan',
+    rating: 5,
+    comment: 'Baby milestone footprint preservation review.',
+    imageUrl: '/reviews/533073547_122136562988658912_7621633534969610494_n.jpg',
+    productUrl: '/#products',
+    productName: 'Baby Milestone Keepsake Block',
+    likes: 690,
+    date: '20 Aug 2026',
+    verifiedPurchase: true
+  }
+];
 

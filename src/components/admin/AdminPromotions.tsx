@@ -7,6 +7,7 @@ import {
   Bell, 
   X 
 } from 'lucide-react';
+import { CustomSelect } from '../ui/CustomSelect';
 
 export const AdminPromotions: React.FC = () => {
   const { promoCodes, addPromoCode, togglePromoCode, deletePromoCode, settings, updateSettings } = useAdmin();
@@ -234,17 +235,16 @@ export const AdminPromotions: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-zinc-400 mb-1 font-semibold">Discount Type</label>
-                  <select
-                    value={newPromo.discountType}
-                    onChange={(e) => setNewPromo({ ...newPromo, discountType: e.target.value as 'percentage' | 'fixed' })}
-                    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-rose-400"
-                  >
-                    <option value="percentage">Percentage (%)</option>
-                    <option value="fixed">Fixed BDT (৳)</option>
-                  </select>
-                </div>
+                <CustomSelect
+                  theme="dark"
+                  label="Discount Type"
+                  value={newPromo.discountType}
+                  onChange={(val) => setNewPromo({ ...newPromo, discountType: val as 'percentage' | 'fixed' })}
+                  options={[
+                    { value: 'percentage', label: 'Percentage (%)' },
+                    { value: 'fixed', label: 'Fixed BDT (৳)' }
+                  ]}
+                />
 
                 <div>
                   <label className="block text-zinc-400 mb-1 font-semibold">Discount Value *</label>

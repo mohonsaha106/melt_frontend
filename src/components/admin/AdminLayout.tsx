@@ -13,7 +13,8 @@ import {
   Bell, 
   Search,
   ChevronsUpDown,
-  X
+  X,
+  Star
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -91,6 +92,12 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           label: 'Products', 
           icon: Package,
           badge: metrics.totalProducts
+        },
+        { 
+          id: 'reviews', 
+          label: 'Reviews', 
+          icon: Star,
+          badge: metrics.totalReviews
         }
       ]
     },
@@ -114,6 +121,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
         return 'Categories';
       case 'products':
         return 'Products';
+      case 'reviews':
+        return 'Customer Reviews';
       case 'settings':
         return 'Website Settings';
       default:

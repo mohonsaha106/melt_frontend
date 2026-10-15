@@ -24,8 +24,8 @@ export type TattooCategory =
 export type ResinCategory = TattooCategory;
 
 export interface ProductSizeOption {
-  size: 'S' | 'M' | 'L' | 'Pack';
-  dimensions: string;
+  size: string;
+  dimensions?: string;
   price: number;
   isRecommended?: boolean;
 }
@@ -42,10 +42,11 @@ export interface Product {
   reviewCount: number;
   imageUrl: string;
   images?: string[];
+  secondaryImages?: string[];
   svgIcon?: string;
   description: string;
   placements: Placement[];
-  durability: string;
+  durability?: string;
   sizes: ProductSizeOption[];
   isCustomizable?: boolean;
   isFreeGiftEligible?: boolean;
@@ -57,7 +58,7 @@ export interface CartItem {
   name: string;
   sku: string;
   imageUrl: string;
-  size: 'S' | 'M' | 'L' | 'Pack';
+  size: string;
   price: number;
   quantity: number;
   isFreeGift?: boolean;

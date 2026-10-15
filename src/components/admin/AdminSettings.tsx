@@ -32,6 +32,7 @@ import {
   MessageSquare,
   Info
 } from 'lucide-react';
+import { CustomSelect } from '../ui/CustomSelect';
 
 type DeviceType = 'desktop' | 'tablet' | 'mobile';
 type DeviceOrientation = 'portrait' | 'landscape';
@@ -2052,17 +2053,17 @@ export const AdminSettings: React.FC = () => {
             <div className="flex-1 max-w-md hidden md:flex items-center space-x-1.5 bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1 text-slate-300">
               <Lock className="w-3 h-3 text-emerald-400 shrink-0" />
               <span className="text-[11px] text-slate-500 font-mono">meltsparkle.com</span>
-              <select
+              <CustomSelect
+                theme="dark"
                 value={previewRoute}
-                onChange={(e) => handleRouteChange(e.target.value)}
-                className="bg-transparent text-xs text-white font-medium focus:outline-none cursor-pointer flex-1"
-              >
-                {PREVIEW_ROUTES.map((route) => (
-                  <option key={route.path} value={route.path} className="bg-slate-900 text-white">
-                    {route.path} ({route.label})
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => handleRouteChange(val)}
+                className="flex-1"
+                buttonClassName="bg-transparent border-0 py-0.5 px-1.5 text-xs text-white shadow-none focus:ring-0"
+                options={PREVIEW_ROUTES.map((route) => ({
+                  value: route.path,
+                  label: `${route.path} (${route.label})`
+                }))}
+              />
 
               <button
                 type="button"
@@ -2098,20 +2099,22 @@ export const AdminSettings: React.FC = () => {
               )}
 
               {/* Scale / Zoom Preset Selector */}
-              <select
+              <CustomSelect
+                theme="dark"
                 value={previewScaleMode}
-                onChange={(e) =>
-                  setPreviewScaleMode(e.target.value as 'fit' | '100' | '85' | '75' | '60')
+                onChange={(val) =>
+                  setPreviewScaleMode(val as 'fit' | '100' | '85' | '75' | '60')
                 }
-                className="bg-slate-900 border border-slate-800 text-slate-300 text-[11px] font-mono rounded-lg px-2 py-1 focus:outline-none cursor-pointer"
-                title="Preview Viewport Scaling"
-              >
-                <option value="fit">Auto Fit</option>
-                <option value="100">100%</option>
-                <option value="85">85%</option>
-                <option value="75">75%</option>
-                <option value="60">60%</option>
-              </select>
+                className="w-28"
+                buttonClassName="py-1 px-2 text-[11px] font-mono bg-slate-900 border-slate-800 text-slate-300"
+                options={[
+                  { value: 'fit', label: 'Auto Fit' },
+                  { value: '100', label: '100%' },
+                  { value: '85', label: '85%' },
+                  { value: '75', label: '75%' },
+                  { value: '60', label: '60%' }
+                ]}
+              />
 
               {/* Open in real customer storefront in new tab */}
               <a

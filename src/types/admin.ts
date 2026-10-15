@@ -42,6 +42,7 @@ export interface CategoryItem {
   name: string;
   categorySlug: string;
   image: string;
+  secondaryImages?: string[];
   subtitle?: string;
   badge?: string;
   priceText?: string;
@@ -162,8 +163,22 @@ export interface StoreSettings {
   announcementActive: boolean;
 }
 
+export interface AdminReview {
+  id: string;
+  author: string;
+  rating: number;
+  comment: string;
+  imageUrl: string;
+  productUrl?: string;
+  productName?: string;
+  likes?: number;
+  date: string;
+  verifiedPurchase?: boolean;
+}
+
 export type AdminTab = 
   | 'overview' 
   | 'categories' 
   | 'products' 
+  | 'reviews' 
   | 'settings';

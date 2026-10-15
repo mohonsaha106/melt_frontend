@@ -5,6 +5,7 @@ import { OrderDetails } from '../types';
 import { X, CheckCircle, ShieldCheck, ArrowRight, MessageCircle, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
+import { CustomSelect } from './ui/CustomSelect';
 
 const BD_DISTRICTS = [
   'Dhaka', 'Chattogram', 'Sylhet', 'Rajshahi', 'Khulna', 'Barishal', 'Rangpur', 'Mymensingh',
@@ -320,18 +321,19 @@ export const CheckoutModal: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[11px] font-medium text-zinc-700 mb-1">District *</label>
-                  <select
-                    value={district}
-                    onChange={(e) => setDistrict(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-[#F2EDE2] border border-black/15 rounded-xl text-xs font-medium text-[#111111] focus:outline-none focus:ring-1 focus:ring-black"
-                  >
-                    {BD_DISTRICTS.map((d) => (
-                      <option key={d} value={d}>{d}</option>
-                    ))}
-                  </select>
-                </div>
+                <CustomSelect
+                  theme="cream"
+                  label="District"
+                  required
+                  searchable
+                  value={district}
+                  onChange={(val) => setDistrict(val)}
+                  buttonClassName="py-2.5 px-3.5"
+                  options={BD_DISTRICTS.map((d) => ({
+                    value: d,
+                    label: d
+                  }))}
+                />
 
                 <div>
                   <label className="block text-[11px] font-medium text-zinc-700 mb-1">Thana / Area</label>

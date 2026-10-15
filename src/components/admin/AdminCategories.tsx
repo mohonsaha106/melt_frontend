@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { useAdmin } from '../../context/AdminContext';
 import { CategoryItem } from '../../types/admin';
 import { 
@@ -7,19 +8,12 @@ import {
   Trash2, 
   FolderPlus, 
   Sparkles, 
-  X
+  X,
+  Upload,
+  Image as ImageIcon
 } from 'lucide-react';
 
-const PRESET_IMAGES = [
-  { label: 'Wedding Floral', url: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Flower Cube', url: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Gold Initial', url: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Geode Quartz', url: 'https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Ocean Waves', url: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Rose Bookmark', url: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Resin Pendant', url: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80' },
-  { label: 'Ring Tray', url: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=800&q=80' },
-];
+const DEFAULT_FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80';
 
 export const AdminCategories: React.FC = () => {
   const { categories, addCategory, updateCategory, deleteCategory, products } = useAdmin();
@@ -28,16 +22,16 @@ export const AdminCategories: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<CategoryItem | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [dragOverField, setDragOverField] = useState<string | null>(null);
 
   // Form State
   const [formData, setFormData] = useState({
     name: '',
     categorySlug: '',
     subtitle: '',
-    image: '',
-    badge: '',
-    priceText: '',
-    theme: 'bridal' as 'bridal' | 'gifts' | 'home' | 'wearables'
+    primaryImage: '',
+    secondaryImage1: '',
+    secondaryImage2: ''
   });
 
   // Calculate live product count for each category
@@ -60,10 +54,35 @@ export const AdminCategories: React.FC = () => {
     return categoriesWithCounts.filter(cat => 
       cat.name.toLowerCase().includes(q) ||
       cat.categorySlug.toLowerCase().includes(q) ||
-      (cat.subtitle && cat.subtitle.toLowerCase().includes(q)) ||
-      (cat.badge && cat.badge.toLowerCase().includes(q))
+      (cat.subtitle && cat.subtitle.toLowerCase().includes(q))
     );
   }, [categoriesWithCounts, searchQuery]);
+
+  // Handle direct file upload for primary / secondary images
+  const handleFileUpload = (
+    file: File, 
+    field: 'primaryImage' | 'secondaryImage1' | 'secondaryImage2'
+  ) => {
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file (PNG, JPG, WebP).');
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      alert('File is too large. Please select an image under 8MB.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        setFormData(prev => ({
+          ...prev,
+          [field]: reader.result as string
+        }));
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleOpenAdd = () => {
     setEditingCategory(null);
@@ -71,10 +90,9 @@ export const AdminCategories: React.FC = () => {
       name: '',
       categorySlug: '',
       subtitle: '',
-      image: PRESET_IMAGES[0].url,
-      badge: '',
-      priceText: 'From ৳500',
-      theme: 'bridal'
+      primaryImage: '',
+      secondaryImage1: '',
+      secondaryImage2: ''
     });
     setIsModalOpen(true);
   };
@@ -85,10 +103,9 @@ export const AdminCategories: React.FC = () => {
       name: cat.name,
       categorySlug: cat.categorySlug,
       subtitle: cat.subtitle || '',
-      image: cat.image,
-      badge: cat.badge || '',
-      priceText: cat.priceText || 'From ৳500',
-      theme: cat.theme || 'bridal'
+      primaryImage: cat.image || '',
+      secondaryImage1: cat.secondaryImages?.[0] || '',
+      secondaryImage2: cat.secondaryImages?.[1] || ''
     });
     setIsModalOpen(true);
   };
@@ -107,7 +124,8 @@ export const AdminCategories: React.FC = () => {
     if (!formData.name.trim()) return;
 
     const slug = formData.categorySlug.trim() || formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    const image = formData.image.trim() || PRESET_IMAGES[0].url;
+    const primaryImg = formData.primaryImage || DEFAULT_FALLBACK_IMAGE;
+    const secondaryImgs = [formData.secondaryImage1, formData.secondaryImage2].filter(Boolean);
 
     if (editingCategory) {
       updateCategory({
@@ -115,20 +133,16 @@ export const AdminCategories: React.FC = () => {
         name: formData.name.trim(),
         categorySlug: slug,
         subtitle: formData.subtitle.trim(),
-        image,
-        badge: formData.badge.trim() || undefined,
-        priceText: formData.priceText.trim() || undefined,
-        theme: formData.theme
+        image: primaryImg,
+        secondaryImages: secondaryImgs.length > 0 ? secondaryImgs : undefined
       });
     } else {
       addCategory({
         name: formData.name.trim(),
         categorySlug: slug,
         subtitle: formData.subtitle.trim(),
-        image,
-        badge: formData.badge.trim() || undefined,
-        priceText: formData.priceText.trim() || undefined,
-        theme: formData.theme,
+        image: primaryImg,
+        secondaryImages: secondaryImgs.length > 0 ? secondaryImgs : undefined,
         count: 0
       });
     }
@@ -196,15 +210,37 @@ export const AdminCategories: React.FC = () => {
           >
             {/* Top Visual Preview & Badge */}
             <div className="flex items-start space-x-3.5">
-              <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-100 ring-2 ring-slate-200 shrink-0 overflow-hidden">
-                <img
-                  src={cat.image}
-                  alt={cat.name}
-                  className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-transform duration-300"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = PRESET_IMAGES[0].url;
-                  }}
-                />
+              <div className="relative shrink-0">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-100 ring-2 ring-slate-200 overflow-hidden">
+                  <img
+                    src={cat.image}
+                    alt={cat.name}
+                    className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = DEFAULT_FALLBACK_IMAGE;
+                    }}
+                  />
+                </div>
+                {cat.secondaryImages && cat.secondaryImages.length > 0 && (
+                  <div className="absolute -bottom-1 -right-1 flex -space-x-1.5">
+                    {cat.secondaryImages.map((secImg, sIdx) => (
+                      <div
+                        key={sIdx}
+                        className="w-5 h-5 rounded-full ring-1.5 ring-white bg-slate-100 overflow-hidden shadow-2xs"
+                        title={`Secondary #${sIdx + 1}`}
+                      >
+                        <img
+                          src={secImg}
+                          alt=""
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = DEFAULT_FALLBACK_IMAGE;
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="flex-1 min-w-0">
@@ -304,185 +340,368 @@ export const AdminCategories: React.FC = () => {
       )}
 
       {/* Add / Edit Category Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-slate-900/40 backdrop-blur-xs animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 text-slate-900 shadow-xl relative my-8">
+      {isModalOpen && createPortal(
+        <div 
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 overflow-y-auto"
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, width: '100vw', height: '100vh', zIndex: 9999 }}
+        >
+          {/* Full-bleed edge-to-edge dark backdrop overlay */}
+          <div 
+            onClick={() => setIsModalOpen(false)}
+            className="fixed inset-0 -top-24 -bottom-24 -left-24 -right-24 bg-slate-950/75 sm:bg-slate-950/80 backdrop-blur-sm cursor-pointer transition-opacity"
+            aria-hidden="true"
+          />
+
+          {/* Modal Card Content (relative z-10) */}
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white border border-slate-200 rounded-2xl max-w-xl w-full text-slate-900 shadow-2xl relative z-10 flex flex-col max-h-[92dvh] sm:max-h-[88vh] overflow-hidden my-auto"
+          >
             
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-              <div className="flex items-center space-x-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#e6f4ea] text-[#0a5c36] flex items-center justify-center">
+            {/* Modal Header (Pinned) */}
+            <div className="shrink-0 px-5 sm:px-6 py-3.5 sm:py-4 border-b border-slate-100 flex items-center justify-between bg-white">
+              <div className="flex items-center space-x-2.5 min-w-0 pr-2">
+                <div className="w-8 h-8 rounded-lg bg-[#e6f4ea] text-[#0a5c36] flex items-center justify-center shrink-0">
                   <Sparkles className="w-4 h-4" />
                 </div>
-                <div>
-                  <h2 className="text-base font-bold text-slate-900">
+                <div className="min-w-0">
+                  <h2 className="text-sm sm:text-base font-bold text-slate-900 truncate">
                     {editingCategory ? 'Edit Keepsake Category' : 'Create New Keepsake Category'}
                   </h2>
-                  <p className="text-[11px] text-slate-500">
-                    Configure category name, visual image, and storefront display.
+                  <p className="text-[11px] text-slate-500 truncate">
+                    Configure category name, visual images, and storefront display.
                   </p>
                 </div>
               </div>
 
               <button
+                type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer shrink-0 transition-colors"
+                aria-label="Close modal"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <form onSubmit={handleSave} className="space-y-4 mt-5">
+            {/* Form wrapping body and footer */}
+            <form onSubmit={handleSave} className="flex-1 min-h-0 flex flex-col overflow-hidden">
               
-              {/* Category Name & Slug */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Category Name *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => handleNameChange(e.target.value)}
-                    placeholder="e.g. Wedding Keepsakes"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-[#0a5c36] focus:ring-1 focus:ring-[#0a5c36]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    URL Slug *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.categorySlug}
-                    onChange={(e) => setFormData({ ...formData, categorySlug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') })}
-                    placeholder="e.g. wedding-keepsakes"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs sm:text-sm font-mono text-[#0a5c36] focus:bg-white focus:outline-none focus:border-[#0a5c36] focus:ring-1 focus:ring-[#0a5c36]"
-                  />
-                </div>
-              </div>
-
-              {/* Subtitle */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Subtitle / Description Line
-                </label>
-                <input
-                  type="text"
-                  value={formData.subtitle}
-                  onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-                  placeholder="e.g. Garland & bridal flower preservation frames"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-[#0a5c36] focus:ring-1 focus:ring-[#0a5c36]"
-                />
-              </div>
-
-              {/* Image URL & Live Preview */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Category Halo Image URL
-                </label>
-                <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 rounded-full bg-slate-100 border border-slate-200 shrink-0 overflow-hidden">
-                    <img
-                      src={formData.image || PRESET_IMAGES[0].url}
-                      alt="Preview"
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = PRESET_IMAGES[0].url;
-                      }}
+              {/* Scrollable Form Body */}
+              <div className="flex-1 min-h-0 overflow-y-auto px-5 sm:px-6 py-4 space-y-4 overscroll-contain">
+                
+                {/* Category Name & Slug */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      Category Name *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => handleNameChange(e.target.value)}
+                      placeholder="e.g. Wedding Keepsakes"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-[#0a5c36] focus:ring-1 focus:ring-[#0a5c36]"
                     />
                   </div>
-                  <input
-                    type="url"
-                    value={formData.image}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    placeholder="Paste image URL (https://...)"
-                    className="flex-1 bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs text-slate-900 focus:bg-white focus:outline-none focus:border-[#0a5c36] focus:ring-1 focus:ring-[#0a5c36]"
-                  />
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">
+                      URL Slug *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.categorySlug}
+                      onChange={(e) => setFormData({ ...formData, categorySlug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') })}
+                      placeholder="e.g. wedding-keepsakes"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs sm:text-sm font-mono text-[#0a5c36] focus:bg-white focus:outline-none focus:border-[#0a5c36] focus:ring-1 focus:ring-[#0a5c36]"
+                    />
+                  </div>
                 </div>
 
-                {/* Preset image shortcuts */}
-                <div className="mt-2 flex items-center space-x-2 overflow-x-auto no-scrollbar py-1">
-                  <span className="text-[10px] text-slate-400 uppercase font-mono shrink-0">Presets:</span>
-                  {PRESET_IMAGES.map((preset, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setFormData({ ...formData, image: preset.url })}
-                      className="text-[10px] px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 shrink-0 border border-slate-200 cursor-pointer"
-                    >
-                      {preset.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Badge & Starting Price text */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Subtitle */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Badge Tag (Optional)
+                    Subtitle / Description Line
                   </label>
                   <input
                     type="text"
-                    value={formData.badge}
-                    onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                    placeholder="e.g. Most Loved, New, Bridal"
+                    value={formData.subtitle}
+                    onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+                    placeholder="e.g. Garland & bridal flower preservation frames"
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-[#0a5c36] focus:ring-1 focus:ring-[#0a5c36]"
                   />
                 </div>
 
+                {/* Category Images Direct Upload: 1 Primary + 2 Secondary */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Starting Price Guide
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.priceText}
-                    onChange={(e) => setFormData({ ...formData, priceText: e.target.value })}
-                    placeholder="e.g. From ৳1,800"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-[#0a5c36] focus:ring-1 focus:ring-[#0a5c36]"
-                  />
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-xs font-bold text-slate-800">
+                      Category Images <span className="text-red-500">*</span>
+                    </label>
+                    <span className="text-[11px] text-slate-400 font-medium">
+                      1 Primary + 2 Secondary Placeholders
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3">
+                    
+                    {/* 1. Primary Image (Featured / Cover) */}
+                    <div className="col-span-2 sm:col-span-1">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-slate-700 mb-1">
+                        <span className="flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-[#0a5c36]" />
+                          <span>Primary Cover *</span>
+                        </span>
+                        {formData.primaryImage && (
+                          <button
+                            type="button"
+                            onClick={() => setFormData(prev => ({ ...prev, primaryImage: '' }))}
+                            className="text-[10px] text-rose-500 hover:text-rose-700 cursor-pointer"
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+
+                      {formData.primaryImage ? (
+                        <div className="relative group rounded-xl border border-slate-200 overflow-hidden bg-slate-50 h-28 sm:h-36 flex items-center justify-center">
+                          <img
+                            src={formData.primaryImage}
+                            alt="Primary preview"
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5 p-2">
+                            <label className="px-2.5 py-1 rounded-lg bg-white/95 hover:bg-white text-slate-900 text-[11px] font-semibold cursor-pointer shadow-xs transition-transform active:scale-95">
+                              Change Image
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) handleFileUpload(file, 'primaryImage');
+                                  e.target.value = '';
+                                }}
+                              />
+                            </label>
+                          </div>
+                          <span className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/60 text-white text-[9px] font-medium backdrop-blur-2xs">
+                            Primary
+                          </span>
+                        </div>
+                      ) : (
+                        <label
+                          onDragOver={(e) => { e.preventDefault(); setDragOverField('primary'); }}
+                          onDragLeave={() => setDragOverField(null)}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            setDragOverField(null);
+                            const file = e.dataTransfer.files?.[0];
+                            if (file) handleFileUpload(file, 'primaryImage');
+                          }}
+                          className={`
+                            h-28 sm:h-36 rounded-xl border-2 border-dashed flex flex-col items-center justify-center p-2.5 text-center cursor-pointer transition-all
+                            ${dragOverField === 'primary' 
+                              ? 'border-[#0a5c36] bg-[#e6f4ea]/40' 
+                              : 'border-slate-300 hover:border-[#0a5c36] bg-slate-50/70 hover:bg-[#e6f4ea]/20'
+                            }
+                          `}
+                        >
+                          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[#0a5c36] shadow-2xs mb-1">
+                            <Upload className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                          </div>
+                          <span className="text-xs font-bold text-slate-800">Upload Primary</span>
+                          <span className="text-[10px] text-slate-400 mt-0.5">PNG, JPG or WebP</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleFileUpload(file, 'primaryImage');
+                              e.target.value = '';
+                            }}
+                          />
+                        </label>
+                      )}
+                    </div>
+
+                    {/* 2. Secondary Image 1 */}
+                    <div className="col-span-1">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-slate-700 mb-1">
+                        <span className="truncate">Secondary 1</span>
+                        {formData.secondaryImage1 && (
+                          <button
+                            type="button"
+                            onClick={() => setFormData(prev => ({ ...prev, secondaryImage1: '' }))}
+                            className="text-[10px] text-rose-500 hover:text-rose-700 cursor-pointer"
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+
+                      {formData.secondaryImage1 ? (
+                        <div className="relative group rounded-xl border border-slate-200 overflow-hidden bg-slate-50 h-24 sm:h-36 flex items-center justify-center">
+                          <img
+                            src={formData.secondaryImage1}
+                            alt="Secondary 1 preview"
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5 p-2">
+                            <label className="px-2 py-1 rounded-lg bg-white/95 hover:bg-white text-slate-900 text-[10px] sm:text-[11px] font-semibold cursor-pointer shadow-xs transition-transform active:scale-95">
+                              Change
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) handleFileUpload(file, 'secondaryImage1');
+                                  e.target.value = '';
+                                }}
+                              />
+                            </label>
+                          </div>
+                          <span className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/60 text-white text-[9px] font-medium backdrop-blur-2xs">
+                            #1
+                          </span>
+                        </div>
+                      ) : (
+                        <label
+                          onDragOver={(e) => { e.preventDefault(); setDragOverField('sec1'); }}
+                          onDragLeave={() => setDragOverField(null)}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            setDragOverField(null);
+                            const file = e.dataTransfer.files?.[0];
+                            if (file) handleFileUpload(file, 'secondaryImage1');
+                          }}
+                          className={`
+                            h-24 sm:h-36 rounded-xl border-2 border-dashed flex flex-col items-center justify-center p-2 text-center cursor-pointer transition-all
+                            ${dragOverField === 'sec1' 
+                              ? 'border-[#0a5c36] bg-[#e6f4ea]/40' 
+                              : 'border-slate-300 hover:border-slate-400 bg-slate-50/70 hover:bg-slate-100/60'
+                            }
+                          `}
+                        >
+                          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 shadow-2xs mb-1">
+                            <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                          </div>
+                          <span className="text-[11px] sm:text-xs font-semibold text-slate-700">+ Sec 1</span>
+                          <span className="text-[9px] sm:text-[10px] text-slate-400 mt-0.5">Optional</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleFileUpload(file, 'secondaryImage1');
+                              e.target.value = '';
+                            }}
+                          />
+                        </label>
+                      )}
+                    </div>
+
+                    {/* 3. Secondary Image 2 */}
+                    <div className="col-span-1">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-slate-700 mb-1">
+                        <span className="truncate">Secondary 2</span>
+                        {formData.secondaryImage2 && (
+                          <button
+                            type="button"
+                            onClick={() => setFormData(prev => ({ ...prev, secondaryImage2: '' }))}
+                            className="text-[10px] text-rose-500 hover:text-rose-700 cursor-pointer"
+                          >
+                            Remove
+                          </button>
+                        )}
+                      </div>
+
+                      {formData.secondaryImage2 ? (
+                        <div className="relative group rounded-xl border border-slate-200 overflow-hidden bg-slate-50 h-24 sm:h-36 flex items-center justify-center">
+                          <img
+                            src={formData.secondaryImage2}
+                            alt="Secondary 2 preview"
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1.5 p-2">
+                            <label className="px-2 py-1 rounded-lg bg-white/95 hover:bg-white text-slate-900 text-[10px] sm:text-[11px] font-semibold cursor-pointer shadow-xs transition-transform active:scale-95">
+                              Change
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) handleFileUpload(file, 'secondaryImage2');
+                                  e.target.value = '';
+                                }}
+                              />
+                            </label>
+                          </div>
+                          <span className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/60 text-white text-[9px] font-medium backdrop-blur-2xs">
+                            #2
+                          </span>
+                        </div>
+                      ) : (
+                        <label
+                          onDragOver={(e) => { e.preventDefault(); setDragOverField('sec2'); }}
+                          onDragLeave={() => setDragOverField(null)}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            setDragOverField(null);
+                            const file = e.dataTransfer.files?.[0];
+                            if (file) handleFileUpload(file, 'secondaryImage2');
+                          }}
+                          className={`
+                            h-24 sm:h-36 rounded-xl border-2 border-dashed flex flex-col items-center justify-center p-2 text-center cursor-pointer transition-all
+                            ${dragOverField === 'sec2' 
+                              ? 'border-[#0a5c36] bg-[#e6f4ea]/40' 
+                              : 'border-slate-300 hover:border-slate-400 bg-slate-50/70 hover:bg-slate-100/60'
+                            }
+                          `}
+                        >
+                          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 shadow-2xs mb-1">
+                            <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                          </div>
+                          <span className="text-[11px] sm:text-xs font-semibold text-slate-700">+ Sec 2</span>
+                          <span className="text-[9px] sm:text-[10px] text-slate-400 mt-0.5">Optional</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleFileUpload(file, 'secondaryImage2');
+                              e.target.value = '';
+                            }}
+                          />
+                        </label>
+                      )}
+                    </div>
+
+                  </div>
                 </div>
+
               </div>
 
-              {/* Theme selector */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  Collection Style / Theme
-                </label>
-                <div className="grid grid-cols-4 gap-2">
-                  {(['bridal', 'gifts', 'home', 'wearables'] as const).map((theme) => (
-                    <button
-                      key={theme}
-                      type="button"
-                      onClick={() => setFormData({ ...formData, theme })}
-                      className={`py-1.5 px-2 rounded-xl text-xs font-semibold capitalize border transition-all cursor-pointer ${
-                        formData.theme === theme
-                          ? 'bg-[#e6f4ea] border-[#0a5c36] text-[#0a5c36]'
-                          : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
-                      }`}
-                    >
-                      {theme}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Submit Buttons */}
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-end space-x-3">
+              {/* Submit Buttons Footer: pinned at bottom */}
+              <div className="shrink-0 px-5 sm:px-6 py-3.5 border-t border-slate-100 bg-slate-50/90 flex items-center justify-end space-x-2.5">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-slate-200 hover:bg-white text-slate-700 text-xs font-semibold cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-[#0a5c36] hover:bg-[#074728] text-white text-xs font-semibold shadow-xs cursor-pointer"
+                  className="px-4 sm:px-5 py-2 rounded-xl bg-[#0a5c36] hover:bg-[#074728] text-white text-xs font-semibold shadow-xs cursor-pointer transition-all active:scale-95"
                 >
                   {editingCategory ? 'Update Category' : 'Create Category'}
                 </button>
@@ -491,7 +710,8 @@ export const AdminCategories: React.FC = () => {
             </form>
 
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </div>

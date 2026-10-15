@@ -1,18 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Heart, ArrowRight } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { useAdmin } from '../context/AdminContext';
 
-export const ReviewSection: React.FC = () => {
-  const { websiteSettings } = useStore();
-  const revSettings = websiteSettings?.reviews || {
-    badge: 'REAL CUSTOMER REVIEWS',
-    title: 'Loved by 15,000+ Customers',
-    subtitle: 'Real customer chats, unboxing photos, and keepsakes shared across Bangladesh.',
-    buttonText: 'Explore All 18+ Customer Reviews'
-  };
-
-  const homeReviewImages = [
+const DEFAULT_HOME_REVIEWS = [
     {
       id: 'h-rev-1',
       url: '/reviews/review-1.jpg',
@@ -54,6 +46,33 @@ export const ReviewSection: React.FC = () => {
       likes: 820
     }
   ];
+
+export const ReviewSection: React.FC = () => {
+  const { websiteSettings } = useStore();
+  const { reviews } = useAdmin();
+
+  const revSettings = websiteSettings?.reviews || {
+    badge: 'REAL CUSTOMER REVIEWS',
+    title: 'Loved by 15,000+ Customers',
+    subtitle: 'Real customer chats, unboxing photos, and keepsakes shared across Bangladesh.',
+    buttonText: 'Explore All 18+ Customer Reviews'
+  };
+
+  const homeReviewImages = useMemo(() => {
+    if (reviews && reviews.length > 0) {
+      const adminPhotos = reviews
+        .filter(r => Boolean(r.imageUrl))
+        .map(r => ({
+          id: r.id,
+          url: r.imageUrl,
+          likes: r.likes || 450
+        }));
+      const adminIds = new Set(adminPhotos.map(a => a.id));
+      const remainingDefaults = DEFAULT_HOME_REVIEWS.filter(d => !adminIds.has(d.id));
+      return [...adminPhotos, ...remainingDefaults].slice(0, 8);
+    }
+    return DEFAULT_HOME_REVIEWS;
+  }, [reviews]);
 
   return (
     <section id="community-gallery" className="py-16 sm:py-24 bg-[#E8E2D3] border-b border-[#D3CBBA]">

@@ -15,6 +15,7 @@ import {
   Check
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAdmin } from '../context/AdminContext';
 
 export interface ReviewItem {
   id: string;
@@ -116,10 +117,25 @@ const REVIEW_ITEMS: ReviewItem[] = [
 ];
 
 export const ReviewsPage: React.FC = () => {
+  const { reviews } = useAdmin();
   const [activeItem, setActiveItem] = useState<ReviewItem | null>(null);
   const [likedItems, setLikedItems] = useState<Record<string, boolean>>({});
   const [savedItems, setSavedItems] = useState<Record<string, boolean>>({});
   const [copiedToast, setCopiedToast] = useState(false);
+
+  const displayReviews: ReviewItem[] = useMemo(() => {
+    if (reviews && reviews.length > 0) {
+      const mappedAdmin: ReviewItem[] = reviews.map(r => ({
+        id: r.id,
+        imageUrl: r.imageUrl,
+        likes: r.likes || 120
+      }));
+      const adminIds = new Set(mappedAdmin.map(a => a.id));
+      const remaining = REVIEW_ITEMS.filter(item => !adminIds.has(item.id));
+      return [...mappedAdmin, ...remaining];
+    }
+    return REVIEW_ITEMS;
+  }, [reviews]);
 
   useEffect(() => {
     document.title = 'Customer Reviews | Melt Sparkle';
@@ -161,24 +177,24 @@ export const ReviewsPage: React.FC = () => {
 
   const activeIndex = useMemo(() => {
     if (!activeItem) return -1;
-    return REVIEW_ITEMS.findIndex(item => item.id === activeItem.id);
-  }, [activeItem]);
+    return displayReviews.findIndex(item => item.id === activeItem.id);
+  }, [activeItem, displayReviews]);
 
   const goToPrev = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     if (activeIndex > 0) {
-      setActiveItem(REVIEW_ITEMS[activeIndex - 1]);
+      setActiveItem(displayReviews[activeIndex - 1]);
     } else {
-      setActiveItem(REVIEW_ITEMS[REVIEW_ITEMS.length - 1]);
+      setActiveItem(displayReviews[displayReviews.length - 1]);
     }
   };
 
   const goToNext = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    if (activeIndex < REVIEW_ITEMS.length - 1) {
-      setActiveItem(REVIEW_ITEMS[activeIndex + 1]);
+    if (activeIndex < displayReviews.length - 1) {
+      setActiveItem(displayReviews[activeIndex + 1]);
     } else {
-      setActiveItem(REVIEW_ITEMS[0]);
+      setActiveItem(displayReviews[0]);
     }
   };
 
@@ -225,7 +241,7 @@ export const ReviewsPage: React.FC = () => {
             - GPU & Layout containment prevents any column shaking
            ========================================= */}
         <div className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-4 gap-3 sm:gap-4 md:gap-5">
-          {REVIEW_ITEMS.map((item, idx) => {
+          {displayReviews.map((item, idx) => {
             const isLiked = likedItems[item.id];
             const isSaved = savedItems[item.id];
             const currentLikes = isLiked ? item.likes + 1 : item.likes;

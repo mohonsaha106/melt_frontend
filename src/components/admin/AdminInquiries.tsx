@@ -11,6 +11,7 @@ import {
   X, 
   MessageCircle 
 } from 'lucide-react';
+import { CustomSelect } from '../ui/CustomSelect';
 
 export const AdminInquiries: React.FC = () => {
   const { inquiries, updateInquiryStatus, deleteInquiry, addInquiry } = useAdmin();
@@ -282,21 +283,20 @@ export const AdminInquiries: React.FC = () => {
                 />
               </div>
 
-              <div>
-                <label className="block text-zinc-400 mb-1 font-semibold">Topic / Inquiry Subject</label>
-                <select
-                  value={newInq.topic}
-                  onChange={(e) => setNewInq({ ...newInq, topic: e.target.value })}
-                  className="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-emerald-400"
-                >
-                  <option>বিয়ের ফুল ও মালা সংরক্ষণ</option>
-                  <option>কাস্টম মনোগ্রাম কিপসেক</option>
-                  <option>জিওড রেজিন ওয়াল ক্লক</option>
-                  <option>বেবি মাইলস্টোন কিপসেক</option>
-                  <option>কর্পোরেট ও বাল্ক উপহার</option>
-                  <option>সাধারণ জিজ্ঞাসা ও ডেলিভারি</option>
-                </select>
-              </div>
+              <CustomSelect
+                theme="dark"
+                label="Topic / Inquiry Subject"
+                value={newInq.topic}
+                onChange={(val) => setNewInq({ ...newInq, topic: val })}
+                options={[
+                  { value: 'বিয়ের ফুল ও মালা সংরক্ষণ', label: 'বিয়ের ফুল ও মালা সংরক্ষণ' },
+                  { value: 'কাস্টম মনোগ্রাম কিপসেক', label: 'কাস্টম মনোগ্রাম কিপসেক' },
+                  { value: 'জিওড রেজিন ওয়াল ক্লক', label: 'জিওড রেজিন ওয়াল ক্লক' },
+                  { value: 'বেবি মাইলস্টোন কিপসেক', label: 'বেবি মাইলস্টোন কিপসেক' },
+                  { value: 'কর্পোরেট ও বাল্ক উপহার', label: 'কর্পোরেট ও বাল্ক উপহার' },
+                  { value: 'সাধারণ জিজ্ঞাসা ও ডেলিভারি', label: 'সাধারণ জিজ্ঞাসা ও ডেলিভারি' }
+                ]}
+              />
 
               <div>
                 <label className="block text-zinc-400 mb-1 font-semibold">Customer Message / Inquiry Details</label>

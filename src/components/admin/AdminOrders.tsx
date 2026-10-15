@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useAdmin } from '../../context/AdminContext';
 import { AdminOrder, OrderStatus } from '../../types/admin';
+import { CustomSelect } from '../ui/CustomSelect';
 import { 
   Search, 
   Eye, 
@@ -141,16 +142,18 @@ export const AdminOrders: React.FC = () => {
             />
           </div>
 
-          <div className="flex items-center gap-2">
-            <select
+          <div className="flex items-center gap-2 min-w-[210px]">
+            <CustomSelect
+              theme="dark"
               value={selectedDelivery}
-              onChange={(e) => setSelectedDelivery(e.target.value)}
-              className="bg-zinc-900 border border-zinc-700/80 rounded-xl py-2.5 px-3.5 text-xs text-zinc-200 focus:outline-none focus:border-amber-400 cursor-pointer"
-            >
-              <option value="all">All Delivery Locations</option>
-              <option value="dhaka">Inside Dhaka (৳60)</option>
-              <option value="outside">Outside Dhaka (৳110)</option>
-            </select>
+              onChange={(val) => setSelectedDelivery(val)}
+              className="w-full"
+              options={[
+                { value: 'all', label: 'All Delivery Locations' },
+                { value: 'dhaka', label: 'Inside Dhaka (৳60)' },
+                { value: 'outside', label: 'Outside Dhaka (৳110)' }
+              ]}
+            />
           </div>
         </div>
 
@@ -592,18 +595,19 @@ export const AdminOrders: React.FC = () => {
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block text-zinc-400 mb-1 font-semibold">Courier Service</label>
-                <select
-                  value={courierInput}
-                  onChange={(e) => setCourierInput(e.target.value as AdminOrder['courierName'])}
-                  className="w-full bg-zinc-900 border border-zinc-700 rounded-xl py-2 px-3 text-white focus:outline-none focus:border-amber-400 cursor-pointer"
-                >
-                  <option value="Steadfast">Steadfast Courier</option>
-                  <option value="Pathao">Pathao Courier</option>
-                  <option value="RedX">RedX Logistics</option>
-                  <option value="Paperfly">Paperfly</option>
-                  <option value="Sundarban">Sundarban Courier</option>
-                </select>
+                <CustomSelect
+                  theme="dark"
+                  label="Courier Service"
+                  value={courierInput || 'Steadfast'}
+                  onChange={(val) => setCourierInput(val as AdminOrder['courierName'])}
+                  options={[
+                    { value: 'Steadfast', label: 'Steadfast Courier' },
+                    { value: 'Pathao', label: 'Pathao Courier' },
+                    { value: 'RedX', label: 'RedX Logistics' },
+                    { value: 'Paperfly', label: 'Paperfly' },
+                    { value: 'Sundarban', label: 'Sundarban Courier' }
+                  ]}
+                />
               </div>
 
               <div>

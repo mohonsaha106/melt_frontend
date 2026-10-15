@@ -10,7 +10,7 @@ interface StoreContextType {
   websiteSettings: WebsiteSectionsSettings;
   // Cart State
   cart: CartItem[];
-  addToCart: (product: Product, size?: 'S' | 'M' | 'L' | 'Pack', customDetails?: { text: string; font: string }) => void;
+  addToCart: (product: Product, size?: string, customDetails?: { text: string; font: string }) => void;
   removeFromCart: (cartItemId: string) => void;
   updateQuantity: (cartItemId: string, delta: number) => void;
   clearCart: () => void;
@@ -253,14 +253,15 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Add regular item to cart
   const addToCart = (
     product: Product,
-    size: 'S' | 'M' | 'L' | 'Pack' = 'S',
+    size?: string,
     customDetails?: { text: string; font: string }
   ) => {
-    const sizeOption = product.sizes.find(s => s.size === size) || product.sizes[0];
+    const targetSize = size || product.sizes?.[0]?.size || 'S';
+    const sizeOption = product.sizes?.find(s => s.size === targetSize) || product.sizes?.[0];
     const unitPrice = sizeOption ? sizeOption.price : product.price;
     const cartItemId = customDetails 
-      ? `${product.id}-${size}-${customDetails.text}-${customDetails.font}`
-      : `${product.id}-${size}`;
+      ? `${product.id}-${targetSize}-${customDetails.text}-${customDetails.font}`
+      : `${product.id}-${targetSize}`;
 
     setCart(prev => {
       const existing = prev.find(item => item.id === cartItemId);
@@ -279,7 +280,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             name: customDetails ? `Custom: ${customDetails.text}` : product.name,
             sku: product.sku,
             imageUrl: product.imageUrl,
-            size,
+            size: targetSize,
             price: unitPrice,
             quantity: 1,
             isFreeGift: false,
