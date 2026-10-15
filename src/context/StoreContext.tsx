@@ -290,8 +290,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         ];
       }
     });
-
-    setIsCartOpen(true);
   };
 
   // Add chosen free gift

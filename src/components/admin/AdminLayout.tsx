@@ -7,14 +7,12 @@ import {
   Layers, 
   Package, 
   SlidersHorizontal, 
-  ExternalLink, 
   PanelLeft, 
   Sparkles, 
-  Bell, 
-  Search,
-  ChevronsUpDown,
-  X,
-  Star
+  ChevronsUpDown, 
+  X, 
+  Star,
+  Home
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -37,7 +35,6 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
       return false;
     }
   });
-  const [showNotificationToast, setShowNotificationToast] = useState(false);
 
   const toggleSidebar = useCallback(() => {
     if (window.innerWidth < 768) {
@@ -322,66 +319,16 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
               </span>
             </div>
 
-            {/* Right: Search shortcut, Notification Bell, Live Store Link */}
-            <div className="flex items-center space-x-2 sm:space-x-3">
-              
-              {/* Jump to Ctrl K pill */}
-              <button
-                onClick={() => {
-                  const query = prompt('Jump to tab or section (overview, categories, products, settings):');
-                  if (query) {
-                    const q = query.toLowerCase();
-                    if (q.includes('cat')) setCurrentTab('categories');
-                    else if (q.includes('prod')) setCurrentTab('products');
-                    else if (q.includes('set') || q.includes('web')) setCurrentTab('settings');
-                    else setCurrentTab('overview');
-                  }
-                }}
-                className="hidden sm:inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-500 text-xs transition-colors cursor-pointer"
-                title="Search or jump to section (Ctrl+K)"
+            {/* Right: Home Button */}
+            <div className="flex items-center">
+              <Link
+                to="/"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold transition-all shadow-2xs hover:border-slate-300 active:scale-98"
+                title="Back to Home Storefront"
               >
-                <Search className="w-3.5 h-3.5 text-slate-400" />
-                <span>Jump to</span>
-                <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-white border border-slate-200 rounded text-slate-400 shadow-2xs">
-                  Ctrl K
-                </kbd>
-              </button>
-
-              {/* Notifications Button */}
-              <div className="relative">
-                <button
-                  onClick={() => setShowNotificationToast(!showNotificationToast)}
-                  className="relative p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors cursor-pointer"
-                  title="Notifications"
-                >
-                  <Bell className="w-4 h-4" />
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white" />
-                </button>
-
-                {showNotificationToast && (
-                  <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-lg border border-slate-200 p-3 z-50 text-xs">
-                    <div className="font-semibold text-slate-900 mb-1 flex items-center justify-between">
-                      <span>System Activity</span>
-                      <span className="text-[10px] text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded font-mono font-bold">Online</span>
-                    </div>
-                    <p className="text-slate-500 text-[11px] leading-relaxed">
-                      All systems operational. Active category synchronization & frontend section controls ready.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {/* External Link to Live Storefront */}
-              <a
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
-                title="Open Live Storefront in new tab"
-              >
-                <ExternalLink className="w-4 h-4" />
-              </a>
-
+                <Home className="w-4 h-4 text-slate-600" />
+                <span>Home</span>
+              </Link>
             </div>
 
           </header>

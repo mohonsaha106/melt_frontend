@@ -113,11 +113,12 @@ export const Footer: React.FC = () => {
                 <Facebook className="w-4 h-4" />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/meltsparkle"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-300 hover:text-white hover:border-zinc-600 transition-colors"
                 aria-label="Instagram"
+                title="instagram.com/meltsparkle"
               >
                 <Instagram className="w-4 h-4" />
               </a>

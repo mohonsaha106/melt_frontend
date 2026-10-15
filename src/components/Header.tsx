@@ -169,11 +169,10 @@ export const Header: React.FC = () => {
                 to="/sepcial-offer"
                 className={`py-1 relative flex items-center gap-1 transition-colors ${
                   isOffersActive
-                    ? 'text-rose-900 font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-rose-700 after:scale-x-100'
-                    : 'text-rose-700 hover:text-rose-900 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-rose-700 after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
+                    ? 'text-black font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:scale-x-100'
+                    : 'text-zinc-700 hover:text-black after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:origin-bottom-right after:scale-x-0 hover:after:scale-x-100 after:transition-transform'
                 }`}
               >
-                <Tag className="w-3 h-3 text-rose-600" />
                 OFFERS
               </Link>
 
@@ -265,11 +264,11 @@ export const Header: React.FC = () => {
 
               {/* Instagram Link */}
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/meltsparkle"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 text-zinc-700 hover:text-black hover:bg-[#DFD8C7] rounded-full transition-colors hidden sm:flex"
-                title="Follow our Instagram"
+                title="Follow our Instagram (@meltsparkle)"
               >
                 <Instagram className="w-4 h-4" />
               </a>

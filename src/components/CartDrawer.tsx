@@ -15,7 +15,7 @@ import {
   CheckCircle2,
   AlertCircle
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const CartDrawer: React.FC = () => {
   const navigate = useNavigate();
@@ -39,27 +39,28 @@ export const CartDrawer: React.FC = () => {
     setSelectedCategory
   } = useStore();
 
-  if (!isCartOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
-      {/* Backdrop */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={() => setIsCartOpen(false)}
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
-      />
+    <AnimatePresence>
+      {isCartOpen && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.28, ease: 'easeOut' }}
+            onClick={() => setIsCartOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+          />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex">
-        <motion.div
-          initial={{ x: '100%' }}
-          animate={{ x: 0 }}
-          exit={{ x: '100%' }}
-          transition={{ type: 'spring', damping: 26, stiffness: 280 }}
-          className="w-full sm:w-[440px] max-w-full bg-[#E8E2D3] shadow-2xl flex flex-col justify-between text-[#111111] border-l border-black/10 h-full"
-        >
+          <div className="fixed inset-y-0 right-0 max-w-full flex pointer-events-none">
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+              className="pointer-events-auto w-full sm:w-[440px] max-w-full bg-[#E8E2D3] shadow-2xl flex flex-col justify-between text-[#111111] border-l border-black/10 h-full will-change-transform"
+            >
           {/* Header */}
           <div className="p-5 sm:p-6 border-b border-black/10 flex items-center justify-between">
             <div>
@@ -294,5 +295,7 @@ export const CartDrawer: React.FC = () => {
         </motion.div>
       </div>
     </div>
+      )}
+    </AnimatePresence>
   );
 };
